@@ -457,6 +457,10 @@ body.about-open .site-header {
     --header-h: 128px;
   }
 
+  .portfolio-shell {
+    padding-top: calc(var(--header-h) + 52px);
+  }
+
   .site-header {
     grid-template-columns: 1fr auto;
     grid-template-rows: auto auto;
