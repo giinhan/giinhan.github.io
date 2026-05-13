@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Branding Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header" aria-label="Portfolio navigation">
+      <button class="logo" type="button" data-reset>BRANDS.</button>
+      <nav class="category-tabs" aria-label="Category tabs">
+        <button class="tab tab-all is-active" type="button" data-category="all">ALL</button>
+        <button class="tab" type="button" data-category="1">1</button>
+        <button class="tab" type="button" data-category="2">2</button>
+        <button class="tab" type="button" data-category="3">3</button>
+        <button class="tab" type="button" data-category="4">4</button>
+        <button class="tab" type="button" data-category="5">5</button>
+      </nav>
+      <button class="about-link" type="button" data-about-open>About</button>
+    </header>
+
+    <main class="portfolio-shell">
+      <section class="project-grid" aria-label="Branding project cards" data-grid></section>
+    </main>
+
+    <div class="detail-view" data-detail aria-hidden="true">
+      <button class="detail-scrim" type="button" data-close aria-label="전체 그리드로 돌아가기"></button>
+      <article class="detail-card" data-detail-card>
+        <div class="detail-inner" data-detail-inner>
+          <section class="detail-face detail-front">
+            <img data-detail-image alt="" />
+          </section>
+          <section class="detail-face detail-back">
+            <div class="back-scroll">
+              <p class="counter">0/240</p>
+              <h2 data-detail-title></h2>
+              <p data-detail-copy></p>
+              <div class="back-image-row">
+                <img data-detail-thumb-a alt="" />
+                <img data-detail-thumb-b alt="" />
+              </div>
+            </div>
+          </section>
+        </div>
+      </article>
+      <div class="detail-actions" aria-label="Card actions">
+        <button class="action-btn" type="button" data-flip>A</button>
+        <button class="action-btn action-btn-dark" type="button" data-close>B</button>
+      </div>
+    </div>
+
+    <aside class="about-panel" data-about-panel aria-hidden="true">
+      <button class="about-close" type="button" data-about-close aria-label="About 닫기"></button>
+      <h1>About</h1>
+      <p class="about-name" data-about-name></p>
+      <p data-about-body></p>
+      <div class="about-meta">
+        <p>Contact</p>
+        <a data-about-email href=""></a>
+      </div>
+      <a
+        class="consulting-button"
+        href="https://forms.gle/GMm2Psk3ohRX3HU28"
+        target="_blank"
+        rel="noreferrer"
+      >
+        컨설팅 신청하기
+      </a>
+    </aside>
+    <button class="about-dim" type="button" data-about-close aria-label="About 닫기"></button>
+
+    <script src="script.js"></script>
+  </body>
+</html>
