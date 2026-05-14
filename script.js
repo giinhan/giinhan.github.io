@@ -11,7 +11,25 @@ const aboutPanel = document.querySelector("[data-about-panel]");
 const aboutName = document.querySelector("[data-about-name]");
 const aboutBody = document.querySelector("[data-about-body]");
 const aboutEmail = document.querySelector("[data-about-email]");
-let rustleTimer = null;
+let currentProject = null;
+const aboutAudio = new Audio("sound/about.mp3");
+aboutAudio.loop = true;
+
+const categoryTapSounds = {
+  1: "sound/category tap 01.mp3",
+  2: "sound/category tap 02.mp3",
+  3: "sound/category tap 03.mp3",
+  4: "sound/category tap 04.mp3",
+  5: "sound/category tap 05.mp3",
+};
+
+const cardFlipSounds = {
+  1: "sound/card flip 01.mp3",
+  2: "sound/card flip 02.mp3",
+  3: "sound/card flip 03.wav",
+  4: "sound/card flip 04.mp3",
+  5: "sound/card flip 05.mp3",
+};
 
 const aboutContent = {
   name: "한지인",
@@ -19,25 +37,40 @@ const aboutContent = {
   body: "나는 한지인이다",
 };
 
-const cardRows = [
-  { category: "1", card: "1", txt: "일일" },
-  { category: "2", card: "1", txt: "이일" },
-  { category: "3", card: "1", txt: "삼일" },
-  { category: "4", card: "1", txt: "사일" },
-  { category: "5", card: "1", txt: "오일" },
+const cardTextById = {
+  "1-01": "일일",
+  "2-01": "이일",
+  "3-01": "삼일",
+  "4-01": "사일",
+  "5-01": "오일",
+};
+
+const imageRows = [
+  { category: "1", path: "img/1 create/1-01.png" },
+  { category: "1", path: "img/1 create/1-02.png" },
+  { category: "1", path: "img/1 create/1-03.png" },
+  { category: "2", path: "img/2 operate/2-01.JPG" },
+  { category: "2", path: "img/2 operate/2-02.jpg" },
+  { category: "3", path: "img/3 talk/3-01.png" },
+  { category: "3", path: "img/3 talk/3-02.jpg" },
+  { category: "4", path: "img/4 write/4-01.png" },
+  { category: "4", path: "img/4 write/4-02.jpeg" },
+  { category: "4", path: "img/4 write/4-03.jpeg" },
+  { category: "5", path: "img/5 consult/5-01.png" },
 ];
 
-const projects = cardRows.map((row, index) => {
-  const image = `img/${row.category}-${row.card}.png`;
+const projects = imageRows.map((row, index) => {
+  const fileName = row.path.split("/").pop();
+  const id = fileName.replace(/\.[^.]+$/, "");
   return {
-    id: `${row.category}-${row.card}`,
+    id,
     category: row.category,
-    title: `${row.category}-${row.card}`,
+    title: id,
     tilt: `${[-4, 3, -2, 5, -5][index % 5]}deg`,
-    image,
-    thumbA: image,
-    thumbB: image,
-    copy: row.txt,
+    image: row.path,
+    thumbA: row.path,
+    thumbB: row.path,
+    copy: cardTextById[id] || "아카이브 카드 설명을 준비 중입니다.",
   };
 });
 
@@ -45,7 +78,7 @@ function render(category = "all") {
   grid.innerHTML = "";
   const filtered =
     category === "all" ? projects : projects.filter((project) => project.category === category);
-  filtered.forEach((project) => {
+  shuffle(filtered).forEach((project) => {
     const card = document.createElement("button");
     card.className = "project-card";
     card.type = "button";
@@ -57,7 +90,17 @@ function render(category = "all") {
   });
 }
 
+function shuffle(items) {
+  const shuffled = [...items];
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 function openDetail(project) {
+  currentProject = project;
   detail.classList.remove("is-flipped");
   detailImage.src = project.image;
   detailImage.alt = project.title;
@@ -70,54 +113,26 @@ function openDetail(project) {
   detail.setAttribute("aria-hidden", "false");
   detail.classList.add("is-open");
   document.body.classList.add("detail-open");
-  window.clearTimeout(rustleTimer);
-  rustleTimer = window.setTimeout(() => {
-    if (detail.classList.contains("is-open")) {
-      playPaperRustle();
-    }
-  }, 940);
 }
 
-function playPaperRustle() {
-  const AudioContext = window.AudioContext || window.webkitAudioContext;
-  if (!AudioContext) {
+function playSound(src) {
+  if (!src) {
     return;
   }
 
-  const context = new AudioContext();
-  const duration = 0.42;
-  const sampleRate = context.sampleRate;
-  const buffer = context.createBuffer(1, sampleRate * duration, sampleRate);
-  const data = buffer.getChannelData(0);
+  const audio = new Audio(src);
+  audio.currentTime = 0;
+  audio.play().catch(() => {});
+}
 
-  for (let i = 0; i < data.length; i += 1) {
-    const t = i / data.length;
-    const burst = Math.sin(t * Math.PI) * (1 - t * 0.35);
-    const grain = Math.random() * 2 - 1;
-    const scratch = Math.sin(i * 0.21) * (Math.random() * 0.35);
-    data[i] = (grain * 0.55 + scratch) * burst;
-  }
+function playAboutAudio() {
+  aboutAudio.currentTime = 0;
+  aboutAudio.play().catch(() => {});
+}
 
-  const source = context.createBufferSource();
-  const highpass = context.createBiquadFilter();
-  const lowpass = context.createBiquadFilter();
-  const gain = context.createGain();
-
-  highpass.type = "highpass";
-  highpass.frequency.value = 750;
-  lowpass.type = "lowpass";
-  lowpass.frequency.value = 5200;
-  gain.gain.setValueAtTime(0.0001, context.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.24, context.currentTime + 0.035);
-  gain.gain.exponentialRampToValueAtTime(0.018, context.currentTime + duration);
-
-  source.buffer = buffer;
-  source.connect(highpass);
-  highpass.connect(lowpass);
-  lowpass.connect(gain);
-  gain.connect(context.destination);
-  source.start();
-  source.stop(context.currentTime + duration);
+function stopAboutAudio() {
+  aboutAudio.pause();
+  aboutAudio.currentTime = 0;
 }
 
 function renderAbout() {
@@ -128,7 +143,7 @@ function renderAbout() {
 }
 
 function closeDetail() {
-  window.clearTimeout(rustleTimer);
+  currentProject = null;
   detail.classList.remove("is-open", "is-flipped");
   detail.setAttribute("aria-hidden", "true");
   document.body.classList.remove("detail-open");
@@ -137,6 +152,7 @@ function closeDetail() {
 
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
+    playSound(categoryTapSounds[tab.dataset.category]);
     tabs.forEach((item) => item.classList.remove("is-active"));
     tab.classList.add("is-active");
     render(tab.dataset.category);
@@ -145,6 +161,7 @@ tabs.forEach((tab) => {
 });
 
 document.querySelector("[data-flip]").addEventListener("click", () => {
+  playSound(cardFlipSounds[currentProject?.category]);
   detail.classList.toggle("is-flipped");
 });
 
@@ -160,6 +177,7 @@ document.querySelector("[data-about-open]").addEventListener("click", () => {
   document.body.classList.add("about-open");
   aboutPanel.classList.add("is-open");
   aboutPanel.setAttribute("aria-hidden", "false");
+  playAboutAudio();
 });
 
 document.querySelectorAll("[data-about-close]").forEach((button) => {
@@ -167,6 +185,7 @@ document.querySelectorAll("[data-about-close]").forEach((button) => {
     document.body.classList.remove("about-open");
     aboutPanel.classList.remove("is-open");
     aboutPanel.setAttribute("aria-hidden", "true");
+    stopAboutAudio();
   });
 });
 
@@ -175,6 +194,8 @@ document.addEventListener("keydown", (event) => {
     closeDetail();
     document.body.classList.remove("about-open");
     aboutPanel.classList.remove("is-open");
+    aboutPanel.setAttribute("aria-hidden", "true");
+    stopAboutAudio();
   }
 });
 
