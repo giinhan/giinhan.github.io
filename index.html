@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Gothic+A1:wght@300;600;700&family=Inter:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
       rel="stylesheet"
     />
     <link
@@ -18,13 +18,12 @@
   </head>
   <body>
     <header class="site-header" aria-label="Portfolio navigation">
-      <button class="logo" type="button" data-reset>BRANDS.</button>
       <nav class="category-tabs" aria-label="Category tabs">
         <button class="tab tab-all is-active" type="button" data-category="all">ALL</button>
         <button class="tab tab-word" type="button" data-category="1">create</button>
         <button class="tab tab-word" type="button" data-category="2">operate</button>
-        <button class="tab tab-word" type="button" data-category="3">talk</button>
-        <button class="tab tab-word" type="button" data-category="4">write</button>
+        <button class="tab tab-word" type="button" data-category="3">write</button>
+        <button class="tab tab-word" type="button" data-category="4">talk</button>
         <button class="tab tab-word" type="button" data-category="5">consult</button>
       </nav>
       <button class="about-link" type="button" data-about-open>About</button>
@@ -43,7 +42,6 @@
           </section>
           <section class="detail-face detail-back">
             <div class="back-scroll">
-              <p class="counter">0/240</p>
               <h2 data-detail-title></h2>
               <p data-detail-copy></p>
               <div class="back-image-row">
@@ -55,8 +53,12 @@
         </div>
       </article>
       <div class="detail-actions" aria-label="Card actions">
-        <button class="action-btn" type="button" data-flip>A</button>
-        <button class="action-btn action-btn-dark" type="button" data-close>B</button>
+        <button class="action-btn" type="button" data-flip aria-label="카드 뒤집기">
+          <img src="img/000 icon/a.jpeg" alt="" />
+        </button>
+        <button class="action-btn" type="button" data-close aria-label="전체 그리드로 돌아가기">
+          <img src="img/000 icon/b.png" alt="" />
+        </button>
       </div>
     </div>
 
@@ -80,6 +82,7 @@
     </aside>
     <button class="about-dim" type="button" data-about-close aria-label="About 닫기"></button>
 
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
