@@ -223,10 +223,6 @@ button {
   transition: transform 2560ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.detail-view.is-flipped .detail-inner {
-  transform: rotateY(180deg);
-}
-
 .detail-face {
   position: absolute;
   top: 0;

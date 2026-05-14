@@ -13,6 +13,7 @@ const aboutBody = document.querySelector("[data-about-body]");
 const aboutEmail = document.querySelector("[data-about-email]");
 let currentProject = null;
 let projects = [];
+let detailRotation = 0;
 const aboutAudio = new Audio("sound/about.mp3");
 aboutAudio.loop = true;
 
@@ -171,7 +172,9 @@ function shuffle(items) {
 
 function openDetail(project) {
   currentProject = project;
+  detailRotation = 0;
   detail.classList.remove("is-flipped");
+  detailInner.style.transform = "rotateY(0deg)";
   detailImage.src = project.image;
   detailImage.alt = project.title;
   detailTitle.textContent = project.title;
@@ -251,6 +254,8 @@ tabs.forEach((tab) => {
 
 document.querySelector("[data-flip]").addEventListener("click", () => {
   playSound(cardFlipSounds[currentProject?.category]);
+  detailRotation += 180;
+  detailInner.style.transform = `rotateY(${detailRotation}deg)`;
   detail.classList.toggle("is-flipped");
 });
 
