@@ -551,11 +551,11 @@ body.about-open .site-header {
 
 @media (max-width: 920px) {
   :root {
-    --header-h: 128px;
+    --header-h: 150px;
   }
 
   .portfolio-shell {
-    padding-top: calc(var(--header-h) + 72px);
+    padding-top: calc(var(--header-h) + 64px);
   }
 
   .site-header {
@@ -567,15 +567,24 @@ body.about-open .site-header {
 
   .category-tabs {
     grid-column: 1 / -1;
-    grid-row: 2;
+    grid-row: 1;
     justify-self: center;
+    gap: clamp(22px, 5vw, 38px);
+    min-height: 64px;
+    padding: 0 32px;
     max-width: calc(100vw - 36px);
   }
 
   .about-link {
-    grid-column: 2;
-    grid-row: 1;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: end;
     font-size: 20px;
+  }
+
+  .tab {
+    height: 44px;
+    font-size: 24px;
   }
 
   .project-grid {
@@ -588,13 +597,35 @@ body.about-open .site-header {
     width: min(100%, 220px);
   }
 
+  .detail-view {
+    grid-template-rows: minmax(0, auto) auto;
+    align-content: center;
+    justify-items: center;
+    row-gap: 16px;
+    padding: 24px 20px max(20px, env(safe-area-inset-bottom));
+  }
+
   .detail-card {
     max-width: min(86vw, 460px);
+    max-height: calc(100dvh - 105px);
   }
 
   .detail-front img {
     max-width: min(86vw, 460px);
-    max-height: min(68vh, 650px);
+    max-height: calc(100dvh - 105px);
+  }
+
+  .detail-actions {
+    position: relative;
+    z-index: 55;
+    bottom: auto;
+    left: auto;
+    grid-row: 2;
+    transform: translateY(14px);
+  }
+
+  .detail-view.is-open .detail-actions {
+    transform: translateY(0);
   }
 
   .about-panel {
@@ -616,6 +647,13 @@ body.about-open .site-header {
     padding-right: 18px;
     padding-left: 18px;
   }
+
+  .category-tabs {
+    gap: 28px;
+    min-height: 56px;
+    padding: 0 28px;
+  }
+
   .project-grid {
     column-count: 2;
     column-gap: 20px;
@@ -624,9 +662,9 @@ body.about-open .site-header {
   .tab {
     width: auto;
     min-width: max-content;
-    height: 24px;
+    height: 38px;
     padding: 0;
-    font-size: 9px;
+    font-size: 20px;
   }
 
   .tab-all {
@@ -635,6 +673,6 @@ body.about-open .site-header {
 
   .tab-word {
     width: max-content;
-    font-size: 9px;
+    font-size: 20px;
   }
 }
