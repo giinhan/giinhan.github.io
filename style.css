@@ -164,7 +164,7 @@ button {
   background: transparent;
   cursor: pointer;
   break-inside: avoid;
-  transform: rotate(var(--tilt));
+  transform: translate(var(--stagger-x, 0), var(--stagger-y, 0)) rotate(var(--tilt));
   transform-origin: center center;
   backface-visibility: hidden;
   contain: paint;

@@ -77,6 +77,20 @@ const categoryNumberByName = {
   consult: "5",
 };
 
+const layoutProfiles = [
+  { tilt: -7, x: 0, y: 0 },
+  { tilt: 4, x: -8, y: 24 },
+  { tilt: -2, x: 10, y: -14 },
+  { tilt: 8, x: -5, y: 36 },
+  { tilt: -5, x: 7, y: 8 },
+  { tilt: 2, x: -11, y: -24 },
+  { tilt: -9, x: 5, y: 18 },
+  { tilt: 6, x: -4, y: -8 },
+  { tilt: -3, x: 12, y: 30 },
+  { tilt: 5, x: -9, y: -18 },
+  { tilt: -6, x: 3, y: 12 },
+];
+
 function normalizeCardNumber(value) {
   return String(value ?? "")
     .trim()
@@ -140,12 +154,15 @@ function createProjects(cardContentById) {
     const fileName = row.path.split("/").pop();
     const id = fileName.replace(/\.[^.]+$/, "");
     const content = cardContentById[id] || {};
+    const layout = layoutProfiles[index % layoutProfiles.length];
 
     return {
       id,
       category: row.category,
       title: content.backHeading || id,
-      tilt: `${[-4, 3, -2, 5, -5][index % 5]}deg`,
+      tilt: layout.tilt,
+      staggerX: layout.x,
+      staggerY: layout.y,
       image: row.path,
       thumbA: row.path,
       thumbB: row.path,
@@ -159,11 +176,13 @@ function render(category = "all") {
   grid.innerHTML = "";
   const filtered =
     category === "all" ? projects : projects.filter((project) => project.category === category);
-  shuffle(filtered).forEach((project) => {
+  arrangeCards(filtered).forEach((project) => {
     const card = document.createElement("button");
     card.className = "project-card";
     card.type = "button";
-    card.style.setProperty("--tilt", project.tilt);
+    card.style.setProperty("--tilt", `${project.tilt}deg`);
+    card.style.setProperty("--stagger-x", `${project.staggerX}px`);
+    card.style.setProperty("--stagger-y", `${project.staggerY}px`);
     card.setAttribute("aria-label", `${project.title} 크게 보기`);
     const image = document.createElement("img");
     image.src = project.image;
@@ -173,6 +192,36 @@ function render(category = "all") {
     card.addEventListener("click", () => openDetail(project));
     grid.appendChild(card);
   });
+}
+
+function arrangeCards(items) {
+  const remaining = shuffle(items);
+  const arranged = [];
+
+  while (remaining.length) {
+    let bestIndex = 0;
+    let bestScore = -Infinity;
+
+    remaining.forEach((project, index) => {
+      const previous = arranged[arranged.length - 1];
+      const beforePrevious = arranged[arranged.length - 2];
+      const sameDirectionPenalty = previous && Math.sign(project.tilt) === Math.sign(previous.tilt) ? 12 : 0;
+      const closeTiltPenalty = previous ? Math.max(0, 7 - Math.abs(project.tilt - previous.tilt)) * 2 : 0;
+      const secondNeighborPenalty =
+        beforePrevious && Math.sign(project.tilt) === Math.sign(beforePrevious.tilt) ? 5 : 0;
+      const offsetReward = previous ? Math.abs(project.staggerY - previous.staggerY) * 0.2 : 0;
+      const score = offsetReward - sameDirectionPenalty - closeTiltPenalty - secondNeighborPenalty;
+
+      if (score > bestScore) {
+        bestIndex = index;
+        bestScore = score;
+      }
+    });
+
+    arranged.push(remaining.splice(bestIndex, 1)[0]);
+  }
+
+  return arranged;
 }
 
 function shuffle(items) {
