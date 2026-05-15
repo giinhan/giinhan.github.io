@@ -1,7 +1,7 @@
 :root {
   --ink: #211c0b;
   --muted: #77726a;
-  --paper: #f4f4f3;
+  --paper: #fbfbfa;
   --panel: #fff4b8;
   --shadow: 14px 30px 34px rgba(33, 28, 11, 0.2), 5px 12px 18px rgba(33, 28, 11, 0.12);
   --header-h: 92px;
@@ -21,12 +21,22 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--paper);
-  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
+    sans-serif;
+  overflow-wrap: break-word;
+  word-break: keep-all;
 }
 
 button {
   color: inherit;
   font: inherit;
+}
+
+.tab,
+.about-link,
+.about-panel {
+  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
+    monospace;
 }
 
 .site-header {
@@ -64,8 +74,7 @@ button {
   padding: 0 17px;
   border: 0;
   border-radius: 0;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 8px 18px rgba(33, 28, 11, 0.06);
+  background: rgba(255, 255, 255, 0.72);
   overflow-x: auto;
   pointer-events: auto;
   scrollbar-width: none;
@@ -77,6 +86,7 @@ button {
 }
 
 .tab {
+  position: relative;
   display: inline-flex;
   width: auto;
   min-width: max-content;
@@ -86,7 +96,6 @@ button {
   justify-content: center;
   padding: 0;
   color: #58544e;
-  font-family: "Roboto", sans-serif;
   font-synthesis: none;
   font-size: 15px;
   font-weight: 700;
@@ -94,6 +103,17 @@ button {
   line-height: 1;
   text-shadow: none;
   white-space: nowrap;
+}
+
+.tab::after {
+  position: absolute;
+  right: 0;
+  bottom: -3px;
+  left: 0;
+  height: 2px;
+  background: currentColor;
+  content: "";
+  opacity: 0;
 }
 
 .tab-all {
@@ -109,11 +129,14 @@ button {
   font-weight: 700;
 }
 
+.tab.is-active::after {
+  opacity: 1;
+}
+
 .about-link {
   grid-column: 3;
   justify-self: end;
   padding: 8px 0 8px 18px;
-  font-family: "Roboto", sans-serif;
   font-size: 24px;
   font-weight: 300;
 }
@@ -194,8 +217,8 @@ button {
   position: absolute;
   inset: 0;
   border: 0;
-  background: rgba(239, 237, 232, 0.78);
-  backdrop-filter: blur(3px);
+  background: rgba(252, 252, 250, 0.84);
+  backdrop-filter: blur(2px);
   cursor: default;
 }
 
@@ -249,83 +272,124 @@ button {
 }
 
 .detail-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
   height: 100%;
+  overflow: visible;
   transform: rotateY(180deg);
 }
 
 .back-scroll {
+  --back-pad: clamp(15px, 2vw, 25px);
   height: 100%;
+  width: 100%;
   overflow: auto;
-  padding: clamp(15px, 2vw, 25px);
+  padding: var(--back-pad);
   background: #fffef9;
-  background-image: linear-gradient(rgba(33, 28, 11, 0.025) 1px, transparent 1px);
-  background-size: 100% 32px;
-  scrollbar-color: #111 #f6f6f6;
-  scrollbar-width: thin;
+  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
+    sans-serif;
+  font-weight: 300;
+  scrollbar-width: none;
 }
 
 .back-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.back-scrollbar {
+  position: absolute;
+  top: 0;
+  right: -24px;
+  width: 20px;
+  height: 100%;
+  background: #fffef9;
+}
+
+.back-scrollbar[hidden] {
+  display: none;
+}
+
+.back-scrollbar::before,
+.back-scrollbar::after {
+  position: absolute;
+  left: 0;
   width: 18px;
+  height: 19px;
+  background: #fffef9;
+  content: "";
 }
 
-.back-scroll::-webkit-scrollbar-track {
-  border-left: 1px solid #d9d9d9;
-  border-right: 1px solid #d9d9d9;
-  background: #f7f7f7;
+.back-scrollbar::before {
+  top: 0;
 }
 
-.back-scroll::-webkit-scrollbar-thumb {
-  min-height: 78px;
-  border: 2px solid #f7f7f7;
-  background: #111;
+.back-scrollbar::after {
+  bottom: 0;
 }
 
-.back-scroll::-webkit-scrollbar-button:single-button {
-  display: block;
-  width: 18px;
-  height: 24px;
-  border-left: 1px solid #d9d9d9;
-  border-right: 1px solid #d9d9d9;
-  background-color: #f7f7f7;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 12px 12px;
-}
-
-.back-scroll::-webkit-scrollbar-button:single-button:vertical:decrement {
-  border-top: 1px solid #d9d9d9;
-  background-image: linear-gradient(45deg, transparent 50%, #111 50%),
-    linear-gradient(135deg, #111 50%, transparent 50%);
-  background-position: 4px 10px, 10px 10px;
-  background-size: 7px 7px, 7px 7px;
-}
-
-.back-scroll::-webkit-scrollbar-button:single-button:vertical:increment {
-  border-bottom: 1px solid #d9d9d9;
-  background-image: linear-gradient(225deg, transparent 50%, #111 50%),
-    linear-gradient(315deg, #111 50%, transparent 50%);
-  background-position: 4px 7px, 10px 7px;
-  background-size: 7px 7px, 7px 7px;
+.back-scrollbar-thumb {
+  position: absolute;
+  top: 20px;
+  right: 3px;
+  left: 3px;
+  min-height: 72px;
+  background: var(--scrollbar-color, #111);
+  border-radius: 0;
 }
 
 .back-scroll h2 {
   margin: 0 0 22px;
-  font-family: "Gothic A1", "Noto Sans KR", sans-serif;
-  font-size: clamp(17px, 2.4vw, 29px);
+  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
+    sans-serif;
+  font-size: clamp(15.3px, 2.16vw, 26.1px);
   font-weight: 600;
   line-height: 1.5;
   letter-spacing: 0;
+  white-space: pre-line;
+}
+
+.back-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-start;
+  margin: 0 0 24px;
+}
+
+.back-tags[hidden] {
+  display: none;
+}
+
+.back-tag {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #000;
+  padding: 4px 10px 3px;
+  background: transparent;
+  color: #000;
+  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
+    sans-serif;
+  font-size: clamp(9px, 0.84vw, 11px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
 }
 
 .back-scroll p {
   margin: 0 0 24px;
   color: #4e4835;
   font-size: clamp(12px, 1.19vw, 15px);
+  font-weight: 300;
   line-height: 1.58;
 }
 
 .back-scroll [data-detail-copy] {
-  font-family: "Gothic A1", "Noto Sans KR", sans-serif;
+  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
+    sans-serif;
   font-weight: 300;
   white-space: pre-line;
 }
@@ -419,7 +483,6 @@ button {
   overflow: auto;
   background: var(--panel);
   box-shadow: -20px 0 38px rgba(33, 28, 11, 0.22);
-  font-family: "Roboto", sans-serif;
   font-weight: 300;
   transform: translateX(105%);
   transition: transform 320ms ease;
@@ -476,7 +539,8 @@ button {
   border-radius: 999px;
   background: var(--ink);
   color: #fff8ce;
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
+    sans-serif;
   font-size: 18px;
   font-weight: 500;
   text-decoration: none;

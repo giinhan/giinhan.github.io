@@ -2,10 +2,14 @@ const grid = document.querySelector("[data-grid]");
 const detail = document.querySelector("[data-detail]");
 const detailInner = document.querySelector("[data-detail-inner]");
 const detailImage = document.querySelector("[data-detail-image]");
+const detailTags = document.querySelector("[data-detail-tags]");
 const detailTitle = document.querySelector("[data-detail-title]");
 const detailCopy = document.querySelector("[data-detail-copy]");
 const detailThumbA = document.querySelector("[data-detail-thumb-a]");
 const detailThumbB = document.querySelector("[data-detail-thumb-b]");
+const detailScrollArea = detailInner.querySelector(".back-scroll");
+const detailScrollbar = document.querySelector("[data-detail-scrollbar]");
+const detailScrollbarThumb = document.querySelector("[data-detail-scrollbar-thumb]");
 const tabs = document.querySelectorAll("[data-category]");
 const aboutPanel = document.querySelector("[data-about-panel]");
 const aboutName = document.querySelector("[data-about-name]");
@@ -14,6 +18,7 @@ const aboutEmail = document.querySelector("[data-about-email]");
 let currentProject = null;
 let projects = [];
 let detailRotation = 0;
+const dominantColorByImage = new Map();
 const aboutAudio = new Audio("sound/about.mp3");
 aboutAudio.loop = true;
 
@@ -84,6 +89,13 @@ function getCardId(category, card) {
   return categoryNumber && cardNumber ? `${categoryNumber}-${cardNumber}` : "";
 }
 
+function getRowTags(row) {
+  return Object.keys(row)
+    .filter((key) => /^tag(?:\s*\d+)?$/i.test(String(key).trim()))
+    .map((key) => String(row[key] || "").trim())
+    .filter(Boolean);
+}
+
 async function loadCardContent() {
   if (!window.XLSX) {
     return fallbackCardContentById;
@@ -112,6 +124,7 @@ async function loadCardContent() {
       contentById[id] = {
         backHeading: row["back heading"] || contentById[id]?.backHeading || id,
         backBody: row["back  body"] || row["back body"] || contentById[id]?.backBody || "",
+        tags: getRowTags(row),
       };
     });
 
@@ -137,6 +150,7 @@ function createProjects(cardContentById) {
       thumbA: row.path,
       thumbB: row.path,
       copy: content.backBody || "아카이브 카드 설명을 준비 중입니다.",
+      tags: content.tags || [],
     };
   });
 }
@@ -175,8 +189,11 @@ function openDetail(project) {
   detailRotation = 0;
   detail.classList.remove("is-flipped");
   detailInner.style.transform = "rotateY(0deg)";
+  detail.style.setProperty("--scrollbar-color", "#111");
   detailImage.src = project.image;
   detailImage.alt = project.title;
+  applyScrollbarColor(project);
+  renderTags(detailTags, project.tags);
   detailTitle.textContent = project.title;
   renderLinkedText(detailCopy, project.copy);
   detailThumbA.src = project.thumbA;
@@ -186,6 +203,96 @@ function openDetail(project) {
   detail.setAttribute("aria-hidden", "false");
   detail.classList.add("is-open");
   document.body.classList.add("detail-open");
+  requestAnimationFrame(syncDetailScrollbar);
+}
+
+function renderTags(element, tags) {
+  element.innerHTML = "";
+  element.hidden = !tags.length;
+
+  tags.forEach((tag) => {
+    const item = document.createElement("span");
+    item.className = "back-tag";
+    item.textContent = tag;
+    element.appendChild(item);
+  });
+}
+
+async function applyScrollbarColor(project) {
+  const color = await getDominantImageColor(project.image);
+
+  if (currentProject?.id === project.id) {
+    detail.style.setProperty("--scrollbar-color", color);
+  }
+}
+
+function getDominantImageColor(src) {
+  if (dominantColorByImage.has(src)) {
+    return Promise.resolve(dominantColorByImage.get(src));
+  }
+
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => {
+      const color = sampleDominantColor(image);
+      dominantColorByImage.set(src, color);
+      resolve(color);
+    };
+    image.onerror = () => {
+      resolve("#111");
+    };
+    image.src = src;
+  });
+}
+
+function sampleDominantColor(image) {
+  const size = 72;
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d", { willReadFrequently: true });
+  const buckets = new Map();
+
+  canvas.width = size;
+  canvas.height = size;
+  context.drawImage(image, 0, 0, size, size);
+
+  const pixels = context.getImageData(0, 0, size, size).data;
+
+  for (let index = 0; index < pixels.length; index += 16) {
+    const red = pixels[index];
+    const green = pixels[index + 1];
+    const blue = pixels[index + 2];
+    const alpha = pixels[index + 3];
+    const max = Math.max(red, green, blue);
+    const min = Math.min(red, green, blue);
+    const brightness = (red + green + blue) / 3;
+    const saturation = max - min;
+
+    if (alpha < 180 || brightness < 35 || brightness > 235 || saturation < 18) {
+      continue;
+    }
+
+    const key = `${Math.round(red / 24) * 24},${Math.round(green / 24) * 24},${
+      Math.round(blue / 24) * 24
+    }`;
+    buckets.set(key, (buckets.get(key) || 0) + saturation + 24);
+  }
+
+  let selected = "";
+  let selectedScore = 0;
+
+  buckets.forEach((score, key) => {
+    if (score > selectedScore) {
+      selected = key;
+      selectedScore = score;
+    }
+  });
+
+  if (!selected) {
+    return "#111";
+  }
+
+  const [red, green, blue] = selected.split(",").map(Number);
+  return `rgb(${red}, ${green}, ${blue})`;
 }
 
 function renderLinkedText(element, text) {
@@ -240,7 +347,8 @@ function closeDetail() {
   detail.classList.remove("is-open", "is-flipped");
   detail.setAttribute("aria-hidden", "true");
   document.body.classList.remove("detail-open");
-  detailInner.querySelector(".back-scroll").scrollTop = 0;
+  detailScrollArea.scrollTop = 0;
+  syncDetailScrollbar();
 }
 
 tabs.forEach((tab) => {
@@ -293,6 +401,77 @@ document.addEventListener("keydown", (event) => {
     aboutPanel.setAttribute("aria-hidden", "true");
     stopAboutAudio();
   }
+});
+
+function syncDetailScrollbar() {
+  const maxScrollTop = detailScrollArea.scrollHeight - detailScrollArea.clientHeight;
+  const trackInset = 20;
+  const trackHeight = detailScrollbar.clientHeight - trackInset * 2;
+
+  detailScrollbar.hidden = maxScrollTop <= 0;
+
+  if (detailScrollbar.hidden) {
+    return;
+  }
+
+  const thumbHeight = Math.max(72, (detailScrollArea.clientHeight / detailScrollArea.scrollHeight) * trackHeight);
+  const maxThumbTop = trackHeight - thumbHeight;
+  const thumbTop = trackInset + (detailScrollArea.scrollTop / maxScrollTop) * maxThumbTop;
+
+  detailScrollbarThumb.style.height = `${thumbHeight}px`;
+  detailScrollbarThumb.style.transform = `translateY(${thumbTop - trackInset}px)`;
+}
+
+detailScrollArea.addEventListener("scroll", syncDetailScrollbar);
+window.addEventListener("resize", syncDetailScrollbar);
+detailThumbA.addEventListener("load", syncDetailScrollbar);
+detailThumbB.addEventListener("load", syncDetailScrollbar);
+
+detailScrollArea.addEventListener(
+  "wheel",
+  (event) => {
+    const scrollArea = event.currentTarget;
+    const direction = Math.sign(event.deltaY);
+
+    if (!direction) {
+      return;
+    }
+
+    event.preventDefault();
+    scrollArea.scrollTop += direction * 28;
+  },
+  { passive: false },
+);
+
+detailScrollbar.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+
+  if (event.target === detailScrollbarThumb) {
+    const startY = event.clientY;
+    const startScrollTop = detailScrollArea.scrollTop;
+
+    function handleMove(moveEvent) {
+      const maxScrollTop = detailScrollArea.scrollHeight - detailScrollArea.clientHeight;
+      const trackHeight = detailScrollbar.clientHeight - 40;
+      const thumbHeight = detailScrollbarThumb.offsetHeight;
+      const maxThumbTop = trackHeight - thumbHeight;
+      const delta = moveEvent.clientY - startY;
+
+      detailScrollArea.scrollTop = startScrollTop + (delta / maxThumbTop) * maxScrollTop;
+    }
+
+    function handleUp() {
+      window.removeEventListener("pointermove", handleMove);
+      window.removeEventListener("pointerup", handleUp);
+    }
+
+    window.addEventListener("pointermove", handleMove);
+    window.addEventListener("pointerup", handleUp);
+    return;
+  }
+
+  const direction = event.clientY < detailScrollbarThumb.getBoundingClientRect().top ? -1 : 1;
+  detailScrollArea.scrollTop += direction * 84;
 });
 
 async function init() {

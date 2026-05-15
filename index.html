@@ -7,14 +7,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Gothic+A1:wght@300;600;700&family=Inter:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap"
       rel="stylesheet"
     />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css?v=20260515-3" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css?v=20260515-28" />
   </head>
   <body>
     <header class="site-header" aria-label="Portfolio navigation">
@@ -43,11 +47,15 @@
           <section class="detail-face detail-back">
             <div class="back-scroll">
               <h2 data-detail-title></h2>
+              <div class="back-tags" data-detail-tags aria-label="tags"></div>
               <p data-detail-copy></p>
               <div class="back-image-row">
                 <img data-detail-thumb-a alt="" />
                 <img data-detail-thumb-b alt="" />
               </div>
+            </div>
+            <div class="back-scrollbar" data-detail-scrollbar aria-hidden="true">
+              <div class="back-scrollbar-thumb" data-detail-scrollbar-thumb></div>
             </div>
           </section>
         </div>
@@ -83,6 +91,6 @@
     <button class="about-dim" type="button" data-about-close aria-label="About 닫기"></button>
 
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="script.js?v=20260515-3"></script>
+    <script src="script.js?v=20260515-28"></script>
   </body>
 </html>
