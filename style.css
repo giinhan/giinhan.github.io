@@ -177,7 +177,8 @@ button {
 
 .project-card img,
 .detail-front img,
-.back-image-row img {
+.back-media-list img,
+.back-media-list video {
   display: block;
   width: 100%;
   height: auto;
@@ -400,15 +401,26 @@ button {
   text-underline-offset: 0.18em;
 }
 
-.back-image-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin: 28px 0;
+.back-scroll h2 a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
 }
 
-.back-image-row img {
+.back-media-list {
+  display: grid;
+  gap: 14px;
+  margin: 28px 0 0;
+}
+
+.back-media-list[hidden] {
+  display: none;
+}
+
+.back-media-list img,
+.back-media-list video {
   box-shadow: 0 10px 20px rgba(33, 28, 11, 0.11);
+  background: #fff;
 }
 
 .detail-actions {

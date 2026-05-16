@@ -5,8 +5,7 @@ const detailImage = document.querySelector("[data-detail-image]");
 const detailTags = document.querySelector("[data-detail-tags]");
 const detailTitle = document.querySelector("[data-detail-title]");
 const detailCopy = document.querySelector("[data-detail-copy]");
-const detailThumbA = document.querySelector("[data-detail-thumb-a]");
-const detailThumbB = document.querySelector("[data-detail-thumb-b]");
+const detailMedia = document.querySelector("[data-detail-media]");
 const detailScrollArea = detailInner.querySelector(".back-scroll");
 const detailScrollbar = document.querySelector("[data-detail-scrollbar]");
 const detailScrollbarThumb = document.querySelector("[data-detail-scrollbar-thumb]");
@@ -56,9 +55,46 @@ https://www.patagonia.co.kr/activismHub/JiRiver
 };
 
 const imageRows = [
-  { category: "1", path: "img/1 create/1-01.png" },
-  { category: "1", path: "img/1 create/1-02.png" },
-  { category: "1", path: "img/1 create/1-03.png" },
+  { category: "1", path: "img/1 create/1-01/1-01.png" },
+  { category: "1", path: "img/1 create/1-02/1-02.png" },
+  { category: "1", path: "img/1 create/1-03/1-03.png" },
+  {
+    category: "1",
+    path: "img/1 create/1-04/1-04.png",
+    backMedia: [
+      "img/1 create/1-04/1-04-1-small.mov",
+      "img/1 create/1-04/1-04-2.png",
+      "img/1 create/1-04/1-04-3.JPG",
+      "img/1 create/1-04/1-04-4.JPG",
+      "img/1 create/1-04/1-04-5.JPG",
+    ],
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-05/1-05.png",
+    backMedia: [
+      "img/1 create/1-05/1-05-1.png",
+      "img/1 create/1-05/1-05-2.png",
+      "img/1 create/1-05/1-05-3.png",
+      "img/1 create/1-05/1-05-4.JPG",
+    ],
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-06/1-06.jpg",
+    backMedia: [
+      "img/1 create/1-06/1-06-1.jpg",
+      "img/1 create/1-06/1-06-1-2.jpg",
+      "img/1 create/1-06/1-06-2.jpg",
+      "img/1 create/1-06/1-06-2-2.jpg",
+      "img/1 create/1-06/1-06-3.jpg",
+      "img/1 create/1-06/1-06-3-2.jpg",
+      "img/1 create/1-06/1-06-4.jpg",
+      "img/1 create/1-06/1-06-4-2.jpg",
+      "img/1 create/1-06/1-06-5.jpg",
+      "img/1 create/1-06/1-06-5-2.jpg",
+    ],
+  },
   { category: "2", path: "img/2 operate/2-01.jpg" },
   { category: "2", path: "img/2 operate/2-02.jpg" },
   { category: "3", path: "img/3 write/3-01.png" },
@@ -164,8 +200,7 @@ function createProjects(cardContentById) {
       staggerX: layout.x,
       staggerY: layout.y,
       image: row.path,
-      thumbA: row.path,
-      thumbB: row.path,
+      backMedia: row.backMedia || [],
       copy: content.backBody || "아카이브 카드 설명을 준비 중입니다.",
       tags: content.tags || [],
     };
@@ -234,6 +269,7 @@ function shuffle(items) {
 }
 
 function openDetail(project) {
+  pauseDetailMedia();
   currentProject = project;
   detailRotation = 0;
   detail.classList.remove("is-flipped");
@@ -243,16 +279,45 @@ function openDetail(project) {
   detailImage.alt = project.title;
   applyScrollbarColor(project);
   renderTags(detailTags, project.tags);
-  detailTitle.textContent = project.title;
+  renderLinkedText(detailTitle, project.title);
   renderLinkedText(detailCopy, project.copy);
-  detailThumbA.src = project.thumbA;
-  detailThumbB.src = project.thumbB;
-  detailThumbA.alt = `${project.title} detail image A`;
-  detailThumbB.alt = `${project.title} detail image B`;
+  renderDetailMedia(project);
   detail.setAttribute("aria-hidden", "false");
   detail.classList.add("is-open");
   document.body.classList.add("detail-open");
   requestAnimationFrame(syncDetailScrollbar);
+}
+
+function renderDetailMedia(project) {
+  detailMedia.innerHTML = "";
+  detailMedia.hidden = !project.backMedia.length;
+
+  project.backMedia.forEach((src, index) => {
+    const isVideo = /\.(mov|mp4|webm|m4v)$/i.test(src);
+    const element = document.createElement(isVideo ? "video" : "img");
+
+    element.src = src;
+
+    if (isVideo) {
+      element.controls = true;
+      element.muted = true;
+      element.playsInline = true;
+      element.preload = "metadata";
+    } else {
+      element.alt = `${project.title} back image ${index + 1}`;
+    }
+
+    element.addEventListener("load", syncDetailScrollbar);
+    element.addEventListener("loadedmetadata", syncDetailScrollbar);
+    detailMedia.appendChild(element);
+  });
+}
+
+function pauseDetailMedia() {
+  detailMedia.querySelectorAll("video, audio").forEach((media) => {
+    media.pause();
+    media.currentTime = 0;
+  });
 }
 
 function renderTags(element, tags) {
@@ -345,23 +410,35 @@ function sampleDominantColor(image) {
 }
 
 function renderLinkedText(element, text) {
-  const urlPattern = /(https?:\/\/[^\s]+)/g;
-  const urlOnlyPattern = /^https?:\/\/[^\s]+$/;
+  const urlPattern =
+    /((?:https?:\/\/|www\.)[^\s<>()]+|(?:[a-z0-9-]+\.)+(?:com|co\.kr|kr|net|org|io|ai|edu|gov|co|me|design|studio|xyz)(?:\/[^\s<>()]*)?)/gi;
   element.textContent = "";
 
-  String(text).split(urlPattern).forEach((part) => {
-    if (urlOnlyPattern.test(part)) {
-      const link = document.createElement("a");
-      link.href = part;
-      link.textContent = part;
-      link.target = "_blank";
-      link.rel = "noreferrer";
-      element.appendChild(link);
-      return;
-    }
+  String(text)
+    .split(urlPattern)
+    .filter((part) => part !== "")
+    .forEach((part) => {
+      if (urlPattern.test(part)) {
+        urlPattern.lastIndex = 0;
+        const trailingMatch = part.match(/[.,;:!?)]$/);
+        const trailingText = trailingMatch ? trailingMatch[0] : "";
+        const urlText = trailingText ? part.slice(0, -1) : part;
+        const link = document.createElement("a");
+        link.href = /^https?:\/\//i.test(urlText) ? urlText : `https://${urlText}`;
+        link.textContent = urlText;
+        link.target = "_blank";
+        link.rel = "noreferrer";
+        element.appendChild(link);
 
-    element.appendChild(document.createTextNode(part));
-  });
+        if (trailingText) {
+          element.appendChild(document.createTextNode(trailingText));
+        }
+        return;
+      }
+
+      urlPattern.lastIndex = 0;
+      element.appendChild(document.createTextNode(part));
+    });
 }
 
 function playSound(src) {
@@ -392,6 +469,7 @@ function renderAbout() {
 }
 
 function closeDetail() {
+  pauseDetailMedia();
   currentProject = null;
   detail.classList.remove("is-open", "is-flipped");
   detail.setAttribute("aria-hidden", "true");
@@ -413,7 +491,11 @@ document.querySelector("[data-flip]").addEventListener("click", () => {
   playSound(cardFlipSounds[currentProject?.category]);
   detailRotation += 180;
   detailInner.style.transform = `rotateY(${detailRotation}deg)`;
-  detail.classList.toggle("is-flipped");
+  const isShowingBack = detail.classList.toggle("is-flipped");
+
+  if (!isShowingBack) {
+    pauseDetailMedia();
+  }
 });
 
 document.querySelectorAll("[data-close]").forEach((button) => {
@@ -473,9 +555,6 @@ function syncDetailScrollbar() {
 
 detailScrollArea.addEventListener("scroll", syncDetailScrollbar);
 window.addEventListener("resize", syncDetailScrollbar);
-detailThumbA.addEventListener("load", syncDetailScrollbar);
-detailThumbB.addEventListener("load", syncDetailScrollbar);
-
 detailScrollArea.addEventListener(
   "wheel",
   (event) => {
