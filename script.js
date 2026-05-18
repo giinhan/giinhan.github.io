@@ -54,10 +54,29 @@ https://www.patagonia.co.kr/activismHub/JiRiver
   },
 };
 
+function numberedMedia(folder, prefix, numbers, extension) {
+  return numbers.map((number) => `${folder}/${prefix}-${number}.${extension}`);
+}
+
 const imageRows = [
-  { category: "1", path: "img/1 create/1-01/1-01.png" },
-  { category: "1", path: "img/1 create/1-02/1-02.png" },
-  { category: "1", path: "img/1 create/1-03/1-03.png" },
+  {
+    category: "1",
+    path: "img/1 create/1-01/1-01.png",
+    backMedia: numberedMedia("img/1 create/1-01", "1-01", [1, 2], "png"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-02/1-02.jpg",
+    backMedia: numberedMedia("img/1 create/1-02", "1-02", [1, 2, 3, 4, 5, 6, 7, 8, 9], "jpg"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-03/1-03.jpg",
+    backMedia: [
+      ...numberedMedia("img/1 create/1-03", "1-03", [1, 2, 3, 4], "png"),
+      "img/1 create/1-03/1-03-5.jpg",
+    ],
+  },
   {
     category: "1",
     path: "img/1 create/1-04/1-04.png",
@@ -94,6 +113,39 @@ const imageRows = [
       "img/1 create/1-06/1-06-5.jpg",
       "img/1 create/1-06/1-06-5-2.jpg",
     ],
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-07/1-07.jpg",
+    backMedia: [
+      "img/1 create/1-07/1-07-0.jpg",
+      "img/1 create/1-07/1-07-1.png",
+      ...numberedMedia("img/1 create/1-07", "1-07", [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "jpg"),
+    ],
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-08/1-08.png",
+    backMedia: [
+      ...numberedMedia("img/1 create/1-08", "1-08", [1, 2], "jpg"),
+      ...numberedMedia("img/1 create/1-08", "1-08", [3, 4, 5, 6], "png"),
+      ...numberedMedia("img/1 create/1-08", "1-08", [7, 8, 9, 10, 11, 12, 13, 14], "jpg"),
+    ],
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-09/1-09.jpg",
+    backMedia: [
+      ...numberedMedia("img/1 create/1-09", "1-09", [1, 2], "jpg"),
+      "img/1 create/1-09/1-09-3.PNG",
+      "img/1 create/1-09/1-09-4.PNG",
+      "img/1 create/1-09/1-09-5.png",
+    ],
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-10/1-10.jpg",
+    backMedia: ["img/1 create/1-10/40-2.png", "img/1 create/1-10/40-3.png"],
   },
   { category: "2", path: "img/2 operate/2-01.jpg" },
   { category: "2", path: "img/2 operate/2-02.jpg" },
@@ -222,11 +274,19 @@ function render(category = "all") {
     const image = document.createElement("img");
     image.src = project.image;
     image.alt = project.title;
+    image.addEventListener("load", () => applyFrontImageScale(card, image), { once: true });
 
     card.append(image);
     card.addEventListener("click", () => openDetail(project));
     grid.appendChild(card);
   });
+}
+
+function applyFrontImageScale(card, image) {
+  const ratio = image.naturalWidth / image.naturalHeight;
+  const scale = ratio >= 1.18 ? 1.3 : ratio >= 0.92 ? 1.12 : 1;
+
+  card.style.setProperty("--card-scale", scale);
 }
 
 function arrangeCards(items) {
