@@ -387,17 +387,17 @@ const categoryNumberByName = {
 };
 
 const layoutProfiles = [
-  { tilt: -7, x: 0, y: 0 },
-  { tilt: 4, x: -8, y: 24 },
-  { tilt: -2, x: 10, y: -14 },
-  { tilt: 8, x: -5, y: 36 },
-  { tilt: -5, x: 7, y: 8 },
-  { tilt: 2, x: -11, y: -24 },
-  { tilt: -9, x: 5, y: 18 },
-  { tilt: 6, x: -4, y: -8 },
-  { tilt: -3, x: 12, y: 30 },
-  { tilt: 5, x: -9, y: -18 },
-  { tilt: -6, x: 3, y: 12 },
+  { tilt: -4, x: 0, y: 0 },
+  { tilt: 2.5, x: -6, y: 24 },
+  { tilt: -1.5, x: 8, y: -14 },
+  { tilt: 4.5, x: -4, y: 36 },
+  { tilt: -3, x: 5, y: 8 },
+  { tilt: 1.5, x: -8, y: -24 },
+  { tilt: -5, x: 4, y: 18 },
+  { tilt: 3.5, x: -3, y: -8 },
+  { tilt: -2, x: 9, y: 30 },
+  { tilt: 3, x: -7, y: -18 },
+  { tilt: -3.5, x: 2, y: 12 },
 ];
 
 function normalizeCardNumber(value) {
@@ -558,7 +558,7 @@ function render(category = "all") {
 
 function applyFrontImageScale(card, image) {
   const ratio = image.naturalWidth / image.naturalHeight;
-  const scale = ratio >= 1.18 ? 1.3 : ratio >= 0.92 ? 1.12 : 1;
+  const scale = ratio >= 1.18 ? 1.2 : ratio >= 0.92 ? 1.06 : 1;
 
   card.style.setProperty("--card-scale", scale);
 }

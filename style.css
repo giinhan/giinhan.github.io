@@ -149,16 +149,16 @@ button {
 
 .project-grid {
   column-count: 4;
-  column-gap: clamp(58px, 7vw, 132px);
+  column-gap: clamp(72px, 8.4vw, 158px);
   min-height: calc(100vh - var(--header-h));
-  padding: 0 58px 10vh;
+  padding: 0 clamp(72px, 7vw, 128px) 12vh;
 }
 
 .project-card {
   position: relative;
   display: block;
-  width: min(100%, 270px);
-  margin: 0 auto clamp(58px, 9vh, 112px);
+  width: min(100%, 248px);
+  margin: 0 auto clamp(70px, 10vh, 126px);
   padding: 0;
   border: 0;
   background: transparent;
@@ -676,12 +676,12 @@ body.about-open .site-header {
 
   .project-grid {
     column-count: 2;
-    column-gap: 28px;
-    padding: 0 2px 80px;
+    column-gap: 38px;
+    padding: 0 14px 96px;
   }
 
   .project-card {
-    width: min(100%, 220px);
+    width: min(100%, 202px);
   }
 
   .detail-view {
@@ -743,7 +743,9 @@ body.about-open .site-header {
 
   .project-grid {
     column-count: 2;
-    column-gap: 20px;
+    column-gap: 28px;
+    padding-right: 4px;
+    padding-left: 4px;
   }
 
   .tab {
