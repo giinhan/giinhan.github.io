@@ -351,6 +351,16 @@ button {
   white-space: pre-line;
 }
 
+.detail-title-line {
+  display: block;
+}
+
+.detail-title-line-fit {
+  max-width: 100%;
+  overflow: visible;
+  white-space: nowrap;
+}
+
 .back-tags {
   display: flex;
   flex-wrap: wrap;

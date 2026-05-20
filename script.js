@@ -21,19 +21,23 @@ const dominantColorByImage = new Map();
 const aboutAudio = new Audio("sound/about.mp3");
 aboutAudio.loop = true;
 
-const cardFlipSounds = {
-  1: "sound/card flip 01.mp3",
-  2: "sound/card flip 02.mp3",
-  3: "sound/card flip 03.wav",
-  4: "sound/card flip 04.mp3",
-  5: "sound/card flip 05.mp3",
-};
+const cardFlipSounds = [
+  "sound/card flip 01.mp3",
+  "sound/card flip 02.mp3",
+  "sound/card flip 03.wav",
+  "sound/card flip 04.mp3",
+  "sound/card flip 05.mp3",
+];
 
-const aboutContent = {
+const workbookPath = "txt/giinhan txt.xlsx";
+
+const fallbackAboutContent = {
   name: "한지인",
   email: "giinhan@gmail.com",
   body: "나는 한지인이다",
 };
+
+let aboutContent = { ...fallbackAboutContent };
 
 const fallbackCardContentById = {
   "1-01": {
@@ -56,6 +60,10 @@ https://www.patagonia.co.kr/activismHub/JiRiver
 
 function numberedMedia(folder, prefix, numbers, extension) {
   return numbers.map((number) => `${folder}/${prefix}-${number}.${extension}`);
+}
+
+function mediaFiles(folder, files) {
+  return files.map((file) => `${folder}/${file}`);
 }
 
 const imageRows = [
@@ -145,7 +153,220 @@ const imageRows = [
   {
     category: "1",
     path: "img/1 create/1-10/1-10.jpg",
-    backMedia: ["img/1 create/1-10/40-2.png", "img/1 create/1-10/40-3.png"],
+    backMedia: numberedMedia("img/1 create/1-10", "1-10", [1, 2], "png"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-11/1-11.png",
+    backMedia: [
+      "img/1 create/1-11/1-11-1.jpg",
+      ...numberedMedia("img/1 create/1-11", "1-11", [2, 3, 4], "png"),
+      "img/1 create/1-11/1-11-5.JPG",
+    ],
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-12/1-12.png",
+    backMedia: mediaFiles("img/1 create/1-12", [
+      "1-12-0.png",
+      "1-12-1.jpg",
+      "1-12-2.jpg",
+      "1-12-3.jpg",
+      "1-12-4.png",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-13/1-13.JPG",
+    backMedia: mediaFiles("img/1 create/1-13", ["1-13-1.png", "1-13-2.jpg", "1-13-3.png", "1-13-4.png"]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-14/1-14.jpg",
+    backMedia: mediaFiles("img/1 create/1-14", [
+      "1-14-1.jpg",
+      "1-14-2.jpg",
+      "1-14-3.jpg",
+      "1-14-4.jpg",
+      "1-14-5.jpg",
+      "1-14-6.jpg",
+      "1-14-7.png",
+      "1-14-8.jpg",
+      "Screenshot 2026-05-17 at 9.11.57 PM.png",
+      "Screenshot 2026-05-17 at 9.12.14 PM.png",
+      "Screenshot 2026-05-17 at 9.12.24 PM.png",
+      "Screenshot 2026-05-17 at 9.13.03 PM.png",
+      "Screenshot 2026-05-17 at 9.13.07 PM.png",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-15/1-15.JPG",
+    backMedia: mediaFiles("img/1 create/1-15", ["1-15-1.jpg", "1-15-2.JPG", "1-15-3.JPG", "1-15-4.JPG", "1-15-5.JPG"]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-16/1-16.JPG",
+    backMedia: mediaFiles("img/1 create/1-16", [
+      "1-16-0.jpg",
+      "1-16-1.JPG",
+      "1-16-2.JPG",
+      "1-16-3.JPG",
+      "1-16-4.JPG",
+      "1-16-5.JPG",
+      "1-16-6.jpg",
+      "1-16-8.JPG",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-17/1-17.JPG",
+    backMedia: mediaFiles("img/1 create/1-17", ["1-17-0.JPG", "1-17-1.JPG", "1-17-2.JPG", "1-17-3.JPG", "1-17-4.JPG", "1-17-5.JPG"]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-18/1-18.JPG",
+    backMedia: mediaFiles("img/1 create/1-18", [
+      "1-18-1.JPG",
+      "1-18-2.JPG",
+      "1-18-3.jpg",
+      "1-18-4.JPG",
+      "1-18-5.JPG",
+      "1-18-6.JPG",
+      "1-18-7.JPG",
+      "1-18-8.JPG",
+      "1-18-9.JPG",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-19/1-19.jpg",
+    backMedia: numberedMedia("img/1 create/1-19", "1-19", [1, 2, 3, 4, 5, 6, 7], "jpg"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-20/1-20.png",
+    backMedia: mediaFiles("img/1 create/1-20", [
+      "1-20-1.png",
+      "1-20-2.png",
+      "1-20-3.jpg",
+      "1-20-4.jpg",
+      "1-20-5.png",
+      "1-20-6.png",
+      "1-20-7.png",
+      "1-20-8.png",
+      "1-20-9.jpg",
+      "1-20-10.png",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-21/1-21-0.png",
+    backMedia: mediaFiles("img/1 create/1-21", [
+      "1-21-1",
+      "1-21-2.png",
+      "1-21-3.png",
+      "1-21-4.png",
+      "1-21-5.png",
+      "1-21-6.png",
+      "1-21-7.png",
+      "1-21-8.jpg",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-22/1-22.jpg",
+    backMedia: numberedMedia("img/1 create/1-22", "1-22", [1, 2, 3, 4, 5], "jpg"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-23/1-23.jpg",
+    backMedia: numberedMedia("img/1 create/1-23", "1-23", [1, 2, 3], "jpg"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-24/1-24.jpg",
+    backMedia: mediaFiles("img/1 create/1-24", [
+      "1-24-1.jpg",
+      "1-24-2.jpg",
+      "1-24-3.JPG",
+      "1-24-4.JPG",
+      "1-24-5.JPG",
+      "1-24-6.JPG",
+      "1-24-7.JPG",
+      "1-24-8.jpg",
+      "1-24-9.JPG",
+      "1-24-10.JPG",
+      "1-24-11.jpg",
+      "1-24-12.jpg",
+      "1-24-13.jpg",
+      "1-24-14.png",
+      "1-24-15.jpg",
+      "1-24-16.JPG",
+      "1-24-17.jpg",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-25/1-25.png",
+    backMedia: numberedMedia("img/1 create/1-25", "1-25", [0, 1, 2, 3, 4, 5], "png"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-26/1-26.JPG",
+    backMedia: mediaFiles("img/1 create/1-26", [
+      "1-26-1.jpg",
+      "1-26-2.JPG",
+      "1-26-3.JPG",
+      "1-26-4.JPG",
+      "1-26-5.JPG",
+      "1-26-6.JPG",
+      "1-26-7.JPG",
+      "1-26-8.JPG",
+      "1-26-9.JPG",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-27/1-27.JPG",
+    backMedia: mediaFiles("img/1 create/1-27", ["1-27-1.jpg", "1-27-2.JPG", "1-27-3.jpg", "1-27-4.JPG", "1-27-5.JPG", "1-27-6.JPG", "1-27-7.JPG"]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-28/1-28.JPG",
+    backMedia: mediaFiles("img/1 create/1-28", [
+      "1-28-1.JPG",
+      "1-28-2.JPG",
+      "1-28-3.JPG",
+      "1-28-4.JPG",
+      "1-28-5.jpg",
+      "1-28-6.JPG",
+      "1-28-7.jpg",
+      "1-28-8.jpg",
+      "1-28-9.jpg",
+      "1-28-10.jpg",
+      "1-28-11.jpg",
+      "1-28-12.jpg",
+      "1-28-13.JPG",
+      "1-28-14.jpg",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-29/1-29.jpg",
+    backMedia: numberedMedia("img/1 create/1-29", "1-29", [1, 2, 3], "jpg"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-30/1-30.jpg",
+    backMedia: mediaFiles("img/1 create/1-30", [
+      "1-30-1.jpg",
+      "1-30-2.jpg",
+      "1-30-3.jpg",
+      "1-30-4.jpg",
+      "1-30-5.jpg",
+      "1-30-6.png",
+    ]),
   },
   { category: "2", path: "img/2 operate/2-01.jpg" },
   { category: "2", path: "img/2 operate/2-02.jpg" },
@@ -198,27 +419,72 @@ function getRowTags(row) {
     .filter(Boolean);
 }
 
-async function loadCardContent() {
+function getCell(rows, cell) {
+  const column = cell.match(/[A-Z]+/)?.[0];
+  const row = Number(cell.match(/\d+/)?.[0]) - 1;
+  const columnIndex = column
+    .split("")
+    .reduce((total, letter) => total * 26 + letter.charCodeAt(0) - 64, 0) - 1;
+
+  return String(rows[row]?.[columnIndex] || "").trim();
+}
+
+function normalizeWorkbookRows(sheet) {
+  return XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false });
+}
+
+function getCardNumber(row, currentCategory, lastCardNumber, hasContent) {
+  const explicitCard = String(row.card || "").trim();
+
+  if (explicitCard) {
+    return explicitCard;
+  }
+
+  if (!currentCategory || !hasContent || !lastCardNumber) {
+    return "";
+  }
+
+  return String(lastCardNumber + 1).padStart(2, "0");
+}
+
+async function loadSiteContent() {
   if (!window.XLSX) {
-    return fallbackCardContentById;
+    return { cardContentById: fallbackCardContentById, about: fallbackAboutContent };
   }
 
   try {
-    const response = await fetch("txt/Book1.xlsx", { cache: "no-store" });
+    const response = await fetch(workbookPath, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Workbook request failed with ${response.status}`);
+    }
+
     const buffer = await response.arrayBuffer();
     const workbook = XLSX.read(buffer, { type: "array" });
     const sheet = workbook.Sheets.Cards || workbook.Sheets[workbook.SheetNames[0]];
-    const rows = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false });
+    const rows = normalizeWorkbookRows(sheet);
     const contentById = { ...fallbackCardContentById };
     let currentCategory = "";
+    let lastCardNumber = 0;
 
     rows.forEach((row) => {
       const rowCategory = String(row.category || "").trim();
       if (rowCategory) {
         currentCategory = rowCategory;
+        lastCardNumber = 0;
       }
 
-      const id = getCardId(currentCategory, row.card);
+      const hasContent =
+        Boolean(row["back heading"] || row["back  body"] || row["back body"]) || getRowTags(row).length > 0;
+      const card = getCardNumber(row, currentCategory, lastCardNumber, hasContent);
+      if (card) {
+        lastCardNumber = Number(String(card).replace(/\D/g, "")) || lastCardNumber;
+      }
+
+      if (!hasContent) {
+        return;
+      }
+
+      const id = getCardId(currentCategory, card);
       if (!id) {
         return;
       }
@@ -230,10 +496,18 @@ async function loadCardContent() {
       };
     });
 
-    return contentById;
+    const aboutSheet = workbook.Sheets.about || workbook.Sheets.About;
+    const aboutRows = aboutSheet ? XLSX.utils.sheet_to_json(aboutSheet, { header: 1, defval: "", raw: false }) : [];
+    const about = {
+      name: getCell(aboutRows, "A1") || fallbackAboutContent.name,
+      email: getCell(aboutRows, "A3") || fallbackAboutContent.email,
+      body: getCell(aboutRows, "A5") || fallbackAboutContent.body,
+    };
+
+    return { cardContentById: contentById, about };
   } catch (error) {
-    console.warn("Book1.xlsx could not be loaded.", error);
-    return fallbackCardContentById;
+    console.warn(`${workbookPath} could not be loaded.`, error);
+    return { cardContentById: fallbackCardContentById, about: fallbackAboutContent };
   }
 }
 
@@ -339,12 +613,15 @@ function openDetail(project) {
   detailImage.alt = project.title;
   applyScrollbarColor(project);
   renderTags(detailTags, project.tags);
-  renderLinkedText(detailTitle, project.title);
+  renderDetailTitle(project);
   renderLinkedText(detailCopy, project.copy);
   renderDetailMedia(project);
   detail.setAttribute("aria-hidden", "false");
   detail.classList.add("is-open");
   document.body.classList.add("detail-open");
+  requestAnimationFrame(fitDetailTitleLines);
+  requestAnimationFrame(() => requestAnimationFrame(fitDetailTitleLines));
+  document.fonts?.ready.then(fitDetailTitleLines);
   requestAnimationFrame(syncDetailScrollbar);
 }
 
@@ -389,6 +666,43 @@ function renderTags(element, tags) {
     item.className = "back-tag";
     item.textContent = tag;
     element.appendChild(item);
+  });
+}
+
+function renderDetailTitle(project) {
+  detailTitle.innerHTML = "";
+
+  String(project.title)
+    .split("\n")
+    .forEach((line, index) => {
+      const item = document.createElement("span");
+      const isFittedLine = project.id === "1-08" && index === 1;
+
+      item.className = isFittedLine ? "detail-title-line detail-title-line-fit" : "detail-title-line";
+      if (isFittedLine) {
+        item.dataset.fitRatio = "0.9";
+      }
+
+      renderLinkedText(item, line);
+      detailTitle.appendChild(item);
+    });
+}
+
+function fitDetailTitleLines() {
+  detailTitle.querySelectorAll(".detail-title-line-fit").forEach((line) => {
+    line.style.fontSize = "";
+
+    const availableWidth = detailTitle.clientWidth;
+    const lineWidth = line.scrollWidth;
+
+    if (!availableWidth || !lineWidth || lineWidth <= availableWidth) {
+      return;
+    }
+
+    const currentSize = Number.parseFloat(getComputedStyle(line).fontSize);
+    const fitRatio = Number.parseFloat(line.dataset.fitRatio || "0.995");
+    const fittedSize = Math.max(10, currentSize * (availableWidth / lineWidth) * fitRatio);
+    line.style.fontSize = `${fittedSize}px`;
   });
 }
 
@@ -511,6 +825,11 @@ function playSound(src) {
   audio.play().catch(() => {});
 }
 
+function playRandomCardFlipSound() {
+  const sound = cardFlipSounds[Math.floor(Math.random() * cardFlipSounds.length)];
+  playSound(sound);
+}
+
 function playAboutAudio() {
   aboutAudio.currentTime = 0;
   aboutAudio.play().catch(() => {});
@@ -548,7 +867,7 @@ tabs.forEach((tab) => {
 });
 
 document.querySelector("[data-flip]").addEventListener("click", () => {
-  playSound(cardFlipSounds[currentProject?.category]);
+  playRandomCardFlipSound();
   detailRotation += 180;
   detailInner.style.transform = `rotateY(${detailRotation}deg)`;
   const isShowingBack = detail.classList.toggle("is-flipped");
@@ -561,7 +880,7 @@ document.querySelector("[data-flip]").addEventListener("click", () => {
 document.querySelectorAll("[data-close]").forEach((button) => {
   button.addEventListener("click", () => {
     if (currentProject && button.closest("[data-detail]")) {
-      playSound(cardFlipSounds[currentProject.category]);
+      playRandomCardFlipSound();
     }
 
     closeDetail();
@@ -615,6 +934,7 @@ function syncDetailScrollbar() {
 
 detailScrollArea.addEventListener("scroll", syncDetailScrollbar);
 window.addEventListener("resize", syncDetailScrollbar);
+window.addEventListener("resize", fitDetailTitleLines);
 detailScrollArea.addEventListener(
   "wheel",
   (event) => {
@@ -663,7 +983,8 @@ detailScrollbar.addEventListener("pointerdown", (event) => {
 });
 
 async function init() {
-  const cardContentById = await loadCardContent();
+  const { cardContentById, about } = await loadSiteContent();
+  aboutContent = about;
   projects = createProjects(cardContentById);
   renderAbout();
   render("all");
