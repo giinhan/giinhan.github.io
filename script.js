@@ -603,7 +603,7 @@ const imageRows = [
   {
     category: "2",
     path: "img/2 operate/2-06/2-06.jpg",
-    backMedia: mediaFiles("img/2 operate/2-06", ["2-06-2.jpg", "2-06-3.jpg", "2-06-4.jpg"]),
+    backMedia: mediaFiles("img/2 operate/2-06", ["2-06-1.mp4", "2-06-2.jpg", "2-06-3.jpg", "2-06-4.jpg"]),
   },
   {
     category: "2",
@@ -903,8 +903,13 @@ function renderDetailMedia(project) {
     const element = document.createElement(isVideo ? "video" : "img");
 
     element.src = src;
+    element.className = "back-media-item";
 
     if (isVideo) {
+      element.classList.add("back-media-video");
+      if (src.endsWith("2-06-1.mp4")) {
+        element.classList.add("back-media-video-small");
+      }
       element.controls = true;
       element.muted = true;
       element.playsInline = true;

@@ -467,6 +467,11 @@ button {
   background: #fff;
 }
 
+.back-media-video-small {
+  justify-self: center;
+  width: 80%;
+}
+
 .detail-actions {
   position: fixed;
   z-index: 55;
