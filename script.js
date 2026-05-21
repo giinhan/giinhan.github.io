@@ -891,6 +891,8 @@ function openDetail(project) {
   requestAnimationFrame(fitDetailTitleLines);
   requestAnimationFrame(() => requestAnimationFrame(fitDetailTitleLines));
   document.fonts?.ready.then(fitDetailTitleLines);
+  requestAnimationFrame(syncDetailMediaSize);
+  requestAnimationFrame(() => requestAnimationFrame(syncDetailMediaSize));
   requestAnimationFrame(syncDetailScrollbar);
 }
 
@@ -943,8 +945,20 @@ function createDetailMediaElement(src, project, index) {
   }
 
   element.addEventListener("load", syncDetailScrollbar);
-  element.addEventListener("loadedmetadata", syncDetailScrollbar);
+  element.addEventListener("loadedmetadata", () => {
+    syncDetailMediaSize();
+    syncDetailScrollbar();
+  });
   return element;
+}
+
+function syncDetailMediaSize() {
+  const height = detailInner.getBoundingClientRect().height;
+  if (!height) {
+    return;
+  }
+
+  detailMedia.style.setProperty("--detail-card-media-height", `${Math.max(180, height - 36)}px`);
 }
 
 function pauseDetailMedia() {
@@ -1230,8 +1244,11 @@ function syncDetailScrollbar() {
 }
 
 detailScrollArea.addEventListener("scroll", syncDetailScrollbar);
-window.addEventListener("resize", syncDetailScrollbar);
-window.addEventListener("resize", fitDetailTitleLines);
+window.addEventListener("resize", () => {
+  syncDetailMediaSize();
+  syncDetailScrollbar();
+  fitDetailTitleLines();
+});
 detailScrollArea.addEventListener(
   "wheel",
   (event) => {

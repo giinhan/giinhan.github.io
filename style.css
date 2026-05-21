@@ -467,9 +467,13 @@ button {
   background: #fff;
 }
 
-.back-media-video-small {
+.back-media-list .back-media-video-small {
   justify-self: center;
-  width: 80%;
+  width: auto;
+  max-width: 100%;
+  height: var(--detail-card-media-height, min(62vh, 620px));
+  max-height: min(62vh, 620px);
+  object-fit: contain;
 }
 
 .back-media-pair {
