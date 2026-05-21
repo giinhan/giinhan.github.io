@@ -905,8 +905,8 @@ function renderDetailMedia(project) {
       const pair = document.createElement("div");
       pair.className = "back-media-pair";
       pair.append(
-        createDetailMediaElement(src, project, index),
-        createDetailMediaElement("img/1 create/1-33/1-33-4.mp4", project, index + 1),
+        createDetailMediaNode(src, project, index),
+        createDetailMediaNode("img/1 create/1-33/1-33-4.mp4", project, index + 1),
       );
       detailMedia.appendChild(pair);
       return;
@@ -916,9 +916,37 @@ function renderDetailMedia(project) {
       return;
     }
 
-    const element = createDetailMediaElement(src, project, index);
-    detailMedia.appendChild(element);
+    const node = createDetailMediaNode(src, project, index);
+    detailMedia.appendChild(node);
   });
+}
+
+function createDetailMediaNode(src, project, index) {
+  const element = createDetailMediaElement(src, project, index);
+  if (element.tagName !== "VIDEO") {
+    return element;
+  }
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "back-media-video-frame";
+  if (element.classList.contains("back-media-video-small")) {
+    wrapper.classList.add("back-media-video-frame-small");
+  }
+
+  const soundButton = document.createElement("button");
+  soundButton.className = "video-sound-toggle";
+  soundButton.type = "button";
+  soundButton.textContent = "sound off";
+  soundButton.setAttribute("aria-label", "영상 사운드 켜기");
+  soundButton.addEventListener("click", (event) => {
+    event.stopPropagation();
+    element.muted = !element.muted;
+    soundButton.textContent = element.muted ? "sound off" : "sound on";
+    soundButton.setAttribute("aria-label", element.muted ? "영상 사운드 켜기" : "영상 사운드 끄기");
+  });
+
+  wrapper.append(element, soundButton);
+  return wrapper;
 }
 
 function createDetailMediaElement(src, project, index) {

@@ -467,6 +467,17 @@ button {
   background: #fff;
 }
 
+.back-media-video-frame {
+  position: relative;
+  width: 100%;
+}
+
+.back-media-video-frame-small {
+  justify-self: center;
+  width: fit-content;
+  max-width: 100%;
+}
+
 .back-media-list .back-media-video-small {
   justify-self: center;
   width: auto !important;
@@ -485,6 +496,29 @@ button {
 
 .back-media-video-paired {
   width: 100%;
+}
+
+.video-sound-toggle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  min-height: 27px;
+  border: 1px solid rgba(33, 28, 11, 0.26);
+  border-radius: 999px;
+  padding: 0 10px;
+  background: rgba(251, 251, 250, 0.78);
+  color: var(--ink);
+  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.video-sound-toggle:hover,
+.video-sound-toggle:focus-visible {
+  background: rgba(251, 251, 250, 0.95);
 }
 
 .detail-actions {
