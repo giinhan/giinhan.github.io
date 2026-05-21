@@ -469,10 +469,10 @@ button {
 
 .back-media-list .back-media-video-small {
   justify-self: center;
-  width: auto;
+  width: auto !important;
   max-width: 100%;
   height: var(--detail-card-media-height, min(62vh, 620px));
-  max-height: min(62vh, 620px);
+  max-height: min(46vh, 460px);
   object-fit: contain;
 }
 
