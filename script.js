@@ -368,14 +368,280 @@ const imageRows = [
       "1-30-6.png",
     ]),
   },
-  { category: "2", path: "img/2 operate/2-01.jpg" },
-  { category: "2", path: "img/2 operate/2-02.jpg" },
-  { category: "3", path: "img/3 write/3-01.png" },
-  { category: "3", path: "img/3 write/3-02.jpeg" },
-  { category: "3", path: "img/3 write/3-03.jpeg" },
-  { category: "4", path: "img/4 talk/4-01.png" },
-  { category: "4", path: "img/4 talk/4-02.jpg" },
-  { category: "5", path: "img/5 consult/5-01.png" },
+  {
+    category: "1",
+    path: "img/1 create/1-31/1-31.JPG",
+    backMedia: mediaFiles("img/1 create/1-31", [
+      "1-31-1.JPG",
+      "1-31-2.JPG",
+      "1-31-3.JPG",
+      "1-31-4.JPG",
+      "1-31-5.jpg",
+      "1-31-6.JPG",
+      "1-31-7.JPG",
+      "1-31-8.JPG",
+      "1-31-9.jpg",
+      "1-31-10.JPG",
+      "1-31-12.JPG",
+      "1-31-13.JPG",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-32/1-32.jpg",
+    backMedia: mediaFiles("img/1 create/1-32", ["1-32-1.JPG", "1-32-2.PNG"]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-33/1-33.png",
+    backMedia: mediaFiles("img/1 create/1-33", [
+      "1-33-0.jpg",
+      "1-33-1.jpg",
+      "1-33-2.jpg",
+      "1-33-3.mp4",
+      "1-33-4.mp4",
+      "1-33-5.JPG",
+      "1-33-6.JPG",
+      "1-33-7.JPG",
+      "1-33-8.JPG",
+      "1-33-9.JPG",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-34/1-34.JPG",
+    backMedia: mediaFiles("img/1 create/1-34", [
+      "1-34-1.JPG",
+      "1-34-2.jpg",
+      "1-34-3.JPG",
+      "1-34-4.JPG",
+      "1-34-5.JPG",
+      "1-34-6.JPG",
+      "1-34-7.JPG",
+      "1-34-12.jpg",
+      "1-34-13.jpg",
+      "1-34-14.jpg",
+      "1-34-15.JPG",
+      "1-34-16.JPG",
+      "1-34-17.JPG",
+      "1-34-18",
+      "1-34-19.png",
+      "1-34-20.png",
+      "1-34-21.png",
+      "1-34-23.JPG",
+      "1-34-24.JPG",
+      "1-34-25.JPG",
+      "1-34-26.JPG",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-35/1-35.jpg",
+    backMedia: numberedMedia("img/1 create/1-35", "1-35", [1, 2, 3, 4], "jpg"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-36/1-36.JPG",
+    backMedia: mediaFiles("img/1 create/1-36", [
+      "1-36-2.jpg",
+      "1-36-3.JPG",
+      "1-36-4.JPG",
+      "1-36-5.JPG",
+      "1-36-6.JPG",
+      "1-36-8.JPG",
+      "1-36-9.JPG",
+      "1-36-10.JPG",
+      "1-36-11.JPG",
+      "1-36-12.JPG",
+      "1-36-13.JPG",
+      "1-36-14.JPG",
+      "1-36-15.JPG",
+      "1-36-16.JPG",
+      "1-36-17.JPG",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-37/1-37.JPG",
+    backMedia: mediaFiles("img/1 create/1-37", ["1-37-1.JPG", "1-37-2.JPG", "1-37-3.JPG", "1-37-4.jpg", "1-37-5.JPG"]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-38/1-38.jpg",
+    backMedia: mediaFiles("img/1 create/1-38", [
+      "1-38-1.jpg",
+      "1-38-2.JPG",
+      "1-38-3.jpg",
+      "1-38-4.jpg",
+      "1-38-5.jpg",
+      "1-38-6.jpg",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-39/1-39.jpg",
+    backMedia: mediaFiles("img/1 create/1-39", ["1-39-0.png", "1-39-1.JPG", "1-39-2.JPG", "1-39-3.jpg"]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-40/1-40.jpg",
+    backMedia: mediaFiles("img/1 create/1-40", [
+      "1-40-2.JPG",
+      "1-40-3.JPG",
+      "1-40-4.JPG",
+      "1-40-5.MOV",
+      "1-40-6.png",
+      "1-40-7.png",
+      "1-40-8.png",
+      "1-40-9.jpg",
+      "1-40-10.JPG",
+      "1-40-12.JPG",
+      "1-40-13.JPG",
+      "1-40-14.JPG",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-41/1-41.png",
+    backMedia: numberedMedia("img/1 create/1-41", "1-41", [1, 2, 3, 4], "png"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-42/1-42.png",
+    backMedia: numberedMedia("img/1 create/1-42", "1-42", [1, 2], "png"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-43/1-43.jpg",
+    backMedia: mediaFiles("img/1 create/1-43", [
+      "1-43-1-1.jpg",
+      "1-43-1-2.jpg",
+      "1-43-2.png",
+      "1-43-3.png",
+      "1-43-4.png",
+      "1-43-5.png",
+      "1-43-6.png",
+      "1-43-7.JPG",
+      "1-43-8.JPG",
+      "1-43-9.JPG",
+      "1-43-10.JPG",
+      "1-43-11.JPG",
+      "1-43-12.JPG",
+      "1-43-13.JPG",
+      "1-43-15.jpg",
+      "1-43-16.jpg",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-44/1-44.jpg",
+    backMedia: numberedMedia("img/1 create/1-44", "1-44", [1, 2], "jpg"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-45/1-45.jpg",
+    backMedia: numberedMedia("img/1 create/1-45", "1-45", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "jpg"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-46/1-46.jpg",
+    backMedia: mediaFiles("img/1 create/1-46", [
+      "1-46-0.jpg",
+      "1-46-1.jpg",
+      "1-46-2.jpg",
+      "1-46-3.jpg",
+      "1-46-4.jpg",
+      "1-46-5.jpg",
+      "1-46-6.jpg",
+      "1-46-7.jpg",
+      "1-46-8.jpg",
+      "1-46-9.jpg",
+      "1-46-10.jpg",
+      "1-46-11.JPG",
+    ]),
+  },
+  {
+    category: "2",
+    path: "img/2 operate/2-01/2-01.jpg",
+    backMedia: numberedMedia("img/2 operate/2-01", "2-01", [1, 2, 3, 4], "png").concat("img/2 operate/2-01/2-01-5.jpg"),
+  },
+  {
+    category: "2",
+    path: "img/2 operate/2-02/2-02.jpg",
+    backMedia: mediaFiles("img/2 operate/2-02", ["2-02-1", "2-02-2.png", "2-02-3.png"]),
+  },
+  {
+    category: "2",
+    path: "img/2 operate/2-03/2-03.jpg",
+    backMedia: numberedMedia("img/2 operate/2-03", "2-03", [1, 2, 3], "jpg").concat(
+      "img/2 operate/2-03/2-03-4.JPG",
+      "img/2 operate/2-03/2-03-5.jpg",
+      "img/2 operate/2-03/2-03-6.jpg",
+    ),
+  },
+  {
+    category: "2",
+    id: "2-04",
+    path: "img/2 operate/2-04/55-2.jpg",
+    backMedia: mediaFiles("img/2 operate/2-04", ["2-04-1.png", "2-04-2.png", "2-04-3.jpg", "2-04-4.jpg"]),
+  },
+  {
+    category: "2",
+    id: "2-05",
+    path: "img/2 operate/2-05/2-05.jpeg",
+    backMedia: mediaFiles("img/2 operate/2-05", [
+      "2-05-0.jpg",
+      "2-05-1.jpg",
+      "2-05-2.jpg",
+      "2-05-3.jpg",
+      "2-05-4.jpg",
+      "2-05-5.JPG",
+      "2-05-6.jpg",
+      "2-05-7.jpg",
+    ]),
+  },
+  {
+    category: "2",
+    path: "img/2 operate/2-06/2-06.jpg",
+    backMedia: mediaFiles("img/2 operate/2-06", ["2-06-2.jpg", "2-06-3.jpg", "2-06-4.jpg"]),
+  },
+  {
+    category: "2",
+    path: "img/2 operate/2-07/2-07.jpg",
+    backMedia: numberedMedia("img/2 operate/2-07", "2-07", [1, 2, 3, 4, 5], "jpg"),
+  },
+  {
+    category: "2",
+    path: "img/2 operate/2-08/2-08.jpg",
+    backMedia: mediaFiles("img/2 operate/2-08", [
+      "2-08-1.jpg",
+      "2-08-2.jpg",
+      "2-08-3.jpg",
+      "2-08-4.JPG",
+      "2-08-5.JPG",
+      "2-08-6.jpg",
+      "2-08-7.jpg",
+      "2-08-8.png",
+    ]),
+  },
+  {
+    category: "2",
+    path: "img/2 operate/2-10/2-10.png",
+    backMedia: numberedMedia("img/2 operate/2-10", "2-10", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "jpg"),
+  },
+  { category: "3", id: "3-01", path: "img/3 write/3-01/62.jpeg" },
+  { category: "3", id: "3-02", path: "img/3 write/3-02/61.jpeg" },
+  { category: "3", id: "3-03", path: "img/3 write/3-03/63.jpg" },
+  {
+    category: "4",
+    path: "img/4 talk/4-01/4-01.JPG",
+    backMedia: mediaFiles("img/4 talk/4-01", ["4-01-1.JPG", "4-01-2.jpg"]),
+  },
+  { category: "4", id: "4-02", path: "img/4 talk/4-02/64-3.jpg" },
+  { category: "4", id: "4-03", path: "img/4 talk/4-03/64-4.JPG" },
+  { category: "4", id: "4-04", path: "img/4 talk/4-04/64-5.jpg", backMedia: ["img/4 talk/4-04/3-02.jpg"] },
+  { category: "4", id: "4-05", path: "img/4 talk/4-05/3-01.png" },
+  { category: "5", path: "img/5 consult/5-01/5-01.png" },
 ];
 
 const categoryNumberByName = {
@@ -514,7 +780,7 @@ async function loadSiteContent() {
 function createProjects(cardContentById) {
   return imageRows.map((row, index) => {
     const fileName = row.path.split("/").pop();
-    const id = fileName.replace(/\.[^.]+$/, "");
+    const id = row.id || fileName.replace(/\.[^.]+$/, "");
     const content = cardContentById[id] || {};
     const layout = layoutProfiles[index % layoutProfiles.length];
 
@@ -543,14 +809,17 @@ function render(category = "all") {
     card.type = "button";
     card.style.setProperty("--tilt", `${project.tilt}deg`);
     card.style.setProperty("--stagger-x", `${project.staggerX}px`);
-    card.style.setProperty("--stagger-y", `${project.staggerY}px`);
+    card.style.setProperty("--stagger-gap-extra", `${Math.abs(project.staggerY) * 1.35}px`);
     card.setAttribute("aria-label", `${project.title} 크게 보기`);
     const image = document.createElement("img");
     image.src = project.image;
     image.alt = project.title;
     image.addEventListener("load", () => applyFrontImageScale(card, image), { once: true });
+    const title = document.createElement("span");
+    title.className = "project-card-title";
+    title.textContent = project.title;
 
-    card.append(image);
+    card.append(image, title);
     card.addEventListener("click", () => openDetail(project));
     grid.appendChild(card);
   });

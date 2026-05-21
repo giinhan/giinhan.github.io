@@ -7,6 +7,9 @@
   --header-h: 92px;
 }
 
+/* Space Mono is loaded from Google Fonts for now. If you later host woff2 files locally,
+   re-add @font-face declarations here with the correct fonts/space-mono-*.woff2 paths. */
+
 * {
   box-sizing: border-box;
 }
@@ -35,8 +38,13 @@ button {
 .tab,
 .about-link,
 .about-panel {
-  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
-    monospace;
+  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
+}
+
+/* Ensure about panel content (including English text) uses Space Mono */
+.about-panel,
+.about-panel * {
+  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
 }
 
 .site-header {
@@ -98,7 +106,7 @@ button {
   color: #58544e;
   font-synthesis: none;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0;
   line-height: 1;
   text-shadow: none;
@@ -126,7 +134,7 @@ button {
 
 .tab.is-active {
   color: #211c0b;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .tab.is-active::after {
@@ -138,7 +146,7 @@ button {
   justify-self: end;
   padding: 8px 0 8px 18px;
   font-size: 24px;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .portfolio-shell {
@@ -158,14 +166,13 @@ button {
   position: relative;
   display: block;
   width: min(100%, 248px);
-  margin: 0 auto clamp(70px, 10vh, 126px);
+  margin: 0 auto calc(clamp(70px, 10vh, 126px) + var(--stagger-gap-extra, 0px));
   padding: 0;
   border: 0;
   background: transparent;
   cursor: pointer;
   break-inside: avoid;
-  transform: translate(var(--stagger-x, 0), var(--stagger-y, 0)) rotate(var(--tilt))
-    scale(var(--card-scale, 1));
+  transform: translateX(var(--stagger-x, 0)) rotate(var(--tilt)) scale(var(--card-scale, 1));
   transform-origin: center center;
   backface-visibility: hidden;
   contain: paint;
@@ -196,6 +203,36 @@ button {
 .project-card:hover img {
   filter: saturate(1.08);
   box-shadow: 16px 34px 38px rgba(33, 28, 11, 0.22), 6px 14px 20px rgba(33, 28, 11, 0.14);
+}
+
+.project-card-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  display: grid;
+  width: min(78%, 172px);
+  aspect-ratio: 1;
+  place-items: center;
+  padding: 18px;
+  background: rgba(251, 251, 250, 0.58);
+  border-radius: 50%;
+  color: var(--ink);
+  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
+  font-size: clamp(11px, 0.95vw, 14px);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 180ms ease;
+}
+
+.project-card:hover .project-card-title,
+.project-card:focus-visible .project-card-title {
+  opacity: 1;
 }
 
 .detail-view {
@@ -289,9 +326,8 @@ button {
   overflow: auto;
   padding: var(--back-pad);
   background: #fffef9;
-  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
-    sans-serif;
-  font-weight: 300;
+  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
+  font-weight: 400;
   scrollbar-width: none;
 }
 
@@ -342,8 +378,7 @@ button {
 
 .back-scroll h2 {
   margin: 0 0 22px;
-  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
-    sans-serif;
+  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
   font-size: clamp(15.3px, 2.16vw, 26.1px);
   font-weight: 600;
   line-height: 1.5;
@@ -382,10 +417,9 @@ button {
   padding: 4px 10px 3px;
   background: transparent;
   color: #000;
-  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
-    sans-serif;
+  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
   font-size: clamp(9px, 0.84vw, 11px);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1;
   letter-spacing: 0;
   white-space: nowrap;
@@ -395,14 +429,13 @@ button {
   margin: 0 0 24px;
   color: #4e4835;
   font-size: clamp(12px, 1.19vw, 15px);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.58;
 }
 
 .back-scroll [data-detail-copy] {
-  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
-    sans-serif;
-  font-weight: 300;
+  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
+  font-weight: 400;
   white-space: pre-line;
 }
 
@@ -506,7 +539,7 @@ button {
   overflow: auto;
   background: var(--panel);
   box-shadow: -20px 0 38px rgba(33, 28, 11, 0.22);
-  font-weight: 300;
+  font-weight: 400;
   transform: translateX(105%);
   transition: transform 320ms ease;
 }
@@ -529,7 +562,7 @@ button {
 
 .about-panel .about-name {
   margin-bottom: 18px;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .about-meta {
@@ -540,7 +573,7 @@ button {
 .about-list-title {
   margin-bottom: 14px;
   font-size: 23px;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .about-meta a,
@@ -562,8 +595,7 @@ button {
   border-radius: 999px;
   background: var(--ink);
   color: #fff8ce;
-  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
-    sans-serif;
+  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
   font-size: 18px;
   font-weight: 500;
   text-decoration: none;
