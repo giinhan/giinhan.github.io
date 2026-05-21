@@ -483,7 +483,7 @@ button {
   width: auto !important;
   max-width: 100%;
   height: var(--detail-card-media-height, min(34vh, 320px)) !important;
-  max-height: min(34vh, 320px) !important;
+  max-height: min(68vh, 680px) !important;
   object-fit: contain;
 }
 
