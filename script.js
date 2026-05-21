@@ -958,7 +958,7 @@ function syncDetailMediaSize() {
     return;
   }
 
-  detailMedia.style.setProperty("--detail-card-media-height", `${Math.max(160, height * 0.58)}px`);
+  detailMedia.style.setProperty("--detail-card-media-height", `${Math.max(140, height * 0.29)}px`);
 }
 
 function pauseDetailMedia() {
