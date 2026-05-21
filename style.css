@@ -468,7 +468,8 @@ button {
 }
 
 .back-media-video-frame {
-  position: relative;
+  display: grid;
+  gap: 8px;
   width: 100%;
 }
 
@@ -499,18 +500,15 @@ button {
 }
 
 .video-sound-toggle {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 2;
-  min-height: 27px;
+  justify-self: center;
+  min-height: 30px;
   border: 1px solid rgba(33, 28, 11, 0.26);
   border-radius: 999px;
-  padding: 0 10px;
-  background: rgba(251, 251, 250, 0.78);
+  padding: 0 12px;
+  background: rgba(251, 251, 250, 0.92);
   color: var(--ink);
   font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 400;
   letter-spacing: 0;
   cursor: pointer;
