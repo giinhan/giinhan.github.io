@@ -899,29 +899,52 @@ function renderDetailMedia(project) {
   detailMedia.hidden = !project.backMedia.length;
 
   project.backMedia.forEach((src, index) => {
-    const isVideo = /\.(mov|mp4|webm|m4v)$/i.test(src);
-    const element = document.createElement(isVideo ? "video" : "img");
-
-    element.src = src;
-    element.className = "back-media-item";
-
-    if (isVideo) {
-      element.classList.add("back-media-video");
-      if (src.endsWith("2-06-1.mp4")) {
-        element.classList.add("back-media-video-small");
-      }
-      element.controls = true;
-      element.muted = true;
-      element.playsInline = true;
-      element.preload = "metadata";
-    } else {
-      element.alt = `${project.title} back image ${index + 1}`;
+    if (src.endsWith("1-33-3.mp4")) {
+      const pair = document.createElement("div");
+      pair.className = "back-media-pair";
+      pair.append(
+        createDetailMediaElement(src, project, index),
+        createDetailMediaElement("img/1 create/1-33/1-33-4.mp4", project, index + 1),
+      );
+      detailMedia.appendChild(pair);
+      return;
     }
 
-    element.addEventListener("load", syncDetailScrollbar);
-    element.addEventListener("loadedmetadata", syncDetailScrollbar);
+    if (src.endsWith("1-33-4.mp4")) {
+      return;
+    }
+
+    const element = createDetailMediaElement(src, project, index);
     detailMedia.appendChild(element);
   });
+}
+
+function createDetailMediaElement(src, project, index) {
+  const isVideo = /\.(mov|mp4|webm|m4v)$/i.test(src);
+  const element = document.createElement(isVideo ? "video" : "img");
+
+  element.src = src;
+  element.className = "back-media-item";
+
+  if (isVideo) {
+    element.classList.add("back-media-video");
+    if (src.endsWith("2-06-1.mp4")) {
+      element.classList.add("back-media-video-small");
+    }
+    if (src.endsWith("1-33-3.mp4") || src.endsWith("1-33-4.mp4")) {
+      element.classList.add("back-media-video-paired");
+    }
+    element.controls = true;
+    element.muted = true;
+    element.playsInline = true;
+    element.preload = "metadata";
+  } else {
+    element.alt = `${project.title} back image ${index + 1}`;
+  }
+
+  element.addEventListener("load", syncDetailScrollbar);
+  element.addEventListener("loadedmetadata", syncDetailScrollbar);
+  return element;
 }
 
 function pauseDetailMedia() {

@@ -472,6 +472,17 @@ button {
   width: 80%;
 }
 
+.back-media-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 24px);
+  align-items: start;
+}
+
+.back-media-video-paired {
+  width: 100%;
+}
+
 .detail-actions {
   position: fixed;
   z-index: 55;
