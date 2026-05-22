@@ -173,14 +173,37 @@ button {
   cursor: pointer;
   break-inside: avoid;
   transform: translateX(var(--stagger-x, 0)) rotate(var(--tilt)) scale(var(--card-scale, 1));
-  transform-origin: center center;
+  transform-origin: center 86%;
   backface-visibility: hidden;
   contain: paint;
   will-change: transform;
 }
 
-.project-card:hover {
+.project-card:hover,
+.project-card:focus-visible {
   z-index: 2;
+}
+
+.project-card:hover,
+.project-card:focus-visible {
+  animation-duration: var(--wiggle-duration, 880ms);
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.project-card.is-wiggle-1:hover,
+.project-card.is-wiggle-1:focus-visible {
+  animation-name: card-bum-wiggle;
+}
+
+.project-card.is-wiggle-2:hover,
+.project-card.is-wiggle-2:focus-visible {
+  animation-name: card-shy-hop;
+}
+
+.project-card.is-wiggle-3:hover,
+.project-card.is-wiggle-3:focus-visible {
+  animation-name: card-peek-sway;
 }
 
 .project-card img,
@@ -203,36 +226,6 @@ button {
 .project-card:hover img {
   filter: saturate(1.08);
   box-shadow: 16px 34px 38px rgba(33, 28, 11, 0.22), 6px 14px 20px rgba(33, 28, 11, 0.14);
-}
-
-.project-card-title {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 3;
-  display: grid;
-  width: min(78%, 172px);
-  aspect-ratio: 1;
-  place-items: center;
-  padding: 18px;
-  background: rgba(251, 251, 250, 0.58);
-  border-radius: 50%;
-  color: var(--ink);
-  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
-  font-size: clamp(11px, 0.95vw, 14px);
-  font-weight: 400;
-  line-height: 1.35;
-  letter-spacing: 0;
-  text-align: center;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: opacity 180ms ease;
-}
-
-.project-card:hover .project-card-title,
-.project-card:focus-visible .project-card-title {
-  opacity: 1;
 }
 
 .detail-view {
@@ -557,6 +550,66 @@ button {
   100% {
     opacity: 1;
     transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes card-bum-wiggle {
+  0%,
+  100% {
+    transform: translateX(var(--stagger-x, 0)) translateY(0) rotate(var(--tilt)) scale(var(--card-scale, 1));
+  }
+  18% {
+    transform: translateX(var(--stagger-x, 0)) translateY(-3px) rotate(calc(var(--tilt) - 1.3deg)) scale(var(--card-scale, 1)) skewX(-0.8deg);
+  }
+  36% {
+    transform: translateX(var(--stagger-x, 0)) translateY(1px) rotate(calc(var(--tilt) + 1.4deg)) scale(var(--card-scale, 1)) skewX(0.9deg);
+  }
+  54% {
+    transform: translateX(var(--stagger-x, 0)) translateY(-2px) rotate(calc(var(--tilt) - 1deg)) scale(var(--card-scale, 1)) skewX(-0.5deg);
+  }
+  72% {
+    transform: translateX(var(--stagger-x, 0)) translateY(0) rotate(calc(var(--tilt) + 0.7deg)) scale(var(--card-scale, 1)) skewX(0.4deg);
+  }
+}
+
+@keyframes card-shy-hop {
+  0%,
+  100% {
+    transform: translateX(var(--stagger-x, 0)) translateY(0) rotate(var(--tilt)) scale(var(--card-scale, 1));
+  }
+  20% {
+    transform: translateX(var(--stagger-x, 0)) translateY(-5px) rotate(calc(var(--tilt) + 0.9deg)) scale(var(--card-scale, 1)) scaleX(0.995) scaleY(1.014);
+  }
+  38% {
+    transform: translateX(var(--stagger-x, 0)) translateY(1px) rotate(calc(var(--tilt) - 1.1deg)) scale(var(--card-scale, 1)) scaleX(1.01) scaleY(0.992);
+  }
+  58% {
+    transform: translateX(var(--stagger-x, 0)) translateY(-2px) rotate(calc(var(--tilt) + 0.6deg)) scale(var(--card-scale, 1)) scaleX(0.998) scaleY(1.007);
+  }
+  78% {
+    transform: translateX(var(--stagger-x, 0)) translateY(0) rotate(calc(var(--tilt) - 0.4deg)) scale(var(--card-scale, 1));
+  }
+}
+
+@keyframes card-peek-sway {
+  0%,
+  100% {
+    transform: translateX(var(--stagger-x, 0)) translateY(0) rotate(var(--tilt)) scale(var(--card-scale, 1));
+  }
+  16% {
+    transform: translateX(calc(var(--stagger-x, 0) - 2px)) translateY(-2px) rotate(calc(var(--tilt) - 0.6deg)) scale(var(--card-scale, 1));
+  }
+  32% {
+    transform: translateX(calc(var(--stagger-x, 0) + 2px)) translateY(-4px) rotate(calc(var(--tilt) + 1.6deg)) scale(var(--card-scale, 1));
+  }
+  48% {
+    transform: translateX(calc(var(--stagger-x, 0) - 1px)) translateY(-1px) rotate(calc(var(--tilt) - 1.2deg)) scale(var(--card-scale, 1));
+  }
+  66% {
+    transform: translateX(calc(var(--stagger-x, 0) + 1px)) translateY(-2px) rotate(calc(var(--tilt) + 0.8deg)) scale(var(--card-scale, 1));
+  }
+  84% {
+    transform: translateX(var(--stagger-x, 0)) translateY(1px) rotate(calc(var(--tilt) - 0.5deg)) scale(var(--card-scale, 1));
   }
 }
 

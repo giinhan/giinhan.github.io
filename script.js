@@ -582,8 +582,8 @@ const imageRows = [
   {
     category: "2",
     id: "2-04",
-    path: "img/2 operate/2-04/55-2.jpg",
-    backMedia: mediaFiles("img/2 operate/2-04", ["2-04-1.png", "2-04-2.png", "2-04-3.jpg", "2-04-4.jpg"]),
+    path: "img/2 operate/2-04/2-04.png",
+    backMedia: mediaFiles("img/2 operate/2-04", ["2-04-1.png", "2-04-2.jpg", "2-04-3.jpg", "2-04-4.jpg"]),
   },
   {
     category: "2",
@@ -806,6 +806,7 @@ function render(category = "all") {
   arrangeCards(filtered).forEach((project) => {
     const card = document.createElement("button");
     card.className = "project-card";
+    card.classList.add(`is-wiggle-${Math.floor(Math.random() * 3) + 1}`);
     card.type = "button";
     card.style.setProperty("--tilt", `${project.tilt}deg`);
     card.style.setProperty("--stagger-x", `${project.staggerX}px`);
@@ -815,11 +816,8 @@ function render(category = "all") {
     image.src = project.image;
     image.alt = project.title;
     image.addEventListener("load", () => applyFrontImageScale(card, image), { once: true });
-    const title = document.createElement("span");
-    title.className = "project-card-title";
-    title.textContent = project.title;
 
-    card.append(image, title);
+    card.append(image);
     card.addEventListener("click", () => openDetail(project));
     grid.appendChild(card);
   });
