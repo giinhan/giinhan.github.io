@@ -561,6 +561,34 @@ const imageRows = [
     ]),
   },
   {
+    category: "1",
+    path: "img/1 create/1-47/1-47.jpg",
+    backMedia: mediaFiles("img/1 create/1-47", [
+      "1-47-1.mp4",
+      "1-47-2",
+      "1-47-3.png",
+      "1-47-4.jpeg",
+      "1-47-5.png",
+      "1-47-6.JPG",
+      "1-47-7.png",
+      "1-47-8.png",
+      "1-47-9.jpg",
+      "1-47-10.JPG",
+      "1-47-11.jpeg",
+      "1-47-12.JPG",
+      "1-47-13.JPG",
+      "1-47-14.JPG",
+      "1-47-15.JPG",
+      "1-47-16.JPG",
+      "1-47-17.JPG",
+      "1-47-18.JPG",
+      "1-47-19.jpg",
+      "1-47-20.jpg",
+      "1-47-21.jpeg",
+      "1-47-22.jpeg",
+    ]),
+  },
+  {
     category: "2",
     path: "img/2 operate/2-01/2-01.jpg",
     backMedia: numberedMedia("img/2 operate/2-01", "2-01", [1, 2, 3, 4], "png").concat("img/2 operate/2-01/2-01-5.jpg"),
@@ -568,12 +596,13 @@ const imageRows = [
   {
     category: "2",
     path: "img/2 operate/2-02/2-02.jpg",
-    backMedia: mediaFiles("img/2 operate/2-02", ["2-02-1", "2-02-2.png", "2-02-3.png"]),
+    backMedia: mediaFiles("img/2 operate/2-02", ["2-02-0", "2-02-1.JPG", "2-02-2.png", "2-02-3.JPG", "2-02-4.png"]),
   },
   {
     category: "2",
     path: "img/2 operate/2-03/2-03.jpg",
-    backMedia: numberedMedia("img/2 operate/2-03", "2-03", [1, 2, 3], "jpg").concat(
+    backMedia: mediaFiles("img/2 operate/2-03", ["2-03-0.jpg"]).concat(
+      numberedMedia("img/2 operate/2-03", "2-03", [1, 2, 3], "jpg"),
       "img/2 operate/2-03/2-03-4.JPG",
       "img/2 operate/2-03/2-03-5.jpg",
       "img/2 operate/2-03/2-03-6.jpg",
@@ -626,12 +655,19 @@ const imageRows = [
   },
   {
     category: "2",
+    path: "img/2 operate/2-09/2-09.JPG",
+    backMedia: mediaFiles("img/2 operate/2-09", ["2-09-1.JPG", "2-09-2.JPG"]),
+  },
+  {
+    category: "2",
     path: "img/2 operate/2-10/2-10.png",
     backMedia: numberedMedia("img/2 operate/2-10", "2-10", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "jpg"),
   },
   { category: "3", id: "3-01", path: "img/3 write/3-01/62.jpeg" },
   { category: "3", id: "3-02", path: "img/3 write/3-02/61.jpeg" },
   { category: "3", id: "3-03", path: "img/3 write/3-03/63.jpg" },
+  { category: "3", id: "3-04", path: "img/3 write/3-04/3-04.png" },
+  { category: "3", id: "3-05", path: "img/3 write/3-05/3-05.png" },
   {
     category: "4",
     path: "img/4 talk/4-01/4-01.JPG",
@@ -642,6 +678,7 @@ const imageRows = [
   { category: "4", id: "4-04", path: "img/4 talk/4-04/64-5.jpg", backMedia: ["img/4 talk/4-04/3-02.jpg"] },
   { category: "4", id: "4-05", path: "img/4 talk/4-05/3-01.png" },
   { category: "5", path: "img/5 consult/5-01/5-01.png" },
+  { category: "5", id: "5-02", path: "img/5 consult/Screenshot 2026-05-21 at 11.00.54 AM.png" },
 ];
 
 const categoryNumberByName = {
@@ -931,15 +968,20 @@ function createDetailMediaNode(src, project, index) {
     wrapper.classList.add("back-media-video-frame-small");
   }
 
+  if (src.endsWith("1-47-1.mp4")) {
+    wrapper.append(element);
+    return wrapper;
+  }
+
   const soundButton = document.createElement("button");
   soundButton.className = "video-sound-toggle";
   soundButton.type = "button";
-  soundButton.textContent = "sound off";
+  soundButton.textContent = "sound on";
   soundButton.setAttribute("aria-label", "영상 사운드 켜기");
   soundButton.addEventListener("click", (event) => {
     event.stopPropagation();
     element.muted = !element.muted;
-    soundButton.textContent = element.muted ? "sound off" : "sound on";
+    soundButton.textContent = element.muted ? "sound on" : "sound off";
     soundButton.setAttribute("aria-label", element.muted ? "영상 사운드 켜기" : "영상 사운드 끄기");
   });
 
