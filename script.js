@@ -29,7 +29,7 @@ const cardFlipSounds = [
   "sound/card flip 05.mp3",
 ];
 
-const workbookPath = "txt/giinhan txt.xlsx";
+const workbookPath = "txt/giinhan txt.xlsx?v=20260526-03";
 
 const fallbackAboutContent = {
   name: "한지인",
@@ -166,7 +166,7 @@ const imageRows = [
   },
   {
     category: "1",
-    path: "img/1 create/1-12/1-12.png",
+    path: "img/1 create/1-12/1-12.jpg",
     backMedia: mediaFiles("img/1 create/1-12", [
       "1-12-0.png",
       "1-12-1.jpg",
@@ -261,16 +261,31 @@ const imageRows = [
   },
   {
     category: "1",
-    path: "img/1 create/1-21/1-21-0.png",
+    id: "1-21",
+    path: "img/1 create/1-21/1-47.jpg",
     backMedia: mediaFiles("img/1 create/1-21", [
-      "1-21-1",
-      "1-21-2.png",
-      "1-21-3.png",
-      "1-21-4.png",
-      "1-21-5.png",
-      "1-21-6.png",
-      "1-21-7.png",
-      "1-21-8.jpg",
+      "1-47-1.mp4",
+      "1-47-2",
+      "1-47-3.png",
+      "1-47-4.jpeg",
+      "1-47-5.png",
+      "1-47-6.JPG",
+      "1-47-7.png",
+      "1-47-8.png",
+      "1-47-9.jpg",
+      "1-47-10.JPG",
+      "1-47-11.jpeg",
+      "1-47-12.JPG",
+      "1-47-13.JPG",
+      "1-47-14.JPG",
+      "1-47-15.JPG",
+      "1-47-16.JPG",
+      "1-47-17.JPG",
+      "1-47-18.JPG",
+      "1-47-19.jpg",
+      "1-47-20.jpg",
+      "1-47-21.jpeg",
+      "1-47-22.jpeg",
     ]),
   },
   {
@@ -561,34 +576,6 @@ const imageRows = [
     ]),
   },
   {
-    category: "1",
-    path: "img/1 create/1-47/1-47.jpg",
-    backMedia: mediaFiles("img/1 create/1-47", [
-      "1-47-1.mp4",
-      "1-47-2",
-      "1-47-3.png",
-      "1-47-4.jpeg",
-      "1-47-5.png",
-      "1-47-6.JPG",
-      "1-47-7.png",
-      "1-47-8.png",
-      "1-47-9.jpg",
-      "1-47-10.JPG",
-      "1-47-11.jpeg",
-      "1-47-12.JPG",
-      "1-47-13.JPG",
-      "1-47-14.JPG",
-      "1-47-15.JPG",
-      "1-47-16.JPG",
-      "1-47-17.JPG",
-      "1-47-18.JPG",
-      "1-47-19.jpg",
-      "1-47-20.jpg",
-      "1-47-21.jpeg",
-      "1-47-22.jpeg",
-    ]),
-  },
-  {
     category: "2",
     path: "img/2 operate/2-01/2-01.jpg",
     backMedia: numberedMedia("img/2 operate/2-01", "2-01", [1, 2, 3, 4], "png").concat("img/2 operate/2-01/2-01-5.jpg"),
@@ -679,6 +666,21 @@ const imageRows = [
   { category: "4", id: "4-05", path: "img/4 talk/4-05/3-01.png" },
   { category: "5", path: "img/5 consult/5-01/5-01.png" },
   { category: "5", id: "5-02", path: "img/5 consult/Screenshot 2026-05-21 at 11.00.54 AM.png" },
+  {
+    category: "5",
+    id: "5-10",
+    path: "img/5 consult/5-10/1-21-0.png",
+    backMedia: mediaFiles("img/5 consult/5-10", [
+      "1-21-1",
+      "1-21-2.png",
+      "1-21-3.png",
+      "1-21-4.png",
+      "1-21-5.png",
+      "1-21-6.png",
+      "1-21-7.png",
+      "1-21-8.jpg",
+    ]),
+  },
 ];
 
 const categoryNumberByName = {
@@ -719,6 +721,13 @@ function getRowTags(row) {
   return Object.keys(row)
     .filter((key) => /^tag(?:\s*\d+)?$/i.test(String(key).trim()))
     .map((key) => String(row[key] || "").trim())
+    .filter(Boolean);
+}
+
+function getRowYears(row) {
+  return String(row.year || "")
+    .split(",")
+    .map((year) => year.trim())
     .filter(Boolean);
 }
 
@@ -796,6 +805,7 @@ async function loadSiteContent() {
         backHeading: row["back heading"] || contentById[id]?.backHeading || id,
         backBody: row["back  body"] || row["back body"] || contentById[id]?.backBody || "",
         tags: getRowTags(row),
+        years: getRowYears(row),
       };
     });
 
@@ -832,6 +842,7 @@ function createProjects(cardContentById) {
       backMedia: row.backMedia || [],
       copy: content.backBody || "아카이브 카드 설명을 준비 중입니다.",
       tags: content.tags || [],
+      years: content.years || [],
     };
   });
 }
@@ -916,7 +927,7 @@ function openDetail(project) {
   detailImage.src = project.image;
   detailImage.alt = project.title;
   applyScrollbarColor(project);
-  renderTags(detailTags, project.tags);
+  renderTags(detailTags, project.tags, project.years);
   renderDetailTitle(project);
   renderLinkedText(detailCopy, project.copy);
   renderDetailMedia(project);
@@ -1036,14 +1047,21 @@ function pauseDetailMedia() {
   });
 }
 
-function renderTags(element, tags) {
+function renderTags(element, tags, years = []) {
   element.innerHTML = "";
-  element.hidden = !tags.length;
+  element.hidden = !tags.length && !years.length;
 
   tags.forEach((tag) => {
     const item = document.createElement("span");
     item.className = "back-tag";
     item.textContent = tag;
+    element.appendChild(item);
+  });
+
+  years.forEach((year) => {
+    const item = document.createElement("span");
+    item.className = "back-tag back-tag-year";
+    item.textContent = year;
     element.appendChild(item);
   });
 }
@@ -1056,8 +1074,17 @@ function renderDetailTitle(project) {
     .forEach((line, index) => {
       const item = document.createElement("span");
       const isFittedLine = project.id === "1-08" && index === 1;
+      const classNames = ["detail-title-line"];
 
-      item.className = isFittedLine ? "detail-title-line detail-title-line-fit" : "detail-title-line";
+      if (index === 1) {
+        classNames.push("detail-title-line-subtitle");
+      }
+
+      if (isFittedLine) {
+        classNames.push("detail-title-line-fit");
+      }
+
+      item.className = classNames.join(" ");
       if (isFittedLine) {
         item.dataset.fitRatio = "0.9";
       }
@@ -1167,31 +1194,67 @@ function renderLinkedText(element, text) {
     /((?:https?:\/\/|www\.)[^\s<>()]+|(?:[a-z0-9-]+\.)+(?:com|co\.kr|kr|net|org|io|ai|edu|gov|co|me|design|studio|xyz)(?:\/[^\s<>()]*)?)/gi;
   element.textContent = "";
 
-  String(text)
-    .split(urlPattern)
-    .filter((part) => part !== "")
-    .forEach((part) => {
-      if (urlPattern.test(part)) {
-        urlPattern.lastIndex = 0;
-        const trailingMatch = part.match(/[.,;:!?)]$/);
-        const trailingText = trailingMatch ? trailingMatch[0] : "";
-        const urlText = trailingText ? part.slice(0, -1) : part;
-        const link = document.createElement("a");
-        link.href = /^https?:\/\//i.test(urlText) ? urlText : `https://${urlText}`;
-        link.textContent = urlText;
-        link.target = "_blank";
-        link.rel = "noreferrer";
-        element.appendChild(link);
+  const createLink = (urlText, label) => {
+    const link = document.createElement("a");
+    link.href = /^https?:\/\//i.test(urlText) ? urlText : `https://${urlText}`;
+    link.textContent = label;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    return link;
+  };
 
-        if (trailingText) {
-          element.appendChild(document.createTextNode(trailingText));
+  const appendInlineLinkedText = (value) => {
+    String(value)
+      .split(urlPattern)
+      .filter((part) => part !== "")
+      .forEach((part) => {
+        if (urlPattern.test(part)) {
+          urlPattern.lastIndex = 0;
+          const trailingMatch = part.match(/[.,;:!?)]$/);
+          const trailingText = trailingMatch ? trailingMatch[0] : "";
+          const urlText = trailingText ? part.slice(0, -1) : part;
+          element.appendChild(createLink(urlText, urlText));
+
+          if (trailingText) {
+            element.appendChild(document.createTextNode(trailingText));
+          }
+          return;
         }
-        return;
-      }
 
-      urlPattern.lastIndex = 0;
-      element.appendChild(document.createTextNode(part));
-    });
+        urlPattern.lastIndex = 0;
+        element.appendChild(document.createTextNode(part));
+      });
+  };
+
+  const lines = String(text).split("\n");
+  const linkedLines = [];
+
+  lines.forEach((line) => {
+    const trimmedLine = line.trim();
+    const previous = linkedLines[linkedLines.length - 1];
+    const isOnlyUrl = trimmedLine && trimmedLine.match(urlPattern)?.[0] === trimmedLine;
+    urlPattern.lastIndex = 0;
+
+    if (isOnlyUrl && previous?.text.trim() && !previous.url) {
+      previous.url = trimmedLine;
+      return;
+    }
+
+    linkedLines.push({ text: line, url: "" });
+  });
+
+  linkedLines.forEach((line, index) => {
+    if (index > 0) {
+      element.appendChild(document.createTextNode("\n"));
+    }
+
+    if (line.url) {
+      element.appendChild(createLink(line.url, line.text));
+      return;
+    }
+
+    appendInlineLinkedText(line.text);
+  });
 }
 
 function playSound(src) {

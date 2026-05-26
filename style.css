@@ -328,7 +328,7 @@ button {
   overflow: auto;
   padding: var(--back-pad);
   background: #fffef9;
-  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
+  font-family: "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
   font-weight: 400;
   scrollbar-width: none;
 }
@@ -380,7 +380,7 @@ button {
 
 .back-scroll h2 {
   margin: 0 0 22px;
-  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
+  font-family: "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
   font-size: clamp(15.3px, 2.16vw, 26.1px);
   font-weight: 600;
   line-height: 1.5;
@@ -390,6 +390,11 @@ button {
 
 .detail-title-line {
   display: block;
+}
+
+.detail-title-line-subtitle {
+  font-size: 0.7em;
+  font-weight: 300;
 }
 
 .detail-title-line-fit {
@@ -417,14 +422,19 @@ button {
   justify-content: center;
   border: 1px solid #000;
   padding: 4px 10px 3px;
-  background: transparent;
-  color: #000;
+  background: #000;
+  color: #fffef9;
   font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
   font-size: clamp(9px, 0.84vw, 11px);
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0;
   white-space: nowrap;
+}
+
+.back-tag-year {
+  background: transparent;
+  color: #000;
 }
 
 .back-scroll p {
@@ -436,7 +446,7 @@ button {
 }
 
 .back-scroll [data-detail-copy] {
-  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
+  font-family: "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
   font-weight: 400;
   white-space: pre-line;
 }
