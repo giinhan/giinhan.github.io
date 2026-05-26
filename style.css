@@ -113,6 +113,17 @@ button {
   white-space: nowrap;
 }
 
+.about-link {
+  color: #58544e;
+  font-synthesis: none;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+  text-shadow: none;
+  white-space: nowrap;
+}
+
 .tab::after {
   position: absolute;
   right: 0;
@@ -145,8 +156,6 @@ button {
   grid-column: 3;
   justify-self: end;
   padding: 8px 0 8px 18px;
-  font-size: 24px;
-  font-weight: 400;
 }
 
 .portfolio-shell {
@@ -803,7 +812,7 @@ body.about-open .site-header {
     grid-column: 1 / -1;
     grid-row: 2;
     justify-self: end;
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .tab {
@@ -873,9 +882,11 @@ body.about-open .site-header {
   }
 
   .category-tabs {
-    gap: clamp(12px, 3vw, 16px);
+    width: 100%;
+    gap: clamp(6px, 2vw, 10px);
+    justify-content: space-between;
     min-height: 48px;
-    padding: 0 16px;
+    padding: 0 10px;
   }
 
   .project-grid {
@@ -887,18 +898,23 @@ body.about-open .site-header {
 
   .tab {
     width: auto;
-    min-width: max-content;
+    min-width: 0;
+    flex: 0 1 auto;
     height: 32px;
     padding: 0;
-    font-size: 15px;
+    font-size: clamp(12px, 3.5vw, 15px);
   }
 
   .tab-all {
-    min-width: max-content;
+    min-width: 0;
   }
 
   .tab-word {
-    width: max-content;
-    font-size: 15px;
+    width: auto;
+    font-size: clamp(12px, 3.5vw, 15px);
+  }
+
+  .about-link {
+    font-size: clamp(12px, 3.5vw, 15px);
   }
 }
