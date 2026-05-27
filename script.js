@@ -36,6 +36,7 @@ const cardFlipSounds = [
 ];
 
 const workbookPath = "txt/giinhan txt.xlsx?v=20260527-02";
+const assetVersion = "20260527-06";
 
 const fallbackAboutContent = {
   name: "한지인",
@@ -49,6 +50,14 @@ const aboutDocumentPaths = {
   jpn: "txt/about-jpn.docx?v=20260527-02",
   chn: "txt/about-chn.docx?v=20260527-02",
 };
+
+function versionAsset(src) {
+  if (/^(?:https?:)?\/\//i.test(src) || src.includes("?")) {
+    return src;
+  }
+
+  return `${src}?v=${assetVersion}`;
+}
 
 let aboutContentByLanguage = {
   kor: { ...fallbackAboutContent },
@@ -1012,7 +1021,7 @@ async function render(category = "all") {
       card.style.setProperty("--card-scale", getFrontImageScale(dimensions.width / dimensions.height));
     }
 
-    image.src = project.image;
+    image.src = versionAsset(project.image);
     image.alt = project.title;
     image.addEventListener("load", () => applyFrontImageScale(card, image), { once: true });
 
@@ -1068,7 +1077,7 @@ function loadImageDimensions(src) {
       settle({ width: image.naturalWidth, height: image.naturalHeight });
     };
     image.onerror = () => settle();
-    image.src = src;
+    image.src = versionAsset(src);
   });
 }
 
@@ -1118,7 +1127,7 @@ function openDetail(project) {
   detail.classList.remove("is-flipped");
   detailInner.style.transform = "rotateY(0deg)";
   detail.style.setProperty("--scrollbar-color", "#111");
-  detailImage.src = project.image;
+  detailImage.src = versionAsset(project.image);
   detailImage.alt = project.title;
   applyScrollbarColor(project);
   renderTags(detailTags, project.tags, project.years);
@@ -1198,7 +1207,7 @@ function createDetailMediaElement(src, project, index) {
   const isVideo = /\.(mov|mp4|webm|m4v)$/i.test(src);
   const element = document.createElement(isVideo ? "video" : "img");
 
-  element.src = src;
+  element.src = versionAsset(src);
   element.className = "back-media-item";
 
   if (isVideo) {
@@ -1329,7 +1338,7 @@ function getDominantImageColor(src) {
     image.onerror = () => {
       resolve("#111");
     };
-    image.src = src;
+    image.src = versionAsset(src);
   });
 }
 
