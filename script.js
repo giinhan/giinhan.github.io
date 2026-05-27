@@ -33,7 +33,7 @@ const cardFlipSounds = [
   "sound/card flip 05.mp3",
 ];
 
-const workbookPath = "txt/giinhan txt.xlsx?v=20260526-03";
+const workbookPath = "txt/giinhan txt.xlsx?v=20260527-02";
 
 const fallbackAboutContent = {
   name: "한지인",
