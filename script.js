@@ -998,7 +998,7 @@ async function render(category = "all") {
     card.className = "project-card";
     card.classList.add(`is-wiggle-${Math.floor(Math.random() * 3) + 1}`);
     card.type = "button";
-    card.style.setProperty("--entry-delay", `${Math.min(index * 34, 760)}ms`);
+    card.style.setProperty("--entry-delay", `${Math.min(index * 58, 1320)}ms`);
     card.style.setProperty("--tilt", `${project.tilt}deg`);
     card.style.setProperty("--stagger-x", `${project.staggerX}px`);
     card.style.setProperty("--stagger-gap-extra", `${Math.abs(project.staggerY) * 1.35}px`);
