@@ -6,18 +6,9 @@
     <title>Branding Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Load Courier Prime from Google Fonts only; Space Mono will be loaded from Google Fonts too -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Space+Mono:wght@300;400;700&display=swap" as="style" onload="this.rel='stylesheet'" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Work+Sans:wght@400;500;600;700&display=swap" as="style" onload="this.rel='stylesheet'" />
     <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Space+Mono:wght@300;400;700&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     </noscript>
     <link rel="stylesheet" href="style.css?v=20260526-08" />
   </head>
@@ -70,23 +61,76 @@
 
     <aside class="about-panel" data-about-panel aria-hidden="true">
       <button class="about-close" type="button" data-about-close aria-label="About 닫기"></button>
-      <h1>About</h1>
-      <p class="about-name" data-about-name></p>
-      <p data-about-body></p>
-      <div class="about-meta">
-        <p>Contact</p>
-        <a data-about-email href=""></a>
+      <div class="about-panel-header">
+        <div class="about-language-buttons" aria-label="About language">
+          <button class="about-language-button" type="button" data-about-lang="kor">KOR</button>
+          <button class="about-language-button" type="button" data-about-lang="eng">ENG</button>
+          <button class="about-language-button" type="button" data-about-lang="jpn">JPN</button>
+          <button class="about-language-button" type="button" data-about-lang="chn">CHN</button>
+        </div>
       </div>
-      <a
-        class="consulting-button"
-        href="https://forms.gle/GMm2Psk3ohRX3HU28"
-        target="_blank"
-        rel="noreferrer"
-      >
-        컨설팅 신청하기
-      </a>
+      <div class="about-body" data-about-body></div>
+      <div class="about-meta">
+        <a class="about-contact-row" href="https://www.instagram.com/giinhan" target="_blank" rel="noreferrer">
+          <svg class="about-contact-icon about-contact-icon-instagram" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="4" y="4" width="16" height="16" rx="4"></rect>
+            <circle cx="12" cy="12" r="3.5"></circle>
+            <circle cx="17" cy="7" r="1"></circle>
+          </svg>
+          <span>@giinhan</span>
+        </a>
+        <div class="about-contact-row">
+          <svg class="about-contact-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3.5" y="5.5" width="17" height="13" rx="2"></rect>
+            <path d="M4.5 7l7.5 6 7.5-6"></path>
+          </svg>
+          <span>giinhan@gmail.com</span>
+        </div>
+      </div>
     </aside>
     <button class="about-dim" type="button" data-about-close aria-label="About 닫기"></button>
+    <div class="about-motion-layer" aria-hidden="true" data-about-motion-layer>
+      <svg class="about-ball about-tennis-ball" viewBox="0 0 16 13" preserveAspectRatio="none" shape-rendering="crispEdges">
+        <rect x="5" y="1" width="6" height="1" fill="#ebff00"></rect>
+        <rect x="3" y="2" width="2" height="1" fill="#ebff00"></rect>
+        <rect x="5" y="2" width="6" height="1" fill="#e7f7ff"></rect>
+        <rect x="11" y="2" width="2" height="1" fill="#d7ff00"></rect>
+        <rect x="2" y="3" width="3" height="1" fill="#e9ff00"></rect>
+        <rect x="5" y="3" width="6" height="1" fill="#f4ff23"></rect>
+        <rect x="11" y="3" width="3" height="1" fill="#9ce000"></rect>
+        <rect x="1" y="4" width="4" height="1" fill="#eaff00"></rect>
+        <rect x="5" y="4" width="6" height="1" fill="#f5ff2a"></rect>
+        <rect x="11" y="4" width="4" height="1" fill="#87c900"></rect>
+        <rect x="1" y="5" width="4" height="1" fill="#ebff00"></rect>
+        <rect x="5" y="5" width="5" height="1" fill="#f6ff35"></rect>
+        <rect x="10" y="5" width="3" height="1" fill="#9bdd00"></rect>
+        <rect x="13" y="5" width="2" height="1" fill="#e7f0ff"></rect>
+        <rect x="1" y="6" width="3" height="1" fill="#e6fa00"></rect>
+        <rect x="4" y="6" width="5" height="1" fill="#f3ff28"></rect>
+        <rect x="9" y="6" width="4" height="1" fill="#92d700"></rect>
+        <rect x="13" y="6" width="2" height="1" fill="#8bcc00"></rect>
+        <rect x="1" y="7" width="4" height="1" fill="#e7ff00"></rect>
+        <rect x="5" y="7" width="4" height="1" fill="#f0ff18"></rect>
+        <rect x="9" y="7" width="4" height="1" fill="#78be00"></rect>
+        <rect x="13" y="7" width="2" height="1" fill="#e8f2ff"></rect>
+        <rect x="2" y="8" width="3" height="1" fill="#e7f1ff"></rect>
+        <rect x="5" y="8" width="3" height="1" fill="#eaff00"></rect>
+        <rect x="8" y="8" width="4" height="1" fill="#8fd500"></rect>
+        <rect x="12" y="8" width="2" height="1" fill="#6ead00"></rect>
+        <rect x="14" y="8" width="1" height="1" fill="#edf5ff"></rect>
+        <rect x="2" y="9" width="1" height="1" fill="#e8f1ff"></rect>
+        <rect x="3" y="9" width="4" height="1" fill="#cbf000"></rect>
+        <rect x="7" y="9" width="4" height="1" fill="#80c500"></rect>
+        <rect x="11" y="9" width="2" height="1" fill="#6aac00"></rect>
+        <rect x="13" y="9" width="1" height="1" fill="#eef5ff"></rect>
+        <rect x="3" y="10" width="4" height="1" fill="#9ddd00"></rect>
+        <rect x="7" y="10" width="4" height="1" fill="#78bd00"></rect>
+        <rect x="11" y="10" width="2" height="1" fill="#eef5ff"></rect>
+        <rect x="4" y="11" width="8" height="1" fill="#6eae00"></rect>
+        <rect x="5" y="12" width="6" height="1" fill="#5d9900"></rect>
+      </svg>
+    </div>
+    <button class="about-time-button" type="button" data-about-time-toggle aria-pressed="false">time</button>
 
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="script.js?v=20260526-10"></script>

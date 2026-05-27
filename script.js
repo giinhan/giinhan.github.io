@@ -11,15 +11,19 @@ const detailScrollbar = document.querySelector("[data-detail-scrollbar]");
 const detailScrollbarThumb = document.querySelector("[data-detail-scrollbar-thumb]");
 const tabs = document.querySelectorAll("[data-category]");
 const aboutPanel = document.querySelector("[data-about-panel]");
-const aboutName = document.querySelector("[data-about-name]");
 const aboutBody = document.querySelector("[data-about-body]");
-const aboutEmail = document.querySelector("[data-about-email]");
+const aboutLangButtons = document.querySelectorAll("[data-about-lang]");
+const aboutBalls = [...document.querySelectorAll(".about-ball")];
+const aboutTimeToggle = document.querySelector("[data-about-time-toggle]");
 let currentProject = null;
 let projects = [];
 let detailRotation = 0;
 const dominantColorByImage = new Map();
 const aboutAudio = new Audio("sound/about.mp3");
 aboutAudio.loop = true;
+let aboutMotionPlaying = true;
+let aboutMotionFrame = null;
+let aboutMotionLastTime = 0;
 
 const cardFlipSounds = [
   "sound/card flip 01.mp3",
@@ -37,7 +41,17 @@ const fallbackAboutContent = {
   body: "나는 한지인이다",
 };
 
-let aboutContent = { ...fallbackAboutContent };
+const aboutDocumentPaths = {
+  kor: "txt/about-kor.docx?v=20260527-01",
+  eng: "txt/about-eng.docx?v=20260527-01",
+  jpn: "txt/about-jpn.docx?v=20260527-01",
+  chn: "txt/about-chn.docx?v=20260527-01",
+};
+
+let aboutContentByLanguage = {
+  kor: { ...fallbackAboutContent },
+};
+let currentAboutLanguage = "kor";
 
 const fallbackCardContentById = {
   "1-01": {
@@ -57,6 +71,22 @@ https://www.patagonia.co.kr/activismHub/JiRiver
 협조 | 마을문화연구소 김명숙, 위로책방 이민주, 청양전통시장상인회장 심준보, 푸드카빙 정길순, 농부 김진환`,
   },
 };
+
+const aboutBallState = aboutBalls.map((element, index) => ({
+  element,
+  x: 90,
+  y: 140,
+  fromX: 90,
+  fromY: 140,
+  toX: 320,
+  toY: 220,
+  shotStart: 0,
+  shotDuration: 900,
+  shotSide: 1,
+  spin: 0,
+  rallySeed: 0.37,
+  phase: index * 0.82,
+}));
 
 function numberedMedia(folder, prefix, numbers, extension) {
   return numbers.map((number) => `${folder}/${prefix}-${number}.${extension}`);
@@ -166,7 +196,7 @@ const imageRows = [
   },
   {
     category: "1",
-    path: "img/1 create/1-12/1-12.jpg",
+    path: "img/1 create/1-12/1-12.png",
     backMedia: mediaFiles("img/1 create/1-12", [
       "1-12-0.png",
       "1-12-1.jpg",
@@ -759,9 +789,115 @@ function getCardNumber(row, currentCategory, lastCardNumber, hasContent) {
   return String(lastCardNumber + 1).padStart(2, "0");
 }
 
+function decodeXmlEntities(value) {
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = value;
+  return textarea.value;
+}
+
+async function inflateRaw(bytes) {
+  if (!("DecompressionStream" in window)) {
+    throw new Error("DecompressionStream is not supported in this browser.");
+  }
+
+  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+
+async function readZipTextFile(buffer, targetPath) {
+  const view = new DataView(buffer);
+  const bytes = new Uint8Array(buffer);
+  const decoder = new TextDecoder("utf-8");
+  let offset = 0;
+
+  while (offset < view.byteLength - 30) {
+    if (view.getUint32(offset, true) !== 0x04034b50) {
+      offset += 1;
+      continue;
+    }
+
+    const compressionMethod = view.getUint16(offset + 8, true);
+    const compressedSize = view.getUint32(offset + 18, true);
+    const fileNameLength = view.getUint16(offset + 26, true);
+    const extraLength = view.getUint16(offset + 28, true);
+    const fileNameStart = offset + 30;
+    const fileNameEnd = fileNameStart + fileNameLength;
+    const fileName = decoder.decode(bytes.slice(fileNameStart, fileNameEnd));
+    const dataStart = fileNameEnd + extraLength;
+    const dataEnd = dataStart + compressedSize;
+
+    if (fileName === targetPath) {
+      const fileBytes = bytes.slice(dataStart, dataEnd);
+      if (compressionMethod === 0) {
+        return decoder.decode(fileBytes);
+      }
+      if (compressionMethod === 8) {
+        return decoder.decode(await inflateRaw(fileBytes));
+      }
+      throw new Error(`Unsupported ZIP compression method: ${compressionMethod}`);
+    }
+
+    offset = dataEnd;
+  }
+
+  throw new Error(`${targetPath} was not found in the ZIP archive.`);
+}
+
+function extractDocxParagraphs(documentXml) {
+  const paragraphs = (documentXml.match(/<w:p[\s\S]*?<\/w:p>/g) || []).map((paragraph) => {
+    const prepared = paragraph.replace(/<w:tab\b[^>]*\/>/g, "\t").replace(/<w:br\b[^>]*\/>/g, "\n");
+    const runs = [...prepared.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)].map((match) =>
+      decodeXmlEntities(match[1]),
+    );
+    return runs.join("").trim();
+  });
+
+  while (paragraphs[0] === "") {
+    paragraphs.shift();
+  }
+
+  while (paragraphs[paragraphs.length - 1] === "") {
+    paragraphs.pop();
+  }
+
+  return paragraphs;
+}
+
+async function loadAboutDocument(language, path) {
+  const response = await fetch(path, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`About ${language} request failed with ${response.status}`);
+  }
+
+  const buffer = await response.arrayBuffer();
+  const documentXml = await readZipTextFile(buffer, "word/document.xml");
+  const paragraphs = extractDocxParagraphs(documentXml);
+
+  return {
+    ...fallbackAboutContent,
+    body: paragraphs.join("\n") || fallbackAboutContent.body,
+  };
+}
+
+async function loadAboutContent() {
+  const entries = await Promise.all(
+    Object.entries(aboutDocumentPaths).map(async ([language, path]) => {
+      try {
+        return [language, await loadAboutDocument(language, path)];
+      } catch (error) {
+        console.warn(`${path} could not be loaded.`, error);
+        return [language, aboutContentByLanguage[language] || fallbackAboutContent];
+      }
+    }),
+  );
+
+  return Object.fromEntries(entries);
+}
+
 async function loadSiteContent() {
   if (!window.XLSX) {
-    return { cardContentById: fallbackCardContentById, about: fallbackAboutContent };
+    const about = await loadAboutContent();
+    return { cardContentById: fallbackCardContentById, about };
   }
 
   try {
@@ -809,18 +945,13 @@ async function loadSiteContent() {
       };
     });
 
-    const aboutSheet = workbook.Sheets.about || workbook.Sheets.About;
-    const aboutRows = aboutSheet ? XLSX.utils.sheet_to_json(aboutSheet, { header: 1, defval: "", raw: false }) : [];
-    const about = {
-      name: getCell(aboutRows, "A1") || fallbackAboutContent.name,
-      email: getCell(aboutRows, "A3") || fallbackAboutContent.email,
-      body: getCell(aboutRows, "A5") || fallbackAboutContent.body,
-    };
+    const about = await loadAboutContent();
 
     return { cardContentById: contentById, about };
   } catch (error) {
     console.warn(`${workbookPath} could not be loaded.`, error);
-    return { cardContentById: fallbackCardContentById, about: fallbackAboutContent };
+    const about = await loadAboutContent();
+    return { cardContentById: fallbackCardContentById, about };
   }
 }
 
@@ -1272,6 +1403,125 @@ function playRandomCardFlipSound() {
   playSound(sound);
 }
 
+function updateAboutTimeButton() {
+  aboutTimeToggle.textContent = aboutMotionPlaying ? "TIME" : "PLAY";
+  aboutTimeToggle.setAttribute("aria-pressed", String(!aboutMotionPlaying));
+}
+
+function getAboutTimeTailTarget(ball) {
+  const buttonRect = aboutTimeToggle.getBoundingClientRect();
+  const ballSize = ball.element.offsetWidth || 40;
+
+  return {
+    x: buttonRect.left + 25 - ballSize / 2,
+    y: buttonRect.bottom - ballSize / 2,
+  };
+}
+
+function getAboutMotionBounds() {
+  const panelWidth = aboutPanel.classList.contains("is-open") ? aboutPanel.getBoundingClientRect().width : 0;
+  const width = Math.max(180, window.innerWidth - panelWidth - 24);
+  const height = Math.max(180, window.innerHeight);
+
+  return { width, height };
+}
+
+function seededNoise(value) {
+  const raw = Math.sin(value * 12.9898 + 78.233) * 43758.5453;
+  return raw - Math.floor(raw);
+}
+
+function queueAboutBallShot(ball, width, height, time) {
+  const size = ball.element.offsetWidth || 48;
+  const leftCourt = 32;
+  const rightCourt = Math.max(leftCourt + 120, width - size - 36);
+  const nextSide = ball.shotSide * -1;
+  const seed = ball.rallySeed + time * 0.00031;
+  const noiseA = seededNoise(seed + 1.7);
+  const noiseB = seededNoise(seed + 4.3);
+  const noiseC = seededNoise(seed + 8.9);
+  const courtTop = 36;
+  const courtBottom = Math.max(courtTop + 180, height - size - 44);
+  const courtRange = courtBottom - courtTop;
+  const verticalBandStart = ball.y < height * 0.5 ? 0.58 : 0.04;
+  const verticalBandSize = 0.34;
+
+  ball.fromX = ball.x;
+  ball.fromY = ball.y;
+  ball.toX = nextSide > 0 ? rightCourt - noiseA * Math.min(120, rightCourt * 0.22) : leftCourt + noiseA * 86;
+  ball.toY = courtTop + (verticalBandStart + noiseB * verticalBandSize) * courtRange;
+  ball.shotStart = time;
+  ball.shotDuration = 1400 + noiseC * 1200;
+  ball.shotSide = nextSide;
+  ball.rallySeed = (ball.rallySeed + 0.191 + noiseB * 0.37) % 1;
+}
+
+function renderAboutBalls(time = performance.now()) {
+  const { width, height } = getAboutMotionBounds();
+
+  aboutBallState.forEach((ball, index) => {
+    if (aboutMotionPlaying) {
+      if (!ball.shotStart) {
+        queueAboutBallShot(ball, width, height, time);
+      }
+
+      let progress = (time - ball.shotStart) / ball.shotDuration;
+      if (progress >= 1) {
+        ball.x = ball.toX;
+        ball.y = ball.toY;
+        ball.spin += ball.shotSide * 58;
+        queueAboutBallShot(ball, width, height, time);
+        progress = 0;
+      }
+
+      const eased = 1 - Math.pow(1 - Math.max(0, Math.min(progress, 1)), 2);
+      const arcHeight = 72 + seededNoise(ball.rallySeed + ball.shotStart * 0.002) * 112;
+      const sideDrift = Math.sin(progress * Math.PI * 2 + ball.rallySeed * 8) * 14;
+      ball.x = ball.fromX + (ball.toX - ball.fromX) * eased;
+      ball.y = ball.fromY + (ball.toY - ball.fromY) * eased - Math.sin(progress * Math.PI) * arcHeight + sideDrift;
+      ball.spin += ball.shotSide * (5 + progress * 3);
+    } else {
+      const { x: targetX, y: targetY } = getAboutTimeTailTarget(ball);
+
+      ball.x += (targetX - ball.x) * 0.12;
+      ball.y += (targetY - ball.y) * 0.12;
+      ball.spin *= 0.88;
+      ball.shotStart = 0;
+    }
+
+    ball.element.style.transform = `translate3d(${ball.x}px, ${ball.y}px, 0) rotate(${ball.spin}deg)`;
+  });
+}
+
+function animateAboutMotion(time) {
+  if (!document.body.classList.contains("about-open")) {
+    aboutMotionFrame = null;
+    return;
+  }
+
+  if (!aboutMotionLastTime || time - aboutMotionLastTime > 16) {
+    renderAboutBalls(time);
+    aboutMotionLastTime = time;
+  }
+
+  aboutMotionFrame = requestAnimationFrame(animateAboutMotion);
+}
+
+function startAboutMotion() {
+  aboutMotionLastTime = 0;
+  if (!aboutMotionFrame) {
+    aboutMotionFrame = requestAnimationFrame(animateAboutMotion);
+  }
+}
+
+function stopAboutMotion() {
+  if (aboutMotionFrame) {
+    cancelAnimationFrame(aboutMotionFrame);
+    aboutMotionFrame = null;
+  }
+  aboutMotionLastTime = 0;
+}
+
 function playAboutAudio() {
   aboutAudio.currentTime = 0;
   aboutAudio.play().catch(() => {});
@@ -1282,11 +1532,49 @@ function stopAboutAudio() {
   aboutAudio.currentTime = 0;
 }
 
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (character) => {
+    const entities = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    };
+    return entities[character];
+  });
+}
+
+function renderAboutBody(body) {
+  const linkReplacements = [
+    {
+      pattern: /\bWHAT\s*\.?\s*GIN\b/gi,
+      href: "https://www.youtube.com/@what-gin",
+    },
+    {
+      pattern: /\bbeaverdam\b/gi,
+      href: "https://www.instagram.com/beaverdam.sigor/",
+    },
+  ];
+  let html = escapeHtml(body);
+
+  linkReplacements.forEach(({ pattern, href }) => {
+    html = html.replace(
+      pattern,
+      (match) => `<a class="about-inline-link" href="${href}" target="_blank" rel="noreferrer">${match}</a>`,
+    );
+  });
+
+  aboutBody.innerHTML = html;
+}
+
 function renderAbout() {
-  aboutName.textContent = aboutContent.name;
-  aboutBody.textContent = aboutContent.body;
-  aboutEmail.textContent = aboutContent.email;
-  aboutEmail.href = `mailto:${aboutContent.email}`;
+  const aboutContent = aboutContentByLanguage[currentAboutLanguage] || aboutContentByLanguage.kor || fallbackAboutContent;
+
+  renderAboutBody(aboutContent.body);
+  aboutLangButtons.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.aboutLang === currentAboutLanguage);
+  });
 }
 
 function closeDetail() {
@@ -1330,10 +1618,35 @@ document.querySelectorAll("[data-close]").forEach((button) => {
 });
 
 document.querySelector("[data-about-open]").addEventListener("click", () => {
+  currentAboutLanguage = "kor";
+  aboutMotionPlaying = true;
+  updateAboutTimeButton();
+  renderAbout();
   document.body.classList.add("about-open");
   aboutPanel.classList.add("is-open");
   aboutPanel.setAttribute("aria-hidden", "false");
+  startAboutMotion();
   playAboutAudio();
+});
+
+aboutTimeToggle.addEventListener("click", () => {
+  aboutMotionPlaying = !aboutMotionPlaying;
+  updateAboutTimeButton();
+
+  if (aboutMotionPlaying) {
+    aboutAudio.play().catch(() => {});
+  } else {
+    aboutAudio.pause();
+  }
+  startAboutMotion();
+});
+
+aboutLangButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    currentAboutLanguage = button.dataset.aboutLang;
+    renderAbout();
+    aboutPanel.scrollTo({ top: 0, behavior: "smooth" });
+  });
 });
 
 document.querySelectorAll("[data-about-close]").forEach((button) => {
@@ -1341,6 +1654,9 @@ document.querySelectorAll("[data-about-close]").forEach((button) => {
     document.body.classList.remove("about-open");
     aboutPanel.classList.remove("is-open");
     aboutPanel.setAttribute("aria-hidden", "true");
+    aboutMotionPlaying = true;
+    updateAboutTimeButton();
+    stopAboutMotion();
     stopAboutAudio();
   });
 });
@@ -1351,6 +1667,9 @@ document.addEventListener("keydown", (event) => {
     document.body.classList.remove("about-open");
     aboutPanel.classList.remove("is-open");
     aboutPanel.setAttribute("aria-hidden", "true");
+    aboutMotionPlaying = true;
+    updateAboutTimeButton();
+    stopAboutMotion();
     stopAboutAudio();
   }
 });
@@ -1379,6 +1698,9 @@ window.addEventListener("resize", () => {
   syncDetailMediaSize();
   syncDetailScrollbar();
   fitDetailTitleLines();
+  if (document.body.classList.contains("about-open")) {
+    renderAboutBalls();
+  }
 });
 detailScrollArea.addEventListener(
   "wheel",
@@ -1429,9 +1751,10 @@ detailScrollbar.addEventListener("pointerdown", (event) => {
 
 async function init() {
   const { cardContentById, about } = await loadSiteContent();
-  aboutContent = about;
+  aboutContentByLanguage = about;
   projects = createProjects(cardContentById);
   renderAbout();
+  updateAboutTimeButton();
   render("all");
 }
 

@@ -2,13 +2,10 @@
   --ink: #211c0b;
   --muted: #77726a;
   --paper: #fbfbfa;
-  --panel: #fff4b8;
+  --panel: #ffbf00;
   --shadow: 14px 30px 34px rgba(33, 28, 11, 0.2), 5px 12px 18px rgba(33, 28, 11, 0.12);
   --header-h: 92px;
 }
-
-/* Space Mono is loaded from Google Fonts for now. If you later host woff2 files locally,
-   re-add @font-face declarations here with the correct fonts/space-mono-*.woff2 paths. */
 
 * {
   box-sizing: border-box;
@@ -24,8 +21,7 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--paper);
-  font-family: "Courier Prime", "Courier New", Courier, "Noto Sans CJK KR", "Noto Sans KR",
-    sans-serif;
+  font-family: "Work Sans", "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
   overflow-wrap: break-word;
   word-break: keep-all;
 }
@@ -38,13 +34,12 @@ button {
 .tab,
 .about-link,
 .about-panel {
-  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
+  font-family: "Work Sans", "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
 }
 
-/* Ensure about panel content (including English text) uses Space Mono */
 .about-panel,
 .about-panel * {
-  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
+  font-family: "Work Sans", "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
 }
 
 .site-header {
@@ -328,7 +323,7 @@ button {
   overflow: auto;
   padding: var(--back-pad);
   background: #fffef9;
-  font-family: "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
+  font-family: "Work Sans", "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
   font-weight: 400;
   scrollbar-width: none;
 }
@@ -380,7 +375,7 @@ button {
 
 .back-scroll h2 {
   margin: 0 0 22px;
-  font-family: "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
+  font-family: "Work Sans", "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
   font-size: clamp(15.3px, 2.16vw, 26.1px);
   font-weight: 600;
   line-height: 1.5;
@@ -424,7 +419,7 @@ button {
   padding: 4px 10px 3px;
   background: #000;
   color: #fffef9;
-  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
+  font-family: "Work Sans", "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
   font-size: clamp(9px, 0.84vw, 11px);
   font-weight: 400;
   line-height: 1;
@@ -446,7 +441,7 @@ button {
 }
 
 .back-scroll [data-detail-copy] {
-  font-family: "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
+  font-family: "Work Sans", "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
   font-weight: 400;
   white-space: pre-line;
 }
@@ -519,7 +514,7 @@ button {
   padding: 0 12px;
   background: rgba(251, 251, 250, 0.92);
   color: var(--ink);
-  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
+  font-family: "Work Sans", "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0;
@@ -653,13 +648,16 @@ button {
 }
 
 .about-panel {
+  --about-text-size: clamp(14px, 0.95vw, 16px);
+  --about-line-height: 1.85;
   position: fixed;
   z-index: 80;
   top: 0;
   right: 0;
-  width: min(38vw, 680px);
+  width: clamp(620px, 46vw, 820px);
+  max-width: 94vw;
   height: 100vh;
-  padding: 40px 46px 60px;
+  padding: 40px clamp(34px, 3.2vw, 54px) 60px;
   overflow: auto;
   background: var(--panel);
   box-shadow: -20px 0 38px rgba(33, 28, 11, 0.22);
@@ -672,16 +670,67 @@ button {
   transform: translateX(0);
 }
 
-.about-panel h1 {
-  margin: 0 0 48px;
-  font-size: 40px;
-  line-height: 1;
+.about-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 36px;
+  margin: 0 64px 44px 0;
 }
 
-.about-panel p {
+.about-panel p,
+.about-body {
   margin: 0 0 28px;
-  font-size: clamp(24px, 2.35vw, 36px);
-  line-height: 1.08;
+  font-size: var(--about-text-size);
+  line-height: var(--about-line-height);
+}
+
+.about-body {
+  white-space: pre-wrap;
+}
+
+.about-body {
+  font-family: "Work Sans", "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+}
+
+.about-inline-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.55em;
+  padding: 0 0.55em;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: inherit;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.about-language-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 7px;
+  min-width: 0;
+}
+
+.about-language-button {
+  min-width: 52px;
+  height: 29px;
+  border: 1px solid rgba(33, 28, 11, 0.18);
+  border-radius: 999px;
+  background: #843426;
+  color: #fff4b8;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.about-language-button:hover,
+.about-language-button.is-active {
+  background: #9a4433;
 }
 
 .about-panel .about-name {
@@ -690,44 +739,50 @@ button {
 }
 
 .about-meta {
+  font-size: var(--about-text-size);
+  line-height: var(--about-line-height);
   margin: 56px 0 42px;
 }
 
-.about-meta p,
-.about-list-title {
-  margin-bottom: 14px;
-  font-size: 23px;
-  font-weight: 400;
-}
-
-.about-meta a,
-.about-panel li {
-  display: block;
-  color: rgba(33, 28, 11, 0.62);
-  font-size: 21px;
-  line-height: 1.55;
-}
-
-.consulting-button {
-  display: inline-flex;
-  min-height: 54px;
+.about-contact-row {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  margin-top: 28px;
-  padding: 0 24px;
-  border: 1px solid rgba(33, 28, 11, 0.34);
-  border-radius: 999px;
-  background: var(--ink);
-  color: #fff8ce;
-  font-family: "Space Mono", "Noto Sans CJK KR", "Noto Sans KR", monospace;
-  font-size: 18px;
-  font-weight: 500;
+  gap: 8px;
+  color: rgba(33, 28, 11, 0.62);
+  font-size: inherit;
+  line-height: inherit;
   text-decoration: none;
 }
 
-.consulting-button:hover {
-  background: transparent;
-  color: var(--ink);
+.about-contact-row + .about-contact-row {
+  margin-top: 6px;
+}
+
+.about-contact-icon {
+  width: 1.25em;
+  height: 1.25em;
+  flex: 0 0 1.25em;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.about-contact-icon * {
+  vector-effect: non-scaling-stroke;
+}
+
+.about-contact-icon-instagram {
+  transform: scale(1.16);
+  transform-origin: center;
+}
+
+.about-list-title,
+.about-panel li {
+  color: rgba(33, 28, 11, 0.62);
+  font-size: inherit;
+  line-height: inherit;
 }
 
 .about-panel ul {
@@ -738,7 +793,7 @@ button {
 
 .about-close {
   position: absolute;
-  top: 42px;
+  top: 40px;
   right: 42px;
   width: 36px;
   height: 36px;
@@ -781,6 +836,77 @@ button {
 body.about-open .about-dim {
   opacity: 1;
   pointer-events: auto;
+}
+
+.about-motion-layer {
+  position: fixed;
+  z-index: 75;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease;
+}
+
+body.about-open .about-motion-layer {
+  opacity: 1;
+}
+
+.about-ball {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: clamp(27px, 2.56vw, 45px);
+  height: clamp(27px, 2.56vw, 45px);
+  filter: drop-shadow(0 6px 10px rgba(33, 28, 11, 0.18));
+  opacity: 0.88;
+  will-change: transform;
+}
+
+.about-time-button {
+  position: fixed;
+  z-index: 90;
+  top: 36px;
+  left: 34px;
+  display: inline-flex;
+  min-width: 64px;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(33, 28, 11, 0.22);
+  border-radius: 22px;
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 8px 18px rgba(33, 28, 11, 0.12);
+  font-family: "Work Sans", "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  transition: opacity 220ms ease, transform 220ms ease;
+  transform: translateY(-8px);
+}
+
+.about-time-button::after {
+  position: absolute;
+  bottom: -6px;
+  left: 19px;
+  width: 12px;
+  height: 12px;
+  background: inherit;
+  border-right: 1px solid rgba(33, 28, 11, 0.22);
+  border-bottom: 1px solid rgba(33, 28, 11, 0.22);
+  content: "";
+  transform: rotate(45deg);
+}
+
+body.about-open .about-time-button {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 body.detail-open {
@@ -872,16 +998,34 @@ body.about-open .site-header {
   }
 
   .about-panel {
-    width: min(88vw, 520px);
+    --about-text-size: 14px;
+    width: min(92vw, 640px);
     padding: 34px 30px 48px;
   }
 
-  .about-panel h1 {
+  .about-panel-header {
+    margin-right: 56px;
     margin-bottom: 36px;
   }
 
-  .about-panel p {
-    font-size: 25px;
+  .about-language-buttons {
+    gap: 6px;
+  }
+
+  .about-language-button {
+    min-width: 48px;
+    height: 29px;
+    font-size: 12px;
+  }
+
+  .about-close {
+    top: 34px;
+    right: 30px;
+  }
+
+  .about-time-button {
+    top: 28px;
+    left: 28px;
   }
 }
 
@@ -926,5 +1070,33 @@ body.about-open .site-header {
 
   .about-link {
     font-size: clamp(12px, 3.5vw, 15px);
+  }
+
+  .about-panel {
+    --about-text-size: 13.5px;
+    width: min(94vw, 520px);
+    padding: 30px 24px 44px;
+  }
+
+  .about-panel-header {
+    margin-right: 50px;
+    margin-bottom: 34px;
+  }
+
+  .about-language-buttons {
+    justify-content: flex-start;
+  }
+
+  .about-close {
+    top: 30px;
+    right: 24px;
+  }
+
+  .about-time-button {
+    top: 24px;
+    left: 20px;
+    min-width: 58px;
+    min-height: 34px;
+    font-size: 13px;
   }
 }
