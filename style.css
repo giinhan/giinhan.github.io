@@ -200,6 +200,8 @@ button {
 .project-card:hover,
 .project-card:focus-visible {
   animation-duration: var(--wiggle-duration, 880ms);
+  animation-delay: 0ms;
+  animation-fill-mode: none;
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out;
 }
