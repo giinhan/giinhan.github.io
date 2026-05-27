@@ -36,7 +36,7 @@ const cardFlipSounds = [
 ];
 
 const workbookPath = "txt/giinhan txt.xlsx?v=20260527-02";
-const assetVersion = "20260527-06";
+const assetVersion = "20260527-07";
 
 const fallbackAboutContent = {
   name: "한지인",
