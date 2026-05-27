@@ -45,10 +45,10 @@ const fallbackAboutContent = {
 };
 
 const aboutDocumentPaths = {
-  kor: "txt/about-kor.docx?v=20260527-02",
-  eng: "txt/about-eng.docx?v=20260527-02",
-  jpn: "txt/about-jpn.docx?v=20260527-02",
-  chn: "txt/about-chn.docx?v=20260527-02",
+  kor: "txt/about-kor.docx?v=20260527-03",
+  eng: "txt/about-eng.docx?v=20260527-03",
+  jpn: "txt/about-jpn.docx?v=20260527-03",
+  chn: "txt/about-chn.docx?v=20260527-03",
 };
 
 function versionAsset(src) {

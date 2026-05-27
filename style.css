@@ -762,9 +762,13 @@ button {
   cursor: pointer;
 }
 
-.about-language-button:hover,
-.about-language-button.is-active {
+.about-language-button:hover {
   background: #9a4433;
+}
+
+.about-language-button.is-active {
+  background: transparent;
+  color: #843426;
 }
 
 .about-panel .about-name {
