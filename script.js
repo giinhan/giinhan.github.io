@@ -42,10 +42,10 @@ const fallbackAboutContent = {
 };
 
 const aboutDocumentPaths = {
-  kor: "txt/about-kor.docx?v=20260527-01",
-  eng: "txt/about-eng.docx?v=20260527-01",
-  jpn: "txt/about-jpn.docx?v=20260527-01",
-  chn: "txt/about-chn.docx?v=20260527-01",
+  kor: "txt/about-kor.docx?v=20260527-02",
+  eng: "txt/about-eng.docx?v=20260527-02",
+  jpn: "txt/about-jpn.docx?v=20260527-02",
+  chn: "txt/about-chn.docx?v=20260527-02",
 };
 
 let aboutContentByLanguage = {
