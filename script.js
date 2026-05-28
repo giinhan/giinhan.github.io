@@ -35,10 +35,9 @@ const cardFlipSounds = [
 ];
 
 const workbookPath = "txt/giinhan txt.xlsx?v=20260527-02";
-const assetVersion = "20260528-03";
-const initialCardCount = 16;
-const cardRenderBatchSize = 10;
-const cardRenderBatchDelay = 180;
+const assetVersion = "20260528-04";
+const eagerImageLoadCount = 16;
+const imageLoadStagger = 85;
 
 const fallbackAboutContent = {
   name: "한지인",
@@ -60,6 +59,78 @@ function versionAsset(src) {
 
   return `${src}?v=${assetVersion}`;
 }
+
+const frontImageDimensions = {
+  "img/1 create/1-01/1-01.jpg": [1000, 1667],
+  "img/1 create/1-02/1-02.jpg": [1200, 1500],
+  "img/1 create/1-03/1-03.jpg": [1200, 1525],
+  "img/1 create/1-04/1-04.png": [1200, 1703],
+  "img/1 create/1-05/1-05.png": [1200, 1715],
+  "img/1 create/1-06/1-06.jpg": [1200, 1500],
+  "img/1 create/1-07/1-07.jpg": [1200, 1200],
+  "img/1 create/1-08/1-08.png": [1200, 1689],
+  "img/1 create/1-09/1-09.jpg": [1200, 1200],
+  "img/1 create/1-10/1-10.jpg": [1200, 1500],
+  "img/1 create/1-11/1-11.png": [1200, 1431],
+  "img/1 create/1-12/1-12.png": [1200, 1358],
+  "img/1 create/1-13/1-13.JPG": [1200, 1136],
+  "img/1 create/1-14/1-14.jpg": [1200, 1285],
+  "img/1 create/1-15/1-15.JPG": [1200, 1600],
+  "img/1 create/1-16/1-16.JPG": [1200, 1200],
+  "img/1 create/1-17/1-17.JPG": [1200, 1800],
+  "img/1 create/1-18/1-18.JPG": [1200, 1804],
+  "img/1 create/1-19/1-19.jpg": [1200, 1697],
+  "img/1 create/1-20/1-20.png": [1200, 1698],
+  "img/1 create/1-21/1-47.jpg": [1080, 1350],
+  "img/1 create/1-22/1-22.jpg": [1200, 1800],
+  "img/1 create/1-23/1-23.jpg": [1200, 1500],
+  "img/1 create/1-24/1-24.jpg": [1200, 1346],
+  "img/1 create/1-25/1-25.png": [1200, 1205],
+  "img/1 create/1-26/1-26.JPG": [1200, 1200],
+  "img/1 create/1-27/1-27.JPG": [1200, 1364],
+  "img/1 create/1-28/1-28.JPG": [1200, 1651],
+  "img/1 create/1-29/1-29.jpg": [1200, 1374],
+  "img/1 create/1-30/1-30.jpg": [1200, 1800],
+  "img/1 create/1-31/1-31.JPG": [1200, 1240],
+  "img/1 create/1-32/1-32.jpg": [1200, 1687],
+  "img/1 create/1-33/1-33.png": [1200, 1200],
+  "img/1 create/1-34/1-34.JPG": [1200, 1223],
+  "img/1 create/1-35/1-35.jpg": [1200, 1234],
+  "img/1 create/1-36/1-36.JPG": [1200, 1800],
+  "img/1 create/1-37/1-37.JPG": [1200, 1442],
+  "img/1 create/1-38/1-38.jpg": [500, 500],
+  "img/1 create/1-39/1-39.jpg": [1200, 1697],
+  "img/1 create/1-40/1-40.jpg": [1200, 800],
+  "img/1 create/1-41/1-41.png": [1200, 1197],
+  "img/1 create/1-42/1-42.png": [1200, 1406],
+  "img/1 create/1-43/1-43.jpg": [1200, 1800],
+  "img/1 create/1-44/1-44.jpg": [1200, 1696],
+  "img/1 create/1-45/1-45.jpg": [1200, 656],
+  "img/1 create/1-46/1-46.jpg": [1200, 1167],
+  "img/2 operate/2-01/2-01.jpg": [1200, 1200],
+  "img/2 operate/2-02/2-02.jpg": [1200, 1694],
+  "img/2 operate/2-03/2-03.jpg": [1200, 1200],
+  "img/2 operate/2-04/2-04.png": [1200, 1200],
+  "img/2 operate/2-05/2-05.jpeg": [1200, 1676],
+  "img/2 operate/2-06/2-06.jpg": [1200, 1018],
+  "img/2 operate/2-07/2-07.jpg": [1200, 1167],
+  "img/2 operate/2-08/2-08.jpg": [1200, 900],
+  "img/2 operate/2-09/2-09.JPG": [1200, 1268],
+  "img/2 operate/2-10/2-10.png": [1200, 1437],
+  "img/3 write/3-01/62.jpeg": [1200, 1890],
+  "img/3 write/3-02/61.jpeg": [1200, 1763],
+  "img/3 write/3-03/63.jpg": [1200, 1754],
+  "img/3 write/3-04/3-04.png": [1200, 1527],
+  "img/3 write/3-05/3-05.png": [1200, 1259],
+  "img/4 talk/4-01/4-01.JPG": [1200, 901],
+  "img/4 talk/4-02/64-3.jpg": [4032, 2268],
+  "img/4 talk/4-03/64-4.JPG": [8256, 5504],
+  "img/4 talk/4-04/64-5.jpg": [1083, 815],
+  "img/4 talk/4-05/3-01.png": [978, 918],
+  "img/5 consult/5-01/5-01.png": [1715, 1790],
+  "img/5 consult/Screenshot 2026-05-21 at 11.00.54 AM.png": [1200, 869],
+  "img/5 consult/5-10/1-21-0.png": [1200, 2001],
+};
 
 let aboutContentByLanguage = {
   kor: { ...fallbackAboutContent },
@@ -999,36 +1070,31 @@ function render(category = "all") {
   grid.classList.remove("is-ready");
   grid.setAttribute("aria-busy", "true");
   grid.innerHTML = "";
-  renderCardBatch(arranged, 0, initialCardCount, sequence);
+  const cards = arranged.map((project, index) => createProjectCard(project, index, sequence));
+  grid.append(...cards);
 
   requestAnimationFrame(() => {
     if (sequence === renderSequence) {
       grid.classList.add("is-ready");
       grid.removeAttribute("aria-busy");
-      scheduleCardBatch(arranged, initialCardCount, sequence);
+      loadCardImagesSequentially(cards, sequence);
     }
   });
 }
 
-function scheduleCardBatch(items, startIndex, sequence) {
-  if (startIndex >= items.length || sequence !== renderSequence) {
-    return;
-  }
+function loadCardImagesSequentially(cards, sequence) {
+  cards.forEach((card, index) => {
+    const delay = index < eagerImageLoadCount ? index * 18 : eagerImageLoadCount * 18 + (index - eagerImageLoadCount) * imageLoadStagger;
+    setTimeout(() => {
+      if (sequence !== renderSequence) {
+        return;
+      }
 
-  const schedule = window.requestIdleCallback || ((callback) => setTimeout(callback, cardRenderBatchDelay));
-  schedule(() => {
-    if (sequence !== renderSequence) {
-      return;
-    }
-
-    renderCardBatch(items, startIndex, cardRenderBatchSize, sequence);
-    setTimeout(() => scheduleCardBatch(items, startIndex + cardRenderBatchSize, sequence), cardRenderBatchDelay);
-  });
-}
-
-function renderCardBatch(items, startIndex, count, sequence) {
-  items.slice(startIndex, startIndex + count).forEach((project, offset) => {
-    grid.appendChild(createProjectCard(project, startIndex + offset, sequence));
+      const image = card.querySelector("img");
+      if (image && image.dataset.src && !image.src) {
+        image.src = image.dataset.src;
+      }
+    }, delay);
   });
 }
 
@@ -1046,10 +1112,19 @@ function createProjectCard(project, index, sequence) {
   const motion = document.createElement("span");
   motion.className = "project-card-motion";
   const image = document.createElement("img");
+  const dimensions = frontImageDimensions[project.image];
+
+  if (dimensions) {
+    const [width, height] = dimensions;
+    image.width = width;
+    image.height = height;
+    card.style.setProperty("--front-ratio", `${width} / ${height}`);
+    card.style.setProperty("--card-scale", getFrontImageScale(width / height));
+  }
 
   image.alt = project.title;
   image.decoding = "async";
-  image.loading = index < initialCardCount ? "eager" : "lazy";
+  image.loading = "eager";
   image.fetchPriority = index < 6 ? "high" : "auto";
   image.addEventListener(
     "load",
@@ -1063,7 +1138,7 @@ function createProjectCard(project, index, sequence) {
     },
     { once: true },
   );
-  image.src = versionAsset(project.image);
+  image.dataset.src = versionAsset(project.image);
 
   motion.append(image);
   card.append(motion);

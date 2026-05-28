@@ -200,6 +200,7 @@ button {
 
 .project-card-motion {
   display: block;
+  aspect-ratio: var(--front-ratio, 1 / 1.25);
   transform-origin: center 86%;
   will-change: transform;
 }
@@ -238,14 +239,21 @@ button {
 }
 
 .project-card img {
+  aspect-ratio: inherit;
+  opacity: 0;
+  object-fit: contain;
   box-shadow: var(--shadow);
   transform: translateZ(0);
-  transition: filter 220ms ease, box-shadow 220ms ease;
+  transition: opacity 420ms ease, filter 220ms ease, box-shadow 220ms ease;
   backface-visibility: hidden;
   will-change: filter;
 }
 
-.project-card:hover img {
+.project-card.is-loaded img {
+  opacity: 1;
+}
+
+.project-card.is-loaded:hover img {
   filter: saturate(1.08);
   box-shadow: 16px 34px 38px rgba(33, 28, 11, 0.22), 6px 14px 20px rgba(33, 28, 11, 0.14);
 }
