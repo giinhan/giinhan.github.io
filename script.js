@@ -34,8 +34,8 @@ const cardFlipSounds = [
   "sound/card flip 05.mp3",
 ];
 
-const workbookPath = "txt/giinhan txt.xlsx?v=20260527-02";
-const assetVersion = "20260528-04";
+const workbookPath = "txt/giinhan txt.xlsx?v=20260528-01";
+const assetVersion = "20260528-11";
 const eagerImageLoadCount = 16;
 const imageLoadStagger = 85;
 
@@ -169,6 +169,7 @@ const aboutBallState = aboutBalls.map((element, index) => ({
   shotSide: 1,
   spin: 0,
   rallySeed: 0.37,
+  rallyIndex: 0,
   phase: index * 0.82,
 }));
 
@@ -559,7 +560,6 @@ const imageRows = [
       "1-34-21.png",
       "1-34-23.JPG",
       "1-34-24.JPG",
-      "1-34-25.JPG",
       "1-34-26.JPG",
     ]),
   },
@@ -572,7 +572,7 @@ const imageRows = [
     category: "1",
     path: "img/1 create/1-36/1-36.JPG",
     backMedia: mediaFiles("img/1 create/1-36", [
-      "1-36-2.jpg",
+      "1-36-1.JPG",
       "1-36-3.JPG",
       "1-36-4.JPG",
       "1-36-5.JPG",
@@ -586,7 +586,8 @@ const imageRows = [
       "1-36-14.JPG",
       "1-36-15.JPG",
       "1-36-16.JPG",
-      "1-36-17.JPG",
+      "1-36-17.jpg",
+      "1-36-18.JPG",
     ]),
   },
   {
@@ -1577,29 +1578,53 @@ function seededNoise(value) {
   return raw - Math.floor(raw);
 }
 
+function getAboutHitDuration() {
+  if (!Number.isFinite(aboutAudio.currentTime) || aboutAudio.paused) {
+    return 2360;
+  }
+
+  const hitInterval = 2.36;
+  const hitOffset = 0.2;
+  const audioPosition = ((aboutAudio.currentTime - hitOffset) % hitInterval + hitInterval) % hitInterval;
+  let remaining = hitInterval - audioPosition;
+
+  if (remaining < 1.08) {
+    remaining += hitInterval;
+  }
+
+  return remaining * 1000;
+}
+
 function queueAboutBallShot(ball, width, height, time) {
   const size = ball.element.offsetWidth || 48;
-  const leftCourt = 32;
-  const rightCourt = Math.max(leftCourt + 120, width - size - 36);
   const nextSide = ball.shotSide * -1;
-  const seed = ball.rallySeed + time * 0.00031;
+  const seed = ball.rallySeed + ball.rallyIndex * 0.71 + aboutAudio.currentTime * 0.13;
   const noiseA = seededNoise(seed + 1.7);
   const noiseB = seededNoise(seed + 4.3);
   const noiseC = seededNoise(seed + 8.9);
-  const courtTop = 36;
-  const courtBottom = Math.max(courtTop + 180, height - size - 44);
+  const courtLeft = 36;
+  const courtRight = Math.max(courtLeft + 180, width - size - 44);
+  const courtTop = 42;
+  const courtBottom = Math.max(courtTop + 360, height - size - 46);
+  const courtWidth = courtRight - courtLeft;
   const courtRange = courtBottom - courtTop;
-  const verticalBandStart = ball.y < height * 0.5 ? 0.58 : 0.04;
-  const verticalBandSize = 0.34;
+  const centerX = courtLeft + courtWidth * 0.5;
+  const laneWidth = Math.min(courtWidth * 0.34, 160);
+  const topPlayerY = courtTop + courtRange * 0.07;
+  const bottomPlayerY = courtBottom - courtRange * 0.07;
+  const crossCourt = ball.rallyIndex % 3 !== 1;
+  const lateralDirection = crossCourt ? nextSide : -nextSide;
+  const approachJitter = (noiseC - 0.5) * Math.min(34, courtWidth * 0.09);
 
   ball.fromX = ball.x;
   ball.fromY = ball.y;
-  ball.toX = nextSide > 0 ? rightCourt - noiseA * Math.min(120, rightCourt * 0.22) : leftCourt + noiseA * 86;
-  ball.toY = courtTop + (verticalBandStart + noiseB * verticalBandSize) * courtRange;
+  ball.toX = centerX + lateralDirection * (laneWidth * (0.38 + noiseA * 0.54)) + approachJitter;
+  ball.toY = nextSide > 0 ? bottomPlayerY - noiseB * 30 : topPlayerY + noiseB * 30;
   ball.shotStart = time;
-  ball.shotDuration = 1400 + noiseC * 1200;
+  ball.shotDuration = getAboutHitDuration();
   ball.shotSide = nextSide;
-  ball.rallySeed = (ball.rallySeed + 0.191 + noiseB * 0.37) % 1;
+  ball.rallyIndex += 1;
+  ball.rallySeed = (ball.rallySeed + 0.193 + noiseB * 0.29) % 1;
 }
 
 function renderAboutBalls(time = performance.now()) {
@@ -1615,17 +1640,19 @@ function renderAboutBalls(time = performance.now()) {
       if (progress >= 1) {
         ball.x = ball.toX;
         ball.y = ball.toY;
-        ball.spin += ball.shotSide * 58;
+        ball.spin += ball.shotSide * 18;
         queueAboutBallShot(ball, width, height, time);
         progress = 0;
       }
 
-      const eased = 1 - Math.pow(1 - Math.max(0, Math.min(progress, 1)), 2);
-      const arcHeight = 72 + seededNoise(ball.rallySeed + ball.shotStart * 0.002) * 112;
-      const sideDrift = Math.sin(progress * Math.PI * 2 + ball.rallySeed * 8) * 14;
+      const clampedProgress = Math.max(0, Math.min(progress, 1));
+      const speedShape = ball.shotDuration < 1700 ? 1.85 : ball.shotDuration > 2800 ? 2.55 : 2.25;
+      const eased = 1 - Math.pow(1 - clampedProgress, speedShape);
+      const courtCurve = Math.sin(clampedProgress * Math.PI) * ball.shotSide * 10;
       ball.x = ball.fromX + (ball.toX - ball.fromX) * eased;
-      ball.y = ball.fromY + (ball.toY - ball.fromY) * eased - Math.sin(progress * Math.PI) * arcHeight + sideDrift;
-      ball.spin += ball.shotSide * (5 + progress * 3);
+      ball.y = ball.fromY + (ball.toY - ball.fromY) * eased;
+      ball.x += courtCurve;
+      ball.spin += ball.shotSide * (3.8 - clampedProgress * 1.6);
     } else {
       const { x: targetX, y: targetY } = getAboutTimeTailTarget(ball);
 
