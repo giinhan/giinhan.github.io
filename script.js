@@ -35,7 +35,10 @@ const cardFlipSounds = [
 ];
 
 const workbookPath = "txt/giinhan txt.xlsx?v=20260527-02";
-const assetVersion = "20260528-02";
+const assetVersion = "20260528-03";
+const initialCardCount = 16;
+const cardRenderBatchSize = 10;
+const cardRenderBatchDelay = 180;
 
 const fallbackAboutContent = {
   name: "한지인",
@@ -992,39 +995,80 @@ function render(category = "all") {
   const sequence = ++renderSequence;
   const filtered =
     category === "all" ? projects : projects.filter((project) => project.category === category);
+  const arranged = arrangeCards(filtered);
   grid.classList.remove("is-ready");
   grid.setAttribute("aria-busy", "true");
   grid.innerHTML = "";
-  arrangeCards(filtered).forEach((project, index) => {
-    const card = document.createElement("button");
-    card.className = "project-card";
-    card.classList.add(`is-wiggle-${Math.floor(Math.random() * 3) + 1}`);
-    card.type = "button";
-    card.style.setProperty("--entry-delay", `${Math.min(index * 46 + Math.random() * 120, 1500)}ms`);
-    card.style.setProperty("--tilt", `${project.tilt}deg`);
-    card.style.setProperty("--stagger-x", `${project.staggerX}px`);
-    card.style.setProperty("--stagger-gap-extra", `${Math.abs(project.staggerY) * 1.35}px`);
-    card.setAttribute("aria-label", `${project.title} 크게 보기`);
-    const image = document.createElement("img");
-
-    image.src = versionAsset(project.image);
-    image.alt = project.title;
-    image.decoding = "async";
-    image.loading = index < 12 ? "eager" : "lazy";
-    image.fetchPriority = index < 6 ? "high" : "auto";
-    image.addEventListener("load", () => applyFrontImageScale(card, image), { once: true });
-
-    card.append(image);
-    card.addEventListener("click", () => openDetail(project));
-    grid.appendChild(card);
-  });
+  renderCardBatch(arranged, 0, initialCardCount, sequence);
 
   requestAnimationFrame(() => {
     if (sequence === renderSequence) {
       grid.classList.add("is-ready");
       grid.removeAttribute("aria-busy");
+      scheduleCardBatch(arranged, initialCardCount, sequence);
     }
   });
+}
+
+function scheduleCardBatch(items, startIndex, sequence) {
+  if (startIndex >= items.length || sequence !== renderSequence) {
+    return;
+  }
+
+  const schedule = window.requestIdleCallback || ((callback) => setTimeout(callback, cardRenderBatchDelay));
+  schedule(() => {
+    if (sequence !== renderSequence) {
+      return;
+    }
+
+    renderCardBatch(items, startIndex, cardRenderBatchSize, sequence);
+    setTimeout(() => scheduleCardBatch(items, startIndex + cardRenderBatchSize, sequence), cardRenderBatchDelay);
+  });
+}
+
+function renderCardBatch(items, startIndex, count, sequence) {
+  items.slice(startIndex, startIndex + count).forEach((project, offset) => {
+    grid.appendChild(createProjectCard(project, startIndex + offset, sequence));
+  });
+}
+
+function createProjectCard(project, index, sequence) {
+  const card = document.createElement("button");
+  card.className = "project-card";
+  card.classList.add(`is-wiggle-${Math.floor(Math.random() * 3) + 1}`);
+  card.type = "button";
+  card.style.setProperty("--entry-delay", `${Math.min(index * 38 + Math.random() * 90, 1200)}ms`);
+  card.style.setProperty("--tilt", `${project.tilt}deg`);
+  card.style.setProperty("--stagger-x", `${project.staggerX}px`);
+  card.style.setProperty("--stagger-gap-extra", `${Math.abs(project.staggerY) * 1.35}px`);
+  card.setAttribute("aria-label", `${project.title} 크게 보기`);
+
+  const motion = document.createElement("span");
+  motion.className = "project-card-motion";
+  const image = document.createElement("img");
+
+  image.alt = project.title;
+  image.decoding = "async";
+  image.loading = index < initialCardCount ? "eager" : "lazy";
+  image.fetchPriority = index < 6 ? "high" : "auto";
+  image.addEventListener(
+    "load",
+    () => {
+      if (sequence !== renderSequence) {
+        return;
+      }
+
+      applyFrontImageScale(card, image);
+      card.classList.add("is-loaded");
+    },
+    { once: true },
+  );
+  image.src = versionAsset(project.image);
+
+  motion.append(image);
+  card.append(motion);
+  card.addEventListener("click", () => openDetail(project));
+  return card;
 }
 
 function applyFrontImageScale(card, image) {
