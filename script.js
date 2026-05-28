@@ -35,7 +35,7 @@ const cardFlipSounds = [
 ];
 
 const workbookPath = "txt/giinhan txt.xlsx?v=20260527-02";
-const assetVersion = "20260527-07";
+const assetVersion = "20260528-02";
 
 const fallbackAboutContent = {
   name: "한지인",
@@ -109,8 +109,8 @@ function mediaFiles(folder, files) {
 const imageRows = [
   {
     category: "1",
-    path: "img/1 create/1-01/1-01.png",
-    backMedia: numberedMedia("img/1 create/1-01", "1-01", [1, 2], "png"),
+    path: "img/1 create/1-01/1-01.jpg",
+    backMedia: numberedMedia("img/1 create/1-01", "1-01", [1, 2], "jpg"),
   },
   {
     category: "1",
@@ -185,9 +185,9 @@ const imageRows = [
     path: "img/1 create/1-09/1-09.jpg",
     backMedia: [
       ...numberedMedia("img/1 create/1-09", "1-09", [1, 2], "jpg"),
-      "img/1 create/1-09/1-09-3.PNG",
-      "img/1 create/1-09/1-09-4.PNG",
-      "img/1 create/1-09/1-09-5.png",
+      "img/1 create/1-09/1-09-3.jpg",
+      "img/1 create/1-09/1-09-4.jpg",
+      "img/1 create/1-09/1-09-5.jpg",
     ],
   },
   {
