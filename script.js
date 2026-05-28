@@ -19,7 +19,6 @@ let currentProject = null;
 let projects = [];
 let detailRotation = 0;
 const dominantColorByImage = new Map();
-const imageDimensionsBySrc = new Map();
 let renderSequence = 0;
 const aboutAudio = new Audio("sound/about.mp3");
 aboutAudio.loop = true;
@@ -989,40 +988,30 @@ function createProjects(cardContentById) {
   });
 }
 
-async function render(category = "all") {
+function render(category = "all") {
   const sequence = ++renderSequence;
   const filtered =
     category === "all" ? projects : projects.filter((project) => project.category === category);
   grid.classList.remove("is-ready");
   grid.setAttribute("aria-busy", "true");
-  await prepareFrontImageDimensions(filtered);
-
-  if (sequence !== renderSequence) {
-    return;
-  }
-
   grid.innerHTML = "";
   arrangeCards(filtered).forEach((project, index) => {
     const card = document.createElement("button");
     card.className = "project-card";
     card.classList.add(`is-wiggle-${Math.floor(Math.random() * 3) + 1}`);
     card.type = "button";
-    card.style.setProperty("--entry-delay", `${Math.min(index * 58, 1320)}ms`);
+    card.style.setProperty("--entry-delay", `${Math.min(index * 46 + Math.random() * 120, 1500)}ms`);
     card.style.setProperty("--tilt", `${project.tilt}deg`);
     card.style.setProperty("--stagger-x", `${project.staggerX}px`);
     card.style.setProperty("--stagger-gap-extra", `${Math.abs(project.staggerY) * 1.35}px`);
     card.setAttribute("aria-label", `${project.title} 크게 보기`);
     const image = document.createElement("img");
-    const dimensions = imageDimensionsBySrc.get(project.image);
-
-    if (dimensions) {
-      image.width = dimensions.width;
-      image.height = dimensions.height;
-      card.style.setProperty("--card-scale", getFrontImageScale(dimensions.width / dimensions.height));
-    }
 
     image.src = versionAsset(project.image);
     image.alt = project.title;
+    image.decoding = "async";
+    image.loading = index < 12 ? "eager" : "lazy";
+    image.fetchPriority = index < 6 ? "high" : "auto";
     image.addEventListener("load", () => applyFrontImageScale(card, image), { once: true });
 
     card.append(image);
@@ -1045,40 +1034,6 @@ function applyFrontImageScale(card, image) {
 
 function getFrontImageScale(ratio) {
   return ratio >= 1.18 ? 1.2 : ratio >= 0.92 ? 1.06 : 1;
-}
-
-async function prepareFrontImageDimensions(items) {
-  await Promise.allSettled(items.map((project) => loadImageDimensions(project.image)));
-}
-
-function loadImageDimensions(src) {
-  if (imageDimensionsBySrc.has(src)) {
-    return Promise.resolve(imageDimensionsBySrc.get(src));
-  }
-
-  return new Promise((resolve) => {
-    const image = new Image();
-    let settled = false;
-    const settle = (dimensions = null) => {
-      if (settled) {
-        return;
-      }
-
-      settled = true;
-      clearTimeout(timeout);
-      if (dimensions) {
-        imageDimensionsBySrc.set(src, dimensions);
-      }
-      resolve(dimensions);
-    };
-    const timeout = setTimeout(() => settle(), 3600);
-
-    image.onload = () => {
-      settle({ width: image.naturalWidth, height: image.naturalHeight });
-    };
-    image.onerror = () => settle();
-    image.src = versionAsset(src);
-  });
 }
 
 function arrangeCards(items) {
