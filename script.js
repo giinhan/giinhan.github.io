@@ -34,7 +34,7 @@ const cardFlipSounds = [
   "sound/card flip 05.mp3",
 ];
 
-const workbookPath = "txt/giinhan txt.xlsx?v=20260528-01";
+const workbookPath = "txt/giinhan txt.xlsx?v=20260529-01";
 const assetVersion = "20260528-11";
 const eagerImageLoadCount = 16;
 const imageLoadStagger = 85;
@@ -107,6 +107,7 @@ const frontImageDimensions = {
   "img/1 create/1-44/1-44.jpg": [1200, 1696],
   "img/1 create/1-45/1-45.jpg": [1200, 656],
   "img/1 create/1-46/1-46.jpg": [1200, 1167],
+  "img/1 create/1-47/1-47.jpg": [1200, 1568],
   "img/2 operate/2-01/2-01.jpg": [1200, 1200],
   "img/2 operate/2-02/2-02.jpg": [1200, 1694],
   "img/2 operate/2-03/2-03.jpg": [1200, 1200],
@@ -688,6 +689,23 @@ const imageRows = [
       "1-46-9.jpg",
       "1-46-10.jpg",
       "1-46-11.JPG",
+    ]),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-47/1-47.jpg",
+    backMedia: mediaFiles("img/1 create/1-47", [
+      "1-47-1.JPG",
+      "1-47-2.JPG",
+      "1-47-3.JPG",
+      "1-47-4.JPG",
+      "1-47-5.JPG",
+      "1-47-6.JPG",
+      "1-47-7.JPG",
+      "1-47-8.JPG",
+      "1-47-9.JPG",
+      "1-47-10.JPG",
+      "1-47-11.jpg",
     ]),
   },
   {
