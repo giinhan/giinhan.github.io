@@ -17,6 +17,9 @@ const aboutBalls = [...document.querySelectorAll(".about-ball")];
 const aboutTimeToggle = document.querySelector("[data-about-time-toggle]");
 let currentProject = null;
 let projects = [];
+let cardListRows = [];
+let currentListCategory = "";
+let listSort = { key: "", direction: "" };
 let detailRotation = 0;
 const dominantColorByImage = new Map();
 let renderSequence = 0;
@@ -34,10 +37,11 @@ const cardFlipSounds = [
   "sound/card flip 05.mp3",
 ];
 
-const workbookPath = "txt/giinhan txt.xlsx?v=20260529-01";
+const workbookPath = "txt/giinhan txt.xlsx?v=20260531-06";
 const assetVersion = "20260528-11";
 const eagerImageLoadCount = 16;
 const imageLoadStagger = 85;
+const listViewCategories = new Set(["3", "4", "5"]);
 
 const fallbackAboutContent = {
   name: "한지인",
@@ -822,6 +826,8 @@ const categoryNumberByName = {
   write: "3",
   talk: "4",
   consult: "5",
+  council: "5",
+  counsil: "5",
 };
 
 const layoutProfiles = [
@@ -876,6 +882,61 @@ function getCell(rows, cell) {
 
 function normalizeWorkbookRows(sheet) {
   return XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false });
+}
+
+function normalizeWorkbookGrid(sheet) {
+  return XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", raw: false, blankrows: false });
+}
+
+function getCategoryNumber(value) {
+  const normalized = String(value || "").trim().toLowerCase();
+  return categoryNumberByName[normalized] || normalized;
+}
+
+function normalizeCardListRows(sheet) {
+  if (!sheet) {
+    return [];
+  }
+
+  const rows = normalizeWorkbookGrid(sheet);
+  let currentCategory = "";
+
+  return rows
+    .slice(1)
+    .map((row) => {
+      const [
+        label = "",
+        category = "",
+        id = "",
+        title = "",
+        year = "",
+        slash = "",
+        linkText = "",
+        link = "",
+        note = "",
+      ] = row;
+      const rowCategory = getCategoryNumber(category);
+
+      if (rowCategory) {
+        currentCategory = rowCategory;
+      }
+
+      const what = String(title || label || "").trim();
+      const item = {
+        category: currentCategory,
+        id: String(id || "").trim(),
+        what,
+        when: String(year || "").trim(),
+        slash: String(slash || "").trim(),
+        plusText: String(linkText || "").trim(),
+        link: String(link || "").trim(),
+        note: String(note || "").trim(),
+      };
+
+      const hasVisibleContent = Boolean(item.what || item.when || item.slash || item.plusText || item.note);
+      return item.category && hasVisibleContent ? item : null;
+    })
+    .filter(Boolean);
 }
 
 function getCardNumber(row, currentCategory, lastCardNumber, hasContent) {
@@ -1000,7 +1061,7 @@ async function loadAboutContent() {
 async function loadSiteContent() {
   if (!window.XLSX) {
     const about = await loadAboutContent();
-    return { cardContentById: fallbackCardContentById, about };
+    return { cardContentById: fallbackCardContentById, cardListRows: [], about };
   }
 
   try {
@@ -1012,7 +1073,9 @@ async function loadSiteContent() {
     const buffer = await response.arrayBuffer();
     const workbook = XLSX.read(buffer, { type: "array" });
     const sheet = workbook.Sheets.Cards || workbook.Sheets[workbook.SheetNames[0]];
+    const cardListSheet = workbook.Sheets["card_list view"];
     const rows = normalizeWorkbookRows(sheet);
+    const listRows = normalizeCardListRows(cardListSheet);
     const contentById = { ...fallbackCardContentById };
     let currentCategory = "";
     let lastCardNumber = 0;
@@ -1050,11 +1113,11 @@ async function loadSiteContent() {
 
     const about = await loadAboutContent();
 
-    return { cardContentById: contentById, about };
+    return { cardContentById: contentById, cardListRows: listRows, about };
   } catch (error) {
     console.warn(`${workbookPath} could not be loaded.`, error);
     const about = await loadAboutContent();
-    return { cardContentById: fallbackCardContentById, about };
+    return { cardContentById: fallbackCardContentById, cardListRows: [], about };
   }
 }
 
@@ -1083,12 +1146,29 @@ function createProjects(cardContentById) {
 
 function render(category = "all") {
   const sequence = ++renderSequence;
-  const filtered =
-    category === "all" ? projects : projects.filter((project) => project.category === category);
-  const arranged = arrangeCards(filtered);
-  grid.classList.remove("is-ready");
+  const activeCategory = getCategoryNumber(category);
+
+  grid.classList.remove("is-ready", "is-list");
   grid.setAttribute("aria-busy", "true");
   grid.innerHTML = "";
+
+  if (listViewCategories.has(activeCategory)) {
+    currentListCategory = activeCategory;
+    const rows = getSortedProjectListRows(cardListRows.filter((row) => row.category === activeCategory));
+    grid.classList.add("is-list");
+    grid.append(createProjectList(rows));
+    grid.classList.add("is-ready");
+    grid.removeAttribute("aria-busy");
+    return;
+  }
+
+  currentListCategory = "";
+
+  const filtered =
+    category === "all"
+      ? projects.filter((project) => !listViewCategories.has(project.category))
+      : projects.filter((project) => project.category === category);
+  const arranged = arrangeCards(filtered);
   const cards = arranged.map((project, index) => createProjectCard(project, index, sequence));
   grid.append(...cards);
 
@@ -1099,6 +1179,131 @@ function render(category = "all") {
       loadCardImagesSequentially(cards, sequence);
     }
   });
+}
+
+function getYearValues(value) {
+  const matches = String(value || "").match(/\d{4}/g);
+  return matches ? matches.map(Number).filter(Boolean) : [];
+}
+
+function getSortYearValue(value, direction) {
+  const years = getYearValues(value);
+  if (!years.length) {
+    return direction === "desc" ? -Infinity : Infinity;
+  }
+
+  return direction === "desc" ? Math.max(...years) : Math.min(...years);
+}
+
+function getSortedProjectListRows(rows) {
+  if (!listSort.key) {
+    return [...rows];
+  }
+
+  return [...rows].sort((a, b) => {
+    if (listSort.key === "when") {
+      const aYear = getSortYearValue(a.when, listSort.direction);
+      const bYear = getSortYearValue(b.when, listSort.direction);
+      return listSort.direction === "desc" ? bYear - aYear : aYear - bYear;
+    }
+
+    if (listSort.key === "x") {
+      return String(a.slash || "").localeCompare(String(b.slash || ""), "ko", {
+        numeric: true,
+        sensitivity: "base",
+      });
+    }
+
+    return 0;
+  });
+}
+
+function updateListSort(key) {
+  if (key === "when") {
+    listSort = {
+      key,
+      direction: listSort.key === "when" && listSort.direction === "desc" ? "asc" : "desc",
+    };
+  } else if (key === "x") {
+    listSort = { key, direction: "asc" };
+  }
+
+  if (currentListCategory) {
+    render(currentListCategory);
+  }
+}
+
+function createProjectList(rows) {
+  const list = document.createElement("div");
+  list.className = "project-list";
+  list.setAttribute("role", "table");
+  list.setAttribute("aria-label", "Project list");
+
+  const header = document.createElement("div");
+  header.className = "project-list-row project-list-header";
+  header.setAttribute("role", "row");
+  [
+    { label: "what" },
+    { label: "when", sortKey: "when" },
+    { label: "x", sortKey: "x" },
+    { label: "+" },
+  ].forEach(({ label, sortKey }) => {
+    const cell = document.createElement("span");
+    cell.className = "project-list-cell";
+    cell.setAttribute("role", "columnheader");
+    if (sortKey) {
+      const button = document.createElement("button");
+      button.className = "project-list-sort";
+      button.type = "button";
+      button.textContent = label;
+      button.setAttribute("aria-label", `${label} 열 정렬`);
+      if (listSort.key === sortKey) {
+        button.classList.add("is-active");
+        button.dataset.sortDirection = listSort.direction;
+        button.setAttribute("aria-sort", listSort.direction === "desc" ? "descending" : "ascending");
+      }
+      button.addEventListener("click", () => updateListSort(sortKey));
+      cell.append(button);
+    } else {
+      cell.textContent = label;
+    }
+    header.append(cell);
+  });
+  list.append(header);
+
+  rows.forEach((row) => {
+    const item = document.createElement("div");
+    item.className = "project-list-row";
+    item.setAttribute("role", "row");
+
+    const values = [row.what, row.when, row.slash];
+    values.forEach((value) => {
+      const cell = document.createElement("span");
+      cell.className = "project-list-cell";
+      cell.setAttribute("role", "cell");
+      cell.textContent = value;
+      item.append(cell);
+    });
+
+    const linkCell = document.createElement("span");
+    linkCell.className = "project-list-cell";
+    linkCell.setAttribute("role", "cell");
+    if (row.link && row.plusText) {
+      const anchor = document.createElement("a");
+      anchor.href = row.link;
+      anchor.target = "_blank";
+      anchor.rel = "noreferrer";
+      anchor.textContent = row.plusText;
+      linkCell.append(anchor);
+    } else {
+      linkCell.textContent = row.plusText;
+    }
+    item.append(linkCell);
+
+    list.append(item);
+  });
+
+  return list;
 }
 
 function loadCardImagesSequentially(cards, sequence) {
@@ -1778,12 +1983,41 @@ function closeDetail() {
   syncDetailScrollbar();
 }
 
+function getCategoryFromHash() {
+  const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  const category = getCategoryNumber(params.get("category") || "all");
+  return category === "all" || [...tabs].some((tab) => tab.dataset.category === category) ? category : "all";
+}
+
+function persistCategory(category) {
+  const nextHash = `category=${encodeURIComponent(category)}`;
+  if (window.location.hash.replace(/^#/, "") === nextHash) {
+    return;
+  }
+
+  window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}#${nextHash}`);
+}
+
+function showCategory(category, { persist = true, scroll = false } = {}) {
+  const normalizedCategory = getCategoryNumber(category);
+  const activeCategory = normalizedCategory === "all" ? "all" : normalizedCategory;
+  const activeTab = [...tabs].find((tab) => tab.dataset.category === activeCategory) || tabs[0];
+
+  tabs.forEach((item) => item.classList.toggle("is-active", item === activeTab));
+  render(activeTab.dataset.category);
+
+  if (persist) {
+    persistCategory(activeTab.dataset.category);
+  }
+
+  if (scroll) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
-    tabs.forEach((item) => item.classList.remove("is-active"));
-    tab.classList.add("is-active");
-    render(tab.dataset.category);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    showCategory(tab.dataset.category, { scroll: true });
   });
 });
 
@@ -1941,12 +2175,13 @@ detailScrollbar.addEventListener("pointerdown", (event) => {
 });
 
 async function init() {
-  const { cardContentById, about } = await loadSiteContent();
+  const { cardContentById, cardListRows: loadedCardListRows, about } = await loadSiteContent();
   aboutContentByLanguage = about;
+  cardListRows = loadedCardListRows;
   projects = createProjects(cardContentById);
   renderAbout();
   updateAboutTimeButton();
-  render("all");
+  showCategory(getCategoryFromHash(), { persist: false });
 }
 
 init();
