@@ -1293,10 +1293,15 @@ function render(category = "all") {
     resetCardColumnParallax();
     const rows = getSortedProjectListRows(cardListRows.filter((row) => row.category === activeCategory));
     grid.classList.add("is-list");
-    grid.append(createProjectListScrollbar(), createProjectList(rows));
+    grid.append(createProjectListScrollbar(activeCategory), createProjectListViewport(createProjectList(rows)));
     grid.classList.add("is-ready");
     grid.removeAttribute("aria-busy");
-    requestAnimationFrame(syncProjectListScrollbar);
+    requestAnimationFrame(() => {
+      const scrollArea = getProjectListScrollArea();
+      grid.scrollLeft = 0;
+      scrollArea.scrollLeft = 0;
+      syncProjectListScrollbar();
+    });
     return;
   }
 
@@ -1535,9 +1540,10 @@ function createProjectList(rows) {
   return list;
 }
 
-function createProjectListScrollbar() {
+function createProjectListScrollbar(category) {
   const scrollbar = document.createElement("div");
   scrollbar.className = "project-list-scrollbar";
+  scrollbar.dataset.listCategory = category;
   scrollbar.setAttribute("aria-hidden", "true");
 
   const thumb = document.createElement("div");
@@ -1547,7 +1553,8 @@ function createProjectListScrollbar() {
   scrollbar.addEventListener("pointerdown", (event) => {
     event.preventDefault();
 
-    const maxScrollLeft = grid.scrollWidth - grid.clientWidth;
+    const scrollArea = getProjectListScrollArea();
+    const maxScrollLeft = scrollArea.scrollWidth - scrollArea.clientWidth;
     if (maxScrollLeft <= 0) {
       return;
     }
@@ -1560,11 +1567,11 @@ function createProjectListScrollbar() {
 
     if (event.target === thumb) {
       const startX = event.clientX;
-      const startScrollLeft = grid.scrollLeft;
+      const startScrollLeft = scrollArea.scrollLeft;
 
       function handleMove(moveEvent) {
         const delta = moveEvent.clientX - startX;
-        grid.scrollLeft = startScrollLeft + (delta / maxThumbLeft) * maxScrollLeft;
+        scrollArea.scrollLeft = startScrollLeft + (delta / maxThumbLeft) * maxScrollLeft;
       }
 
       function handleUp() {
@@ -1579,10 +1586,22 @@ function createProjectListScrollbar() {
 
     const thumbRect = thumb.getBoundingClientRect();
     const direction = event.clientX < thumbRect.left ? -1 : 1;
-    grid.scrollLeft += direction * Math.max(120, grid.clientWidth * 0.5);
+    scrollArea.scrollLeft += direction * Math.max(120, scrollArea.clientWidth * 0.5);
   });
 
   return scrollbar;
+}
+
+function createProjectListViewport(list) {
+  const viewport = document.createElement("div");
+  viewport.className = "project-list-viewport";
+  viewport.append(list);
+  viewport.addEventListener("scroll", syncProjectListScrollbar, { passive: true });
+  return viewport;
+}
+
+function getProjectListScrollArea() {
+  return grid.querySelector(".project-list-viewport") || grid;
 }
 
 function syncProjectListScrollbar() {
@@ -1592,7 +1611,8 @@ function syncProjectListScrollbar() {
     return;
   }
 
-  const maxScrollLeft = grid.scrollWidth - grid.clientWidth;
+  const scrollArea = getProjectListScrollArea();
+  const maxScrollLeft = scrollArea.scrollWidth - scrollArea.clientWidth;
   scrollbar.hidden = maxScrollLeft <= 0;
 
   if (scrollbar.hidden) {
@@ -1601,9 +1621,9 @@ function syncProjectListScrollbar() {
 
   const trackInset = 20;
   const trackWidth = scrollbar.clientWidth - trackInset * 2;
-  const thumbWidth = Math.max(72, (grid.clientWidth / grid.scrollWidth) * trackWidth);
+  const thumbWidth = Math.max(72, (scrollArea.clientWidth / scrollArea.scrollWidth) * trackWidth);
   const maxThumbLeft = Math.max(1, trackWidth - thumbWidth);
-  const thumbLeft = trackInset + (grid.scrollLeft / maxScrollLeft) * maxThumbLeft;
+  const thumbLeft = trackInset + (scrollArea.scrollLeft / maxScrollLeft) * maxThumbLeft;
 
   thumb.style.width = `${thumbWidth}px`;
   thumb.style.transform = `translateX(${thumbLeft - trackInset}px)`;

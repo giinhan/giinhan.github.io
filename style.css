@@ -215,6 +215,10 @@ button {
   display: none;
 }
 
+.project-list-viewport {
+  width: 100%;
+}
+
 .project-list-row {
   display: grid;
   grid-template-columns: minmax(220px, 2.6fr) minmax(72px, 0.58fr) minmax(160px, 1.28fr) minmax(112px, 0.78fr);
@@ -1396,23 +1400,42 @@ body.about-open {
 
   .project-grid.is-list {
     padding: 0 0 96px;
+    overflow: visible;
+  }
+
+  .project-list-viewport {
+    width: 100%;
     overflow-x: auto;
     scrollbar-width: none;
   }
 
-  .project-grid.is-list::-webkit-scrollbar {
+  .project-list-viewport::-webkit-scrollbar {
     display: none;
   }
 
   .project-list-scrollbar {
+    --project-list-scrollbar-color: #b7ad21;
     position: sticky;
-    left: 18px;
+    left: 0;
     z-index: 4;
     display: block;
-    width: calc(100vw - 36px);
+    width: 100%;
     height: 20px;
     flex: 0 0 auto;
-    margin: 0 18px 14px;
+    margin: 0 0 14px;
+    background: rgba(35, 21, 13, 0.5);
+  }
+
+  .project-list-scrollbar[data-list-category="3"] {
+    --project-list-scrollbar-color: #c8ba1f;
+  }
+
+  .project-list-scrollbar[data-list-category="4"] {
+    --project-list-scrollbar-color: #98a460;
+  }
+
+  .project-list-scrollbar[data-list-category="5"] {
+    --project-list-scrollbar-color: #6f8a5d;
   }
 
   .project-list-scrollbar[hidden] {
@@ -1425,7 +1448,7 @@ body.about-open {
     top: 0;
     width: 19px;
     height: 18px;
-    background: #fffef9;
+    background: rgba(35, 21, 13, 0.5);
     content: "";
   }
 
@@ -1443,12 +1466,12 @@ body.about-open {
     bottom: 3px;
     left: 20px;
     min-width: 72px;
-    background: #111;
+    background: var(--project-list-scrollbar-color);
     border-radius: 0;
   }
 
   .project-list {
-    min-width: 720px;
+    min-width: 800px;
     border-radius: 0;
     font-size: 12px;
   }
