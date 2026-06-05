@@ -211,6 +211,10 @@ button {
   line-height: 1.28;
 }
 
+.project-list-scrollbar {
+  display: none;
+}
+
 .project-list-row {
   display: grid;
   grid-template-columns: minmax(220px, 2.6fr) minmax(72px, 0.58fr) minmax(160px, 1.28fr) minmax(112px, 0.78fr);
@@ -918,8 +922,9 @@ button {
 
 .about-inline-link {
   display: inline-flex;
+  box-sizing: border-box;
+  height: 1.55em;
   align-items: center;
-  min-height: 1.55em;
   padding: 0 0.55em;
   border: 1px solid currentColor;
   border-radius: 999px;
@@ -934,8 +939,10 @@ button {
 }
 
 .about-inline-button {
+  appearance: none;
   background: transparent;
   font: inherit;
+  line-height: 1;
   cursor: var(--cursor-pointer);
 }
 
@@ -1153,7 +1160,7 @@ body.about-open .about-dim {
 
 .flourish-card-body {
   font-size: clamp(14px, 1vw, 16px);
-  line-height: 2.67;
+  line-height: 1.72;
 }
 
 .flourish-card-title {
@@ -1180,7 +1187,7 @@ body.about-open .about-dim {
   padding: clamp(10px, 1.5vw, 15px);
   background: var(--flourish-navy);
   color: #fff;
-  line-height: 2.25;
+  line-height: 1.72;
 }
 
 .flourish-intro-box .flourish-card-text {
@@ -1220,7 +1227,7 @@ body.about-open .about-dim {
 .flourish-card-bullet {
   display: flex;
   gap: 0.72em;
-  align-items: center;
+  align-items: flex-start;
   margin: 0 0 0.31em;
 }
 
@@ -1231,6 +1238,7 @@ body.about-open .about-dim {
   flex: 0 0 1.05em;
   align-items: center;
   justify-content: center;
+  margin-top: 0.35em;
   border: 1px solid var(--flourish-navy);
   color: var(--flourish-navy);
   content: "✓";
@@ -1389,10 +1397,59 @@ body.about-open {
   .project-grid.is-list {
     padding: 0 0 96px;
     overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .project-grid.is-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .project-list-scrollbar {
+    position: sticky;
+    left: 18px;
+    z-index: 4;
+    display: block;
+    width: calc(100vw - 36px);
+    height: 20px;
+    flex: 0 0 auto;
+    margin: 0 18px 14px;
+  }
+
+  .project-list-scrollbar[hidden] {
+    display: none;
+  }
+
+  .project-list-scrollbar::before,
+  .project-list-scrollbar::after {
+    position: absolute;
+    top: 0;
+    width: 19px;
+    height: 18px;
+    background: #fffef9;
+    content: "";
+  }
+
+  .project-list-scrollbar::before {
+    left: 0;
+  }
+
+  .project-list-scrollbar::after {
+    right: 0;
+  }
+
+  .project-list-scrollbar-thumb {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 20px;
+    min-width: 72px;
+    background: #111;
+    border-radius: 0;
   }
 
   .project-list {
     min-width: 720px;
+    border-radius: 0;
     font-size: 12px;
   }
 

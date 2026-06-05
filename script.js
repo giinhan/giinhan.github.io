@@ -60,7 +60,14 @@ const aboutDocumentPaths = {
   jpn: "txt/about-jpn.docx?v=20260605-02",
   chn: "txt/about-chn.docx?v=20260605-02",
 };
+const aboutTextPaths = {
+  kor: "txt/about-kor.txt?v=20260606-01",
+  eng: "txt/about-eng.txt?v=20260606-01",
+  jpn: "txt/about-jpn.txt?v=20260606-01",
+  chn: "txt/about-chn.txt?v=20260606-01",
+};
 const flourishDocumentPath = "txt/flourish.docx?v=20260605-01";
+const flourishTextPath = "txt/flourish.txt?v=20260606-01";
 const flourishSignupLabel = "플로리쉬 0회차 세션 신청서 pre-f 바로가기";
 let flourishParagraphs = [];
 let flourishLoadPromise = null;
@@ -1115,6 +1122,28 @@ async function loadAboutDocument(language, path) {
   };
 }
 
+async function loadTextParagraphs(path) {
+  const response = await fetch(path, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`${path} request failed with ${response.status}`);
+  }
+
+  const text = await response.text();
+  return text
+    .split(/\r?\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+}
+
+async function loadAboutTextDocument(language) {
+  const paragraphs = await loadTextParagraphs(aboutTextPaths[language]);
+
+  return {
+    ...fallbackAboutContent,
+    body: paragraphs.join("\n") || fallbackAboutContent.body,
+  };
+}
+
 async function loadFlourishDocument() {
   if (flourishParagraphs.length) {
     return flourishParagraphs;
@@ -1135,9 +1164,10 @@ async function loadFlourishDocument() {
       })
       .catch((error) => {
         console.warn(`${flourishDocumentPath} could not be loaded.`, error);
-        flourishLoadPromise = null;
-        flourishParagraphs = [];
-        return flourishParagraphs;
+        return loadTextParagraphs(flourishTextPath).then((paragraphs) => {
+          flourishParagraphs = paragraphs;
+          return flourishParagraphs;
+        });
       });
   }
 
@@ -1151,7 +1181,12 @@ async function loadAboutContent() {
         return [language, await loadAboutDocument(language, path)];
       } catch (error) {
         console.warn(`${path} could not be loaded.`, error);
-        return [language, aboutContentByLanguage[language] || fallbackAboutContent];
+        try {
+          return [language, await loadAboutTextDocument(language)];
+        } catch (textError) {
+          console.warn(`${aboutTextPaths[language]} could not be loaded.`, textError);
+          return [language, aboutContentByLanguage[language] || fallbackAboutContent];
+        }
       }
     }),
   );
@@ -1258,9 +1293,10 @@ function render(category = "all") {
     resetCardColumnParallax();
     const rows = getSortedProjectListRows(cardListRows.filter((row) => row.category === activeCategory));
     grid.classList.add("is-list");
-    grid.append(createProjectList(rows));
+    grid.append(createProjectListScrollbar(), createProjectList(rows));
     grid.classList.add("is-ready");
     grid.removeAttribute("aria-busy");
+    requestAnimationFrame(syncProjectListScrollbar);
     return;
   }
 
@@ -1497,6 +1533,80 @@ function createProjectList(rows) {
   });
 
   return list;
+}
+
+function createProjectListScrollbar() {
+  const scrollbar = document.createElement("div");
+  scrollbar.className = "project-list-scrollbar";
+  scrollbar.setAttribute("aria-hidden", "true");
+
+  const thumb = document.createElement("div");
+  thumb.className = "project-list-scrollbar-thumb";
+  scrollbar.append(thumb);
+
+  scrollbar.addEventListener("pointerdown", (event) => {
+    event.preventDefault();
+
+    const maxScrollLeft = grid.scrollWidth - grid.clientWidth;
+    if (maxScrollLeft <= 0) {
+      return;
+    }
+
+    const trackRect = scrollbar.getBoundingClientRect();
+    const trackInset = 20;
+    const trackWidth = trackRect.width - trackInset * 2;
+    const thumbWidth = thumb.offsetWidth;
+    const maxThumbLeft = Math.max(1, trackWidth - thumbWidth);
+
+    if (event.target === thumb) {
+      const startX = event.clientX;
+      const startScrollLeft = grid.scrollLeft;
+
+      function handleMove(moveEvent) {
+        const delta = moveEvent.clientX - startX;
+        grid.scrollLeft = startScrollLeft + (delta / maxThumbLeft) * maxScrollLeft;
+      }
+
+      function handleUp() {
+        window.removeEventListener("pointermove", handleMove);
+        window.removeEventListener("pointerup", handleUp);
+      }
+
+      window.addEventListener("pointermove", handleMove);
+      window.addEventListener("pointerup", handleUp);
+      return;
+    }
+
+    const thumbRect = thumb.getBoundingClientRect();
+    const direction = event.clientX < thumbRect.left ? -1 : 1;
+    grid.scrollLeft += direction * Math.max(120, grid.clientWidth * 0.5);
+  });
+
+  return scrollbar;
+}
+
+function syncProjectListScrollbar() {
+  const scrollbar = grid.querySelector(".project-list-scrollbar");
+  const thumb = grid.querySelector(".project-list-scrollbar-thumb");
+  if (!scrollbar || !thumb) {
+    return;
+  }
+
+  const maxScrollLeft = grid.scrollWidth - grid.clientWidth;
+  scrollbar.hidden = maxScrollLeft <= 0;
+
+  if (scrollbar.hidden) {
+    return;
+  }
+
+  const trackInset = 20;
+  const trackWidth = scrollbar.clientWidth - trackInset * 2;
+  const thumbWidth = Math.max(72, (grid.clientWidth / grid.scrollWidth) * trackWidth);
+  const maxThumbLeft = Math.max(1, trackWidth - thumbWidth);
+  const thumbLeft = trackInset + (grid.scrollLeft / maxScrollLeft) * maxThumbLeft;
+
+  thumb.style.width = `${thumbWidth}px`;
+  thumb.style.transform = `translateX(${thumbLeft - trackInset}px)`;
 }
 
 function loadCardImagesSequentially(cards, sequence) {
@@ -2468,9 +2578,11 @@ function syncDetailScrollbar() {
 }
 
 detailScrollArea.addEventListener("scroll", syncDetailScrollbar);
+grid.addEventListener("scroll", syncProjectListScrollbar, { passive: true });
 window.addEventListener("resize", () => {
   syncDetailMediaSize();
   syncDetailScrollbar();
+  syncProjectListScrollbar();
   fitDetailTitleLines();
   scheduleCardColumnParallax();
   if (document.body.classList.contains("about-open")) {
