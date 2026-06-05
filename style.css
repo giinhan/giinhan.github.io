@@ -3,7 +3,7 @@
   --muted: #77726a;
   --paper: #fbfbfa;
   --panel: #ffbf00;
-  --shadow: 0 18px 26px rgba(33, 28, 11, 0.14), 0 6px 12px rgba(33, 28, 11, 0.08), 0 1px 2px rgba(33, 28, 11, 0.1);
+  --shadow: 18px 34px 42px rgba(14, 24, 8, 0.34), 6px 14px 22px rgba(14, 24, 8, 0.24), 0 2px 3px rgba(14, 24, 8, 0.22);
   --header-h: 92px;
 }
 
@@ -14,11 +14,7 @@
 html {
   min-height: 100%;
   background-color: var(--paper);
-  background-image: linear-gradient(rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0.64)), url("img/back_01.jpg");
-  background-position: center, center top;
-  background-size: auto, 1180px auto;
-  background-repeat: repeat, repeat;
-  background-attachment: fixed, fixed;
+  overflow-y: auto;
 }
 
 body {
@@ -29,6 +25,15 @@ body {
   font-family: "Work Sans", "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
   overflow-wrap: break-word;
   word-break: keep-all;
+}
+
+body::before {
+  position: fixed;
+  z-index: -1;
+  inset: -1px;
+  background: var(--paper) url("img/back_02.jpg") center center / cover no-repeat;
+  content: "";
+  pointer-events: none;
 }
 
 button {
@@ -73,16 +78,16 @@ button {
   grid-column: 2;
   justify-self: center;
   display: flex;
-  gap: clamp(13px, 1.54vw, 22px);
+  gap: clamp(6px, 0.8vw, 12px);
   align-items: center;
   justify-content: center;
   width: max-content;
   max-width: 100%;
   min-height: 41px;
-  padding: 0 17px;
+  padding: 6px 8px;
   border: 0;
   border-radius: 0;
-  background: rgba(255, 255, 255, 0.72);
+  background: var(--panel);
   overflow-x: auto;
   pointer-events: auto;
   scrollbar-width: none;
@@ -102,8 +107,8 @@ button {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  color: #58544e;
+  padding: 0 10px;
+  color: #843426;
   font-synthesis: none;
   font-size: 15px;
   font-weight: 400;
@@ -114,7 +119,8 @@ button {
 }
 
 .about-link {
-  color: #58544e;
+  background: var(--panel);
+  color: #843426;
   font-synthesis: none;
   font-size: 15px;
   font-weight: 400;
@@ -125,14 +131,7 @@ button {
 }
 
 .tab::after {
-  position: absolute;
-  right: 0;
-  bottom: -3px;
-  left: 0;
-  height: 2px;
-  background: currentColor;
-  content: "";
-  opacity: 0;
+  content: none;
 }
 
 .tab-all {
@@ -144,31 +143,36 @@ button {
 }
 
 .tab.is-active {
-  color: #211c0b;
+  background: #843426;
+  color: var(--panel);
   font-weight: 500;
 }
 
-.tab.is-active::after {
-  opacity: 1;
+.tab:hover,
+.tab:focus-visible,
+.about-link:hover,
+.about-link:focus-visible {
+  background: #843426;
+  color: var(--panel);
 }
 
 .about-link {
   grid-column: 3;
   justify-self: end;
-  padding: 8px 0 8px 18px;
+  padding: 8px 12px;
 }
 
 .portfolio-shell {
   width: 100%;
   min-height: 100vh;
-  padding: calc(var(--header-h) + 52px) 32px 64px;
+  padding: calc(var(--header-h) + 18px) 32px 64px;
 }
 
 .project-grid {
   column-count: 4;
   column-gap: clamp(72px, 8.4vw, 158px);
   min-height: calc(100vh - var(--header-h));
-  padding: 0 clamp(72px, 7vw, 128px) 12vh;
+  padding: 0 clamp(72px, 7vw, 128px) calc(24vh + 112px);
 }
 
 .project-grid.is-list {
@@ -181,7 +185,12 @@ button {
 .project-list {
   width: 100%;
   margin: 0 auto;
+  padding: clamp(14px, 2vw, 28px) clamp(16px, 2.4vw, 34px);
   border-top: 1px solid rgba(33, 28, 11, 0.18);
+  border-radius: 4px;
+  background: rgba(251, 251, 250, 0.86);
+  box-shadow: 0 12px 28px rgba(33, 28, 11, 0.06);
+  backdrop-filter: blur(2px);
   color: rgba(33, 28, 11, 0.72);
   font-family: "Work Sans", "Noto Sans KR", sans-serif;
   font-size: clamp(12px, 0.94vw, 16px);
@@ -286,8 +295,8 @@ button {
   position: relative;
   display: block;
   width: min(100%, 248px);
-  margin: 0 auto calc(clamp(70px, 10vh, 126px) + var(--stagger-gap-extra, 0px));
-  padding: 0;
+  margin: -24px auto calc(clamp(48px, 7vh, 88px) + var(--stagger-gap-extra, 0px));
+  padding: 52px 0;
   border: 0;
   background: transparent;
   cursor: pointer;
@@ -296,7 +305,7 @@ button {
   transform: translateX(var(--stagger-x, 0)) rotate(var(--tilt)) scale(var(--card-scale, 1));
   transform-origin: center 86%;
   backface-visibility: hidden;
-  contain: paint;
+  overflow: visible;
   will-change: transform;
 }
 
@@ -317,6 +326,7 @@ button {
 .project-card-motion {
   display: block;
   aspect-ratio: var(--front-ratio, 1 / 1.25);
+  transform: translateY(var(--parallax-y, 0px));
   transform-origin: center 86%;
   will-change: transform;
 }
@@ -370,8 +380,8 @@ button {
 }
 
 .project-card.is-loaded:hover img {
-  filter: saturate(1.06);
-  box-shadow: 0 24px 34px rgba(33, 28, 11, 0.17), 0 8px 16px rgba(33, 28, 11, 0.1), 0 1px 2px rgba(33, 28, 11, 0.12);
+  filter: saturate(1.08) brightness(1.02);
+  box-shadow: 24px 44px 54px rgba(14, 24, 8, 0.4), 8px 18px 28px rgba(14, 24, 8, 0.28), 0 2px 4px rgba(14, 24, 8, 0.24);
 }
 
 .detail-view {
@@ -1126,9 +1136,9 @@ body.about-open .site-header {
     grid-column: 1 / -1;
     grid-row: 1;
     justify-self: center;
-    gap: clamp(14px, 3.2vw, 24px);
+    gap: clamp(6px, 1.8vw, 10px);
     min-height: 54px;
-    padding: 0 20px;
+    padding: 6px 8px;
     max-width: calc(100vw - 36px);
   }
 
@@ -1147,7 +1157,7 @@ body.about-open .site-header {
   .project-grid {
     column-count: 2;
     column-gap: 38px;
-    padding: 0 14px 96px;
+    padding: 0 14px calc(18vh + 112px);
   }
 
   .project-grid.is-list {
@@ -1169,7 +1179,7 @@ body.about-open .site-header {
 
   .project-card {
     width: min(100%, 202px);
-    margin-bottom: calc(clamp(42px, 6.8vh, 72px) + var(--stagger-gap-extra, 0px) * 0.55);
+    margin-bottom: calc(clamp(44px, 7vh, 78px) + var(--stagger-gap-extra, 0px) * 0.5);
   }
 
   .detail-view {
@@ -1247,7 +1257,7 @@ body.about-open .site-header {
     gap: clamp(6px, 2vw, 10px);
     justify-content: space-between;
     min-height: 48px;
-    padding: 0;
+    padding: 6px;
   }
 
   .project-grid {
@@ -1263,7 +1273,7 @@ body.about-open .site-header {
   }
 
   .project-card {
-    margin-bottom: calc(clamp(28px, 5.5vh, 48px) + var(--stagger-gap-extra, 0px) * 0.35);
+    margin-bottom: calc(clamp(34px, 6vh, 56px) + var(--stagger-gap-extra, 0px) * 0.42);
   }
 
   .project-list-cell:first-child {
@@ -1277,7 +1287,7 @@ body.about-open .site-header {
     min-width: 0;
     flex: 0 1 auto;
     height: 32px;
-    padding: 0;
+    padding: 0 7px;
     font-size: clamp(12px, 3.5vw, 15px);
   }
 

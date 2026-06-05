@@ -23,6 +23,7 @@ let listSort = { key: "", direction: "" };
 let detailRotation = 0;
 const dominantColorByImage = new Map();
 let renderSequence = 0;
+let parallaxFrame = null;
 const aboutAudio = new Audio("sound/about.mp3");
 aboutAudio.loop = true;
 let aboutMotionPlaying = true;
@@ -37,11 +38,12 @@ const cardFlipSounds = [
   "sound/card flip 05.mp3",
 ];
 
-const workbookPath = "txt/giinhan txt.xlsx?v=20260605-01";
-const assetVersion = "20260605-01";
+const workbookPath = "txt/giinhan txt.xlsx?v=20260605-02";
+const assetVersion = "20260605-02";
 const eagerImageLoadCount = 16;
 const imageLoadStagger = 85;
 const listViewCategories = new Set(["3", "4", "5"]);
+const columnParallaxSpeeds = [-0.12, 0.07, -0.06, 0.14];
 
 const fallbackAboutContent = {
   name: "한지인",
@@ -123,6 +125,8 @@ const frontImageDimensions = {
   "img/2 operate/2-08/2-08.jpg": [1200, 900],
   "img/2 operate/2-09/2-09.JPG": [1200, 1268],
   "img/2 operate/2-10/2-10.png": [1200, 1437],
+  "img/2 operate/2-11/2-11.jpg": [1200, 1697],
+  "img/2 operate/2-12/2-12.png": [1200, 1708],
   "img/3 write/3-01/62.jpeg": [1200, 1890],
   "img/3 write/3-02/61.jpeg": [1200, 1763],
   "img/3 write/3-03/63.jpg": [1200, 1754],
@@ -801,6 +805,20 @@ const imageRows = [
     path: "img/2 operate/2-10/2-10.png",
     backMedia: numberedMedia("img/2 operate/2-10", "2-10", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "jpg"),
   },
+  {
+    category: "2",
+    path: "img/2 operate/2-11/2-11.jpg",
+    backMedia: [
+      ...numberedMedia("img/2 operate/2-11", "2-11", [1, 2, 3, 4], "jpg"),
+      ...numberedMedia("img/2 operate/2-11", "2-11", [5, 6, 7], "JPG"),
+      "img/2 operate/2-11/2-11-8.jpg",
+    ],
+  },
+  {
+    category: "2",
+    path: "img/2 operate/2-12/2-12.png",
+    backMedia: numberedMedia("img/2 operate/2-12", "2-12", [1, 2], "JPG"),
+  },
   { category: "3", id: "3-01", path: "img/3 write/3-01/62.jpeg" },
   { category: "3", id: "3-02", path: "img/3 write/3-02/61.jpeg" },
   { category: "3", id: "3-03", path: "img/3 write/3-03/63.jpg" },
@@ -1200,6 +1218,7 @@ function render(category = "all") {
 
   if (listViewCategories.has(activeCategory)) {
     currentListCategory = activeCategory;
+    resetCardColumnParallax();
     const rows = getSortedProjectListRows(cardListRows.filter((row) => row.category === activeCategory));
     grid.classList.add("is-list");
     grid.append(createProjectList(rows));
@@ -1223,7 +1242,66 @@ function render(category = "all") {
       grid.classList.add("is-ready");
       grid.removeAttribute("aria-busy");
       loadCardImagesSequentially(cards, sequence);
+      syncCardColumnParallax();
     }
+  });
+}
+
+function resetCardColumnParallax() {
+  if (parallaxFrame) {
+    cancelAnimationFrame(parallaxFrame);
+    parallaxFrame = null;
+  }
+
+  grid.querySelectorAll(".project-card").forEach((card) => {
+    card.style.removeProperty("--parallax-y");
+  });
+}
+
+function getVisualColumnIndex(card, columnLefts) {
+  const left = Math.round(card.offsetLeft);
+  let index = columnLefts.indexOf(left);
+
+  if (index === -1) {
+    columnLefts.push(left);
+    columnLefts.sort((a, b) => a - b);
+    index = columnLefts.indexOf(left);
+  }
+
+  return index;
+}
+
+function syncCardColumnParallax() {
+  if (currentListCategory) {
+    resetCardColumnParallax();
+    return;
+  }
+
+  const cards = [...grid.querySelectorAll(".project-card")];
+  if (!cards.length) {
+    return;
+  }
+
+  const columnLefts = [...new Set(cards.map((card) => Math.round(card.offsetLeft)))].sort((a, b) => a - b);
+  const viewportCenter = window.scrollY + window.innerHeight * 0.5;
+
+  cards.forEach((card) => {
+    const columnIndex = getVisualColumnIndex(card, columnLefts);
+    const speed = columnParallaxSpeeds[columnIndex % columnParallaxSpeeds.length];
+    const cardCenter = card.offsetTop + card.offsetHeight * 0.5;
+    const offset = Math.max(-56, Math.min(56, (viewportCenter - cardCenter) * speed));
+    card.style.setProperty("--parallax-y", `${offset.toFixed(2)}px`);
+  });
+}
+
+function scheduleCardColumnParallax() {
+  if (parallaxFrame) {
+    return;
+  }
+
+  parallaxFrame = requestAnimationFrame(() => {
+    parallaxFrame = null;
+    syncCardColumnParallax();
   });
 }
 
@@ -1400,6 +1478,19 @@ function loadCardImagesSequentially(cards, sequence) {
   });
 }
 
+function getStableCardGap(project, index) {
+  const seed = String(project.id || project.image || index);
+  let hash = 0;
+
+  for (let i = 0; i < seed.length; i += 1) {
+    hash = (hash * 31 + seed.charCodeAt(i)) % 997;
+  }
+
+  const baseGap = Math.abs(project.staggerY) * 0.55;
+  const pocketGap = hash % 4 === 0 ? 34 + (hash % 4) * 10 : hash % 9 === 0 ? 62 : 0;
+  return baseGap + pocketGap;
+}
+
 function createProjectCard(project, index, sequence) {
   const card = document.createElement("button");
   card.className = "project-card";
@@ -1408,7 +1499,7 @@ function createProjectCard(project, index, sequence) {
   card.style.setProperty("--entry-delay", `${Math.min(index * 38 + Math.random() * 90, 1200)}ms`);
   card.style.setProperty("--tilt", `${project.tilt}deg`);
   card.style.setProperty("--stagger-x", `${project.staggerX}px`);
-  card.style.setProperty("--stagger-gap-extra", `${Math.abs(project.staggerY) * 1.35}px`);
+  card.style.setProperty("--stagger-gap-extra", `${getStableCardGap(project, index)}px`);
   card.setAttribute("aria-label", `${project.title} 크게 보기`);
 
   const motion = document.createElement("span");
@@ -2201,10 +2292,12 @@ window.addEventListener("resize", () => {
   syncDetailMediaSize();
   syncDetailScrollbar();
   fitDetailTitleLines();
+  scheduleCardColumnParallax();
   if (document.body.classList.contains("about-open")) {
     renderAboutBalls();
   }
 });
+window.addEventListener("scroll", scheduleCardColumnParallax, { passive: true });
 detailScrollArea.addEventListener(
   "wheel",
   (event) => {
