@@ -214,6 +214,21 @@ button {
   font-weight: 400;
 }
 
+.project-list-note-row {
+  min-height: 0;
+  padding: 12px 0 0;
+  border-bottom: 0;
+}
+
+.project-list-note-cell {
+  grid-column: 1 / -1;
+  color: rgba(33, 28, 11, 0.52);
+  font-size: 0.85em;
+  font-weight: 300;
+  text-align: left;
+  white-space: normal;
+}
+
 .project-list-sort {
   display: inline-flex;
   gap: 0.36em;

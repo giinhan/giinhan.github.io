@@ -37,8 +37,8 @@ const cardFlipSounds = [
   "sound/card flip 05.mp3",
 ];
 
-const workbookPath = "txt/giinhan txt.xlsx?v=20260531-06";
-const assetVersion = "20260528-11";
+const workbookPath = "txt/giinhan txt.xlsx?v=20260605-01";
+const assetVersion = "20260605-01";
 const eagerImageLoadCount = 16;
 const imageLoadStagger = 85;
 const listViewCategories = new Set(["3", "4", "5"]);
@@ -500,7 +500,7 @@ const imageRows = [
       "1-30-3.jpg",
       "1-30-4.jpg",
       "1-30-5.jpg",
-      "1-30-6.png",
+      "1-30-6.jpg",
     ]),
   },
   {
@@ -713,6 +713,19 @@ const imageRows = [
     ]),
   },
   {
+    category: "1",
+    path: "img/1 create/1-48/1-48.jpg",
+    backMedia: numberedMedia("img/1 create/1-48", "1-48", [1, 2], "jpg"),
+  },
+  {
+    category: "1",
+    path: "img/1 create/1-49/1-49.jpg",
+    backMedia: [
+      "img/1 create/1-49/1-49-1.png",
+      ...numberedMedia("img/1 create/1-49", "1-49", [2, 3, 4, 5], "jpg"),
+    ],
+  },
+  {
     category: "2",
     path: "img/2 operate/2-01/2-01.jpg",
     backMedia: numberedMedia("img/2 operate/2-01", "2-01", [1, 2, 3, 4], "png").concat("img/2 operate/2-01/2-01-5.jpg"),
@@ -893,6 +906,29 @@ function getCategoryNumber(value) {
   return categoryNumberByName[normalized] || normalized;
 }
 
+function createListLinkParts(text, link) {
+  const label = String(text || "").trim();
+  const url = String(link || "").trim();
+
+  if (!label) {
+    return [];
+  }
+
+  if (!url) {
+    return [{ label, url: "" }];
+  }
+
+  const reviewMatch = label.match(/^후기\s+(.+)$/);
+  if (reviewMatch) {
+    return [
+      { label: "후기", url: "" },
+      { label: reviewMatch[1].trim(), url },
+    ];
+  }
+
+  return [{ label, url }];
+}
+
 function normalizeCardListRows(sheet) {
   if (!sheet) {
     return [];
@@ -900,43 +936,52 @@ function normalizeCardListRows(sheet) {
 
   const rows = normalizeWorkbookGrid(sheet);
   let currentCategory = "";
+  const items = [];
 
-  return rows
-    .slice(1)
-    .map((row) => {
-      const [
-        label = "",
-        category = "",
-        id = "",
-        title = "",
-        year = "",
-        slash = "",
-        linkText = "",
-        link = "",
-        note = "",
-      ] = row;
-      const rowCategory = getCategoryNumber(category);
+  rows.slice(1).forEach((row) => {
+    const [
+      category = "",
+      what = "",
+      year = "",
+      slash = "",
+      linkText = "",
+      link = "",
+      note = "",
+    ] = row;
+    const rowCategory = getCategoryNumber(category);
+    const itemTitle = String(what || "").trim();
+    const plusText = String(linkText || "").trim();
+    const linkUrl = String(link || "").trim();
 
-      if (rowCategory) {
-        currentCategory = rowCategory;
-      }
+    if (rowCategory) {
+      currentCategory = rowCategory;
+    }
 
-      const what = String(title || label || "").trim();
-      const item = {
-        category: currentCategory,
-        id: String(id || "").trim(),
-        what,
-        when: String(year || "").trim(),
-        slash: String(slash || "").trim(),
-        plusText: String(linkText || "").trim(),
-        link: String(link || "").trim(),
-        note: String(note || "").trim(),
-      };
+    if (!itemTitle && !year && !slash && !note && plusText && items.length > 0) {
+      items[items.length - 1].linkParts.push(...createListLinkParts(plusText, linkUrl));
+      return;
+    }
 
-      const hasVisibleContent = Boolean(item.what || item.when || item.slash || item.plusText || item.note);
-      return item.category && hasVisibleContent ? item : null;
-    })
-    .filter(Boolean);
+    const item = {
+      category: currentCategory,
+      id: "",
+      what: itemTitle,
+      when: String(year || "").trim(),
+      slash: String(slash || "").trim(),
+      plusText,
+      link: linkUrl,
+      linkParts: createListLinkParts(plusText, linkUrl),
+      isListNote: itemTitle.startsWith("*영리기반 개인/기업 컨설팅 내역"),
+      note: String(note || "").trim(),
+    };
+
+    const hasVisibleContent = Boolean(item.what || item.when || item.slash || item.plusText || item.note);
+    if (item.category && hasVisibleContent) {
+      items.push(item);
+    }
+  });
+
+  return items;
 }
 
 function getCardNumber(row, currentCategory, lastCardNumber, hasContent) {
@@ -1196,11 +1241,14 @@ function getSortYearValue(value, direction) {
 }
 
 function getSortedProjectListRows(rows) {
+  const noteRows = rows.filter((row) => row.isListNote);
+  const sortableRows = rows.filter((row) => !row.isListNote);
+
   if (!listSort.key) {
-    return [...rows];
+    return [...sortableRows, ...noteRows];
   }
 
-  return [...rows].sort((a, b) => {
+  return [...sortableRows].sort((a, b) => {
     if (listSort.key === "when") {
       const aYear = getSortYearValue(a.when, listSort.direction);
       const bYear = getSortYearValue(b.when, listSort.direction);
@@ -1215,7 +1263,7 @@ function getSortedProjectListRows(rows) {
     }
 
     return 0;
-  });
+  }).concat(noteRows);
 }
 
 function updateListSort(key) {
@@ -1273,8 +1321,19 @@ function createProjectList(rows) {
 
   rows.forEach((row) => {
     const item = document.createElement("div");
-    item.className = "project-list-row";
+    item.className = row.isListNote ? "project-list-row project-list-note-row" : "project-list-row";
     item.setAttribute("role", "row");
+
+    if (row.isListNote) {
+      const noteCell = document.createElement("span");
+      noteCell.className = "project-list-cell project-list-note-cell";
+      noteCell.setAttribute("role", "cell");
+      noteCell.setAttribute("aria-colspan", "4");
+      noteCell.textContent = row.what;
+      item.append(noteCell);
+      list.append(item);
+      return;
+    }
 
     const values = [row.what, row.when, row.slash];
     values.forEach((value) => {
@@ -1288,7 +1347,25 @@ function createProjectList(rows) {
     const linkCell = document.createElement("span");
     linkCell.className = "project-list-cell";
     linkCell.setAttribute("role", "cell");
-    if (row.link && row.plusText) {
+    if (row.linkParts?.length) {
+      row.linkParts.forEach((part, index) => {
+        if (index > 0) {
+          linkCell.append(document.createTextNode(" "));
+        }
+
+        if (part.url) {
+          const anchor = document.createElement("a");
+          anchor.href = part.url;
+          anchor.target = "_blank";
+          anchor.rel = "noreferrer";
+          anchor.textContent = part.label;
+          linkCell.append(anchor);
+          return;
+        }
+
+        linkCell.append(document.createTextNode(part.label));
+      });
+    } else if (row.link && row.plusText) {
       const anchor = document.createElement("a");
       anchor.href = row.link;
       anchor.target = "_blank";
