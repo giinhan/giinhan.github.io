@@ -15,6 +15,9 @@ const aboutBody = document.querySelector("[data-about-body]");
 const aboutLangButtons = document.querySelectorAll("[data-about-lang]");
 const aboutBalls = [...document.querySelectorAll(".about-ball")];
 const aboutTimeToggle = document.querySelector("[data-about-time-toggle]");
+const flourishPopup = document.querySelector("[data-flourish-popup]");
+const flourishCard = document.querySelector(".flourish-card");
+const flourishBody = document.querySelector("[data-flourish-body]");
 let currentProject = null;
 let projects = [];
 let cardListRows = [];
@@ -52,11 +55,15 @@ const fallbackAboutContent = {
 };
 
 const aboutDocumentPaths = {
-  kor: "txt/about-kor.docx?v=20260527-03",
-  eng: "txt/about-eng.docx?v=20260527-03",
-  jpn: "txt/about-jpn.docx?v=20260527-03",
-  chn: "txt/about-chn.docx?v=20260527-03",
+  kor: "txt/about-kor.docx?v=20260605-02",
+  eng: "txt/about-eng.docx?v=20260605-02",
+  jpn: "txt/about-jpn.docx?v=20260605-02",
+  chn: "txt/about-chn.docx?v=20260605-02",
 };
+const flourishDocumentPath = "txt/flourish.docx?v=20260605-01";
+const flourishSignupLabel = "플로리쉬 0회차 세션 신청서 pre-f 바로가기";
+let flourishParagraphs = [];
+let flourishLoadPromise = null;
 
 function versionAsset(src) {
   if (/^(?:https?:)?\/\//i.test(src) || src.includes("?")) {
@@ -1108,6 +1115,35 @@ async function loadAboutDocument(language, path) {
   };
 }
 
+async function loadFlourishDocument() {
+  if (flourishParagraphs.length) {
+    return flourishParagraphs;
+  }
+
+  if (!flourishLoadPromise) {
+    flourishLoadPromise = fetch(flourishDocumentPath, { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Flourish request failed with ${response.status}`);
+        }
+        return response.arrayBuffer();
+      })
+      .then(async (buffer) => {
+        const documentXml = await readZipTextFile(buffer, "word/document.xml");
+        flourishParagraphs = extractDocxParagraphs(documentXml);
+        return flourishParagraphs;
+      })
+      .catch((error) => {
+        console.warn(`${flourishDocumentPath} could not be loaded.`, error);
+        flourishLoadPromise = null;
+        flourishParagraphs = [];
+        return flourishParagraphs;
+      });
+  }
+
+  return flourishLoadPromise;
+}
+
 async function loadAboutContent() {
   const entries = await Promise.all(
     Object.entries(aboutDocumentPaths).map(async ([language, path]) => {
@@ -2117,21 +2153,149 @@ function renderAboutBody(body) {
       pattern: /\bWHAT\s*\.?\s*GIN\b/gi,
       href: "https://www.youtube.com/@what-gin",
     },
-    {
-      pattern: /\bbeaverdam\b/gi,
-      href: "https://www.instagram.com/beaverdam.sigor/",
-    },
   ];
   let html = escapeHtml(body);
 
-  linkReplacements.forEach(({ pattern, href }) => {
+  html = html.replace(
+    /\bflourish\b([\u3000-\u303f\u3040-\u30ff\u3400-\u9fff]?)/i,
+    (match, suffix = "") =>
+      `<span class="about-linked-phrase"><button class="about-inline-link about-inline-button" type="button" data-flourish-open>flourish</button>${suffix}</span>`,
+  );
+
+  html = html.replace(
+    /\bbeaverdam\b([\u3000-\u303f\u3040-\u30ff\u3400-\u9fff]?)/gi,
+    (match, suffix = "") =>
+      `<span class="about-linked-phrase"><a class="about-inline-link" href="https://www.instagram.com/beaverdam.sigor/" target="_blank" rel="noreferrer">beaverdam</a>${suffix}</span>`,
+  );
+
+  linkReplacements.forEach(({ pattern, href, render }) => {
     html = html.replace(
       pattern,
-      (match) => `<a class="about-inline-link" href="${href}" target="_blank" rel="noreferrer">${match}</a>`,
+      (match) => render?.(match) || `<a class="about-inline-link" href="${href}" target="_blank" rel="noreferrer">${match}</a>`,
     );
   });
 
   aboutBody.innerHTML = html;
+}
+
+function getLinkedUrl(value) {
+  const url = String(value || "").trim();
+  if (!url) {
+    return "";
+  }
+
+  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+}
+
+function renderFlourishCard(paragraphs) {
+  flourishBody.textContent = "";
+
+  if (!paragraphs.length) {
+    const fallback = document.createElement("p");
+    fallback.className = "flourish-card-text";
+    fallback.textContent = "Flourish 내용을 불러오지 못했습니다.";
+    flourishBody.append(fallback);
+    return;
+  }
+
+  const title = document.createElement("h2");
+  title.id = "flourish-title";
+  title.className = "flourish-card-title";
+  title.textContent = "flourish 플로리쉬";
+  flourishBody.append(title);
+
+  const logo = document.createElement("img");
+  logo.className = "flourish-card-logo";
+  logo.src = versionAsset("img/flourish.png");
+  logo.alt = "flourish";
+  flourishBody.append(logo);
+
+  const introBox = document.createElement("section");
+  introBox.className = "flourish-intro-box";
+  flourishBody.append(introBox);
+
+  let currentSection = introBox;
+
+  paragraphs.forEach((paragraph, index) => {
+    const text = String(paragraph || "").trim();
+    if (!text || /^https?:\/\//i.test(text)) {
+      return;
+    }
+
+    const nextText = String(paragraphs[index + 1] || "").trim();
+    const isTitle = index === 0;
+    const isSignupLink = text === flourishSignupLabel;
+
+    if (isTitle) {
+      return;
+    }
+
+    if (isSignupLink) {
+      const link = document.createElement("a");
+      link.className = "flourish-signup-link";
+      link.href = getLinkedUrl(nextText);
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = text;
+      flourishBody.append(link);
+      return;
+    }
+
+    if (text === "플로리쉬 프로그램 내용" || text === "플로리쉬 신청 방법") {
+      const section = document.createElement("section");
+      section.className = "flourish-section";
+      if (text === "플로리쉬 프로그램 내용") {
+        section.classList.add("is-program");
+      }
+      if (text === "플로리쉬 신청 방법") {
+        section.classList.add("is-application");
+      }
+
+      const heading = document.createElement("h3");
+      heading.className = "flourish-section-title";
+      heading.textContent = text;
+      section.append(heading);
+
+      flourishBody.append(section);
+      currentSection = section;
+      return;
+    }
+
+    const isBullet = text.startsWith("•") || currentSection.classList.contains("is-program");
+    const item = document.createElement(isBullet ? "div" : "p");
+    item.className = isBullet ? "flourish-card-bullet" : "flourish-card-text";
+    const itemText = isBullet ? text.replace(/^•\s*/, "") : text;
+    if (currentSection.classList.contains("is-application") && itemText.startsWith("2. ")) {
+      const [firstSentence, restText] = itemText.split(" 회신을 통해");
+      item.append(document.createTextNode(firstSentence));
+      if (restText) {
+        item.append(document.createElement("br"), document.createTextNode(`회신을 통해${restText}`));
+      }
+    } else {
+      item.textContent = itemText;
+    }
+    currentSection.append(item);
+  });
+}
+
+async function openFlourishPopup() {
+  flourishPopup.classList.add("is-open");
+  flourishPopup.setAttribute("aria-hidden", "false");
+  flourishPopup.scrollTop = 0;
+  flourishCard.scrollTop = 0;
+  flourishBody.scrollTop = 0;
+  flourishBody.textContent = "loading...";
+
+  const paragraphs = await loadFlourishDocument();
+  renderFlourishCard(paragraphs);
+  flourishPopup.scrollTop = 0;
+  flourishCard.scrollTop = 0;
+  flourishBody.scrollTop = 0;
+}
+
+function closeFlourishPopup() {
+  flourishPopup.classList.remove("is-open");
+  flourishPopup.setAttribute("aria-hidden", "true");
 }
 
 function renderAbout() {
@@ -2236,6 +2400,19 @@ aboutTimeToggle.addEventListener("click", () => {
   startAboutMotion();
 });
 
+aboutBody.addEventListener("click", (event) => {
+  const trigger = event.target instanceof Element ? event.target.closest("[data-flourish-open]") : null;
+  if (!trigger) {
+    return;
+  }
+
+  openFlourishPopup();
+});
+
+document.querySelectorAll("[data-flourish-close]").forEach((button) => {
+  button.addEventListener("click", closeFlourishPopup);
+});
+
 aboutLangButtons.forEach((button) => {
   button.addEventListener("click", () => {
     currentAboutLanguage = button.dataset.aboutLang;
@@ -2246,6 +2423,7 @@ aboutLangButtons.forEach((button) => {
 
 document.querySelectorAll("[data-about-close]").forEach((button) => {
   button.addEventListener("click", () => {
+    closeFlourishPopup();
     document.body.classList.remove("about-open");
     aboutPanel.classList.remove("is-open");
     aboutPanel.setAttribute("aria-hidden", "true");
@@ -2258,6 +2436,7 @@ document.querySelectorAll("[data-about-close]").forEach((button) => {
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
+    closeFlourishPopup();
     closeDetail();
     document.body.classList.remove("about-open");
     aboutPanel.classList.remove("is-open");
