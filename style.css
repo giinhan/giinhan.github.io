@@ -3,7 +3,7 @@
   --muted: #77726a;
   --paper: #fbfbfa;
   --panel: #ffbf00;
-  --shadow: 18px 34px 42px rgba(14, 24, 8, 0.34), 6px 14px 22px rgba(14, 24, 8, 0.24), 0 2px 3px rgba(14, 24, 8, 0.22);
+  --shadow: 34px 66px 48px rgba(7, 17, 4, 0.46), 18px 34px 24px rgba(7, 17, 4, 0.34), 4px 8px 6px rgba(7, 17, 4, 0.22);
   --header-h: 92px;
   --nav-control-h: 42px;
 }
@@ -330,11 +330,23 @@ button {
 }
 
 .project-card-motion {
+  position: relative;
+  z-index: 0;
   display: block;
   aspect-ratio: var(--front-ratio, 1 / 1.25);
   transform: translateY(var(--parallax-y, 0px));
   transform-origin: center 86%;
   will-change: transform;
+}
+
+.project-card-motion::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  box-shadow: var(--shadow);
+  content: "";
+  pointer-events: none;
+  transition: box-shadow 220ms ease;
 }
 
 .project-card.is-loaded:hover .project-card-motion,
@@ -374,9 +386,10 @@ button {
   aspect-ratio: inherit;
   opacity: 0;
   object-fit: contain;
-  box-shadow: var(--shadow);
+  position: relative;
+  z-index: 1;
   transform: translateZ(0);
-  transition: opacity 420ms ease, filter 220ms ease, box-shadow 220ms ease;
+  transition: opacity 420ms ease, filter 220ms ease;
   backface-visibility: hidden;
   will-change: filter;
 }
@@ -386,8 +399,12 @@ button {
 }
 
 .project-card.is-loaded:hover img {
-  filter: saturate(1.08) brightness(1.02);
-  box-shadow: 24px 44px 54px rgba(14, 24, 8, 0.4), 8px 18px 28px rgba(14, 24, 8, 0.28), 0 2px 4px rgba(14, 24, 8, 0.24);
+  filter: saturate(1.1) brightness(1.035);
+}
+
+.project-card.is-loaded:hover .project-card-motion::before,
+.project-card.is-loaded:focus-visible .project-card-motion::before {
+  box-shadow: 44px 82px 58px rgba(7, 17, 4, 0.52), 24px 46px 30px rgba(7, 17, 4, 0.38), 5px 10px 7px rgba(7, 17, 4, 0.26);
 }
 
 .detail-view {

@@ -114,6 +114,7 @@ const frontImageDimensions = {
   "img/1 create/1-45/1-45.jpg": [1200, 1247],
   "img/1 create/1-46/1-46.jpg": [1200, 1167],
   "img/1 create/1-47/1-47.jpg": [1200, 1568],
+  "img/1 create/1-48/1-48.jpg": [1200, 1648],
   "img/1 create/1-49/1-49.jpg": [1200, 1200],
   "img/2 operate/2-01/2-01.jpg": [1200, 1200],
   "img/2 operate/2-02/2-02.jpg": [1200, 1694],
