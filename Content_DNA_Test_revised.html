@@ -202,6 +202,7 @@
           <button class="secondary" onclick="restart()" data-id="Coba lagi" data-ko="다시 테스트"></button>
         </div>
         <div id="sheetSaveStatus" class="footer-note" aria-live="polite"></div>
+        <button id="sheetRetry" class="hidden" type="button" onclick="recordResult()">저장 다시 시도 / Coba simpan lagi</button>
         <div class="footer-note" data-ko="브랜디드 콘텐츠 크리에이터를 위한 재미있는 진단 테스트입니다. 심리학적 진단이 아닙니다."
              data-id="Tes ringan untuk kreator branded content — bukan diagnosis psikologis."></div>
       </div>
@@ -260,7 +261,7 @@ function setLanguage(nextLang){
   if(!$('test').classList.contains('hidden')) renderQuestion();
   if(!$('result').classList.contains('hidden')) showResult();
 }
-function startTest(){const name=$('participantName').value.trim();if(!name){$('nameError').textContent=text('nameRequired');$('participantName').focus();return;}participantName=name;completedAt='';savedResultKey='';submittedResultKey='';$('sheetSaveStatus').textContent='';$('nameError').textContent='';current=0;answers=Array(questions.length).fill(null);scores={attention:0,action:0,brand:0,connection:0};$('intro').classList.add('hidden');$('result').classList.add('hidden');$('test').classList.remove('hidden');renderQuestion();window.scrollTo({top:0,behavior:'smooth'});}
+function startTest(){const name=$('participantName').value.trim();if(!name){$('nameError').textContent=text('nameRequired');$('participantName').focus();return;}participantName=name;completedAt='';savedResultKey='';submittedResultKey='';$('sheetSaveStatus').textContent='';$('sheetRetry').classList.add('hidden');$('nameError').textContent='';current=0;answers=Array(questions.length).fill(null);scores={attention:0,action:0,brand:0,connection:0};$('intro').classList.add('hidden');$('result').classList.add('hidden');$('test').classList.remove('hidden');renderQuestion();window.scrollTo({top:0,behavior:'smooth'});}
 function renderQuestion(){const q=questions[current];$('qnum').textContent=`${text('question')} ${String(current+1).padStart(2,'0')}`;$('qtitle').textContent=q[lang];$('qcontext').textContent=text('choose');$('textA').textContent=q.a[lang];$('textB').textContent=q.b[lang];$('choiceA').classList.toggle('selected',answers[current]===0);$('choiceB').classList.toggle('selected',answers[current]===1);$('counter').textContent=`${current+1} / ${questions.length}`;$('progress').style.width=`${(current+1)/questions.length*100}%`;$('nextBtn').textContent=current===questions.length-1?text('result'):text('next');$('nextBtn').style.opacity=answers[current]===null?'.45':'1';}
 function answer(i){answers[current]=i;renderQuestion();}
 function nextQuestion(){if(answers[current]===null){alert(text('alert'));return;}if(current<questions.length-1){current++;renderQuestion();window.scrollTo({top:0,behavior:'smooth'});}else showResult();}
@@ -270,24 +271,36 @@ function recordResult(){
   $('participantResultName').textContent=`${text('participant')}: ${participantName}`;
   if(!completedAt) completedAt=new Date().toISOString();
   const key=`${participantName}|${completedAt}`;
-  if(savedResultKey===key)return;
   const sorted=Object.keys(scores).sort((a,b)=>scores[b]-scores[a]);
   const entry={name:participantName,completedAt,language:lang,primary:types[sorted[0]].name,secondary:types[sorted[1]].name,scores:{...scores},answers:[...answers]};
-  try{const history=JSON.parse(localStorage.getItem('contentDnaResults')||'[]');history.push(entry);localStorage.setItem('contentDnaResults',JSON.stringify(history));savedResultKey=key;}catch(error){console.warn('결과 이력을 브라우저에 저장하지 못했습니다.',error);}
+  if(savedResultKey!==key){
+    try{const history=JSON.parse(localStorage.getItem('contentDnaResults')||'[]');history.push(entry);localStorage.setItem('contentDnaResults',JSON.stringify(history));savedResultKey=key;}catch(error){console.warn('결과 이력을 브라우저에 저장하지 못했습니다.',error);}
+  }
   submitResultToGoogleSheet(entry,key);
 }
 async function submitResultToGoogleSheet(entry,key){
   if(submittedResultKey===key)return;
   submittedResultKey=key;
   const status=$('sheetSaveStatus');
+  $('sheetRetry').classList.add('hidden');
   status.textContent=lang==='ko'?'결과를 저장하고 있습니다…':'Menyimpan hasil…';
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),30000);
   try{
-    await fetch(GOOGLE_SHEET_WEB_APP_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:new URLSearchParams({payload:JSON.stringify(entry)})});
-    status.textContent=lang==='ko'?'결과가 안전하게 저장되었습니다.':'Hasil berhasil disimpan.';
+    const response=await fetch(GOOGLE_SHEET_WEB_APP_URL,{method:'POST',mode:'cors',credentials:'omit',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:new URLSearchParams({payload:JSON.stringify(entry)}),keepalive:true,signal:controller.signal});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    const result=await response.json();
+    if(result?.ok!==true)throw new Error(result?.error||'Google Sheets did not confirm saving.');
+    if(key!==`${participantName}|${completedAt}`)return;
+    status.textContent=lang==='ko'?'구글시트에 결과가 저장되었습니다.':'Hasil berhasil disimpan ke Google Sheets.';
   }catch(error){
+    if(key!==`${participantName}|${completedAt}`)return;
     submittedResultKey='';
-    status.textContent=lang==='ko'?'결과 저장에 실패했습니다. 인터넷 연결 후 다시 시도해주세요.':'Gagal menyimpan hasil. Periksa koneksi internet.';
+    $('sheetRetry').classList.remove('hidden');
+    status.textContent=lang==='ko'?`구글시트 저장을 확인하지 못했습니다. 재시도 전 시트에 결과가 있는지 확인해주세요. 오류: ${error.message}`:`Penyimpanan ke Google Sheets belum terkonfirmasi. Periksa sheet sebelum mencoba lagi. Error: ${error.message}`;
     console.error('Google Sheet 저장 실패:',error);
+  }finally{
+    clearTimeout(timeout);
   }
 }
 function showResult(){calculate();$('test').classList.add('hidden');$('result').classList.remove('hidden');const sorted=Object.keys(scores).sort((a,b)=>scores[b]-scores[a]);const top=sorted[0],second=sorted[1],t=types[top],s=types[second];$('dnaTitle').textContent=t['title_'+lang];$('dnaPair').textContent=`${t.name} × ${s.name}`;$('dnaDesc').textContent=lang==='en'?`Your strongest content purpose is ${t.name.toLowerCase()}, supported by ${s.name.toLowerCase()}. You are most energized when content creates this kind of change.`:lang==='id'?`Tujuan konten terkuatmu adalah ${t.name}, dan kecenderungan ${s.name} menjadi yang kedua terkuat. Kamu merasakan motivasi terbesar saat menciptakan perubahan seperti ini melalui konten.`:`당신의 가장 강한 콘텐츠 목적은 ${t.name}이고, ${s.name} 성향이 그다음으로 강합니다. 당신은 콘텐츠를 통해 이런 변화를 만들어낼 때 가장 큰 동기를 느낍니다.`;const labels={action:{en:'ACTION',id:'AKSI',ko:'행동'},brand:{en:'MESSAGE',id:'PESAN',ko:'메시지'},connection:{en:'CONNECTION',id:'RELASI',ko:'관계'},attention:{en:'PERSPECTIVE',id:'PERSPEKTIF',ko:'관점'}};$('scores').innerHTML=['action','brand','connection','attention'].map(k=>`<div class="score-row"><span>${labels[k][lang]}</span><div class="bar ${types[k].color}"><i style="width:${scores[k]/6*100}%"></i></div><span>${scores[k]}/6</span></div>`).join('');$('cards').innerHTML=sorted.map((k,idx)=>{const x=types[k];return `<article class="card ${idx===0?'best':''}"><div class="tag">${String(idx+1).padStart(2,'0')} · ${x.name}</div><h3>${x['keyword_'+lang]}</h3><p>${x['desc_'+lang]}</p><div class="formats">${x.formats.map(f=>`<span class="format">${f}</span>`).join('')}</div></article>`;}).join('');window.scrollTo({top:0,behavior:'smooth'});}
