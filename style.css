@@ -959,6 +959,9 @@ button {
 }
 
 .about-language-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 52px;
   height: 29px;
   border: 1px solid rgba(33, 28, 11, 0.18);
@@ -969,6 +972,7 @@ button {
   line-height: 1;
   letter-spacing: 0;
   cursor: var(--cursor-pointer);
+  text-decoration: none;
 }
 
 .about-language-button:hover {
@@ -978,6 +982,16 @@ button {
 .about-language-button.is-active {
   background: transparent;
   color: #843426;
+}
+
+.about-test-button {
+  background: #fff4b8;
+  color: #843426;
+  font-weight: 700;
+}
+
+.about-test-button:hover {
+  background: #ffe879;
 }
 
 .about-panel .about-name {

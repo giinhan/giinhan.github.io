@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Do You Want to Move? — Content DNA Test</title>
+<style>
+  :root{
+    --bg:#f7f2ec;
+    --paper:#fffdf9;
+    --ink:#242424;
+    --muted:#77716b;
+    --line:#ded7cf;
+    --accent:#6b3b29;
+    --orange:#ee7047;
+    --blue:#55a7d8;
+    --green:#9ab84d;
+    --pink:#df79ae;
+    --shadow:0 18px 50px rgba(54,39,29,.10);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",
+      "Noto Sans",Arial,sans-serif;
+    line-height:1.55;
+  }
+  button{font:inherit}
+  .wrap{max-width:920px;margin:0 auto;padding:28px 18px 70px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+  .brandmark{font-weight:800;letter-spacing:.08em;font-size:13px}
+  .lang{display:flex;gap:4px}.lang button{
+    border:1px solid var(--line);background:var(--paper);border-radius:999px;
+    padding:7px 11px;cursor:pointer;font-size:12px}.lang button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  }
+  .screen{
+    background:var(--paper);border:1px solid rgba(107,59,41,.10);
+    border-radius:24px;box-shadow:var(--shadow);overflow:hidden;
+  }
+  .hero{padding:54px 54px 48px;text-align:center}
+  .eyebrow{
+    display:inline-block;background:var(--accent);color:#fff;padding:8px 16px;
+    border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.08em;
+  }
+  h1{font-size:clamp(38px,7vw,68px);line-height:1.02;margin:22px 0 14px;letter-spacing:-.055em}
+  .hero h2{font-size:20px;margin:0 0 16px;color:var(--accent)}
+  .lead{max-width:640px;margin:0 auto;color:#625c56;font-size:16px}
+  .pills{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:34px auto;max-width:720px}
+  .pill{padding:15px 10px;border-radius:16px;font-weight:800;font-size:12px}
+  .pill span{display:block;font-size:10px;opacity:.7;margin-bottom:4px}
+  .attention{background:#fff0ea;color:#c84f2c}.action{background:#edf7fc;color:#3386b6}
+  .brand{background:#f2f7e5;color:#6d8e25}.connection{background:#fbeaf4;color:#bd4f89}
+  .primary{
+    border:0;background:var(--accent);color:#fff;border-radius:999px;
+    padding:15px 28px;font-weight:800;cursor:pointer;transition:.2s
+  }
+  .primary:hover{transform:translateY(-1px);filter:brightness(1.05)}
+  .smallnote{font-size:12px;color:var(--muted);margin-top:12px}
+  .name-field{max-width:430px;margin:28px auto 14px}
+  .name-field input{width:100%;padding:14px 17px;border:2px solid var(--line);border-radius:14px;background:#fff;font:inherit;text-align:center;outline:none}
+  .name-field input::placeholder{color:var(--muted);letter-spacing:.08em}
+  .name-field input:focus{border-color:var(--accent)}
+  .name-field .field-error{min-height:18px;margin:6px 2px 0;color:#c84f2c;font-size:12px}
+  .question-head{padding:26px 34px 0}
+  .progressline{height:7px;background:#eee8e1;border-radius:99px;overflow:hidden}
+  .progressfill{height:100%;background:var(--accent);transition:.3s;width:0}
+  .counter{display:flex;justify-content:space-between;margin-top:12px;font-size:12px;color:var(--muted)}
+  .question{padding:42px 54px 54px}
+  .qnum{font-size:13px;font-weight:900;color:var(--accent);letter-spacing:.08em}
+  .qtitle{font-size:clamp(25px,4vw,38px);line-height:1.2;letter-spacing:-.025em;margin:10px 0 10px}
+  .context{font-size:14px;color:var(--muted);margin-bottom:26px}
+  .choices{display:grid;gap:14px}
+  .choice{
+    width:100%;text-align:left;padding:20px 21px;background:#fff;
+    border:2px solid var(--line);border-radius:18px;cursor:pointer;
+    display:flex;gap:15px;align-items:flex-start;transition:.18s;
+  }
+  .choice:hover{border-color:#b9aea4;transform:translateY(-1px)}
+  .choice .letter{
+    flex:0 0 34px;height:34px;border-radius:50%;background:#f0ebe5;
+    display:grid;place-items:center;font-weight:900
+  }
+  .choice.selected{border-color:var(--accent);background:#fbf7f2}
+  .choice.selected .letter{background:var(--accent);color:#fff}
+  .choice strong{display:block;margin-bottom:3px}
+  .choice small{display:block;color:var(--muted);font-size:12px}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
+  .back{
+    border:1px solid var(--line);background:#fff;border-radius:999px;
+    padding:12px 19px;cursor:pointer;color:#5f5953
+  }
+  .result{padding:48px 54px 56px}
+  .result-top{text-align:center}
+  .result-top h2{font-size:clamp(35px,6vw,56px);line-height:1;margin:12px 0}
+  .dna{
+    display:inline-block;padding:9px 15px;border-radius:999px;
+    background:#f0ebe5;color:var(--accent);font-weight:900;font-size:13px
+  }
+  .result-desc{max-width:650px;margin:15px auto 30px;color:#625c56}
+  .scores{display:grid;gap:13px;max-width:700px;margin:0 auto 34px}
+  .score-row{display:grid;grid-template-columns:130px 1fr 45px;gap:10px;align-items:center;font-size:12px;font-weight:800}
+  .bar{height:14px;background:#eee8e1;border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:99px;width:0;transition:1s ease}
+  .bar.attention i{background:var(--orange)} .bar.action i{background:var(--blue)}
+  .bar.brand i{background:var(--green)} .bar.connection i{background:var(--pink)}
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:28px}
+  .card{padding:23px;border-radius:20px;background:#f7f4ef}
+  .card .tag{font-size:11px;font-weight:900;letter-spacing:.08em}
+  .card h3{font-size:21px;margin:6px 0}
+  .card p{font-size:13px;color:#6d6761;margin:0}
+  .best{border:2px solid var(--accent);background:#fffaf5}
+  .formats{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+  .format{font-size:11px;padding:6px 9px;border-radius:999px;background:#fff;border:1px solid var(--line)}
+  .result-actions{display:flex;justify-content:center;gap:10px;margin-top:32px;flex-wrap:wrap}
+  .secondary{
+    border:1px solid var(--line);background:#fff;color:#4e4944;
+    border-radius:999px;padding:12px 18px;cursor:pointer;font-weight:700
+  }
+  .footer-note{text-align:center;color:var(--muted);font-size:11px;margin-top:20px}
+  .hidden{display:none!important}
+  @media(max-width:680px){
+    .wrap{padding:12px 10px 40px}.hero,.question,.result{padding:34px 22px}
+    .question-head{padding:20px 22px 0}.pills{grid-template-columns:repeat(2,1fr)}
+    .cards{grid-template-columns:1fr}.score-row{grid-template-columns:105px 1fr 38px}
+    .qtitle{font-size:27px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brandmark">CONTENT DNA TEST</div>
+    <div class="lang"><button class="langTab" data-lang="id" onclick="setLanguage('id')">ID</button><button class="langTab" data-lang="ko" onclick="setLanguage('ko')">KR</button></div>
+  </div>
+
+  <main class="screen">
+    <section id="intro">
+      <div class="hero">
+        <div class="eyebrow" data-id="12 PERTANYAAN · 4 TUJUAN KONTEN" data-ko="12문항 · 4가지 콘텐츠 목적"></div>
+        <h1 data-id="Apa yang Ingin Kamu Gerakkan<br>melalui Konten?" data-ko="당신은 콘텐츠로<br>무엇을 움직이고 싶은가?"></h1>
+        <h2 data-id="Pada akhirnya, apa yang ingin kamu capai melalui konten?" data-ko="콘텐츠를 통해 궁극적으로 무엇을 이루고 싶은가?"></h2>
+        <p class="lead"
+           data-id="Bayangkan kamu membuat branded content untuk brand café, fashion, beauty, makanan, atau lifestyle di Indonesia. Pilih jawaban yang paling sesuai dengan dirimu. Tidak ada jawaban benar atau salah." data-ko="인도네시아의 카페, 패션, 뷰티, 음식, 라이프스타일 브랜드를 위한 브랜디드 콘텐츠를 만든다고 상상해보세요. 자신에게 가장 가까운 답을 골라주세요. 정답은 없습니다."></p>
+
+        <div class="pills">
+          <div class="pill action"><span>01</span><span data-id="AKSI" data-ko="행동">행동</span></div>
+          <div class="pill brand"><span>02</span><span data-id="PESAN" data-ko="메시지">메시지</span></div>
+          <div class="pill connection"><span>03</span><span data-id="RELASI" data-ko="관계">관계</span></div>
+          <div class="pill attention"><span>04</span><span data-id="PERSPEKTIF" data-ko="관점">관점</span></div>
+        </div>
+
+        <div class="name-field">
+          <input id="participantName" type="text" maxlength="50" autocomplete="name" placeholder="YOU NAME HERE" aria-label="Your name" />
+          <div id="nameError" class="field-error" aria-live="polite"></div>
+        </div>
+        <button id="startBtn" class="primary" onclick="startTest()" data-id="Mulai tes →" data-ko="테스트 시작 →"></button>
+        <div class="smallnote" data-id="Sekitar 3–5 menit · 12 pertanyaan" data-ko="약 3~5분 · 12문항"></div>
+      </div>
+    </section>
+
+    <section id="test" class="hidden">
+      <div class="question-head">
+        <div class="progressline"><div id="progress" class="progressfill"></div></div>
+        <div class="counter"><span id="counter"></span><span id="dnaCounterLabel">CONTENT DNA</span></div>
+      </div>
+      <div class="question">
+        <div class="qnum" id="qnum"></div>
+        <div class="qtitle" id="qtitle"></div>
+        <div class="context" id="qcontext"></div>
+        <div class="choices">
+          <button class="choice" id="choiceA" onclick="answer(0)">
+            <span class="letter">A</span><span id="textA"></span>
+          </button>
+          <button class="choice" id="choiceB" onclick="answer(1)">
+            <span class="letter">B</span><span id="textB"></span>
+          </button>
+        </div>
+        <div class="nav">
+          <button class="back" onclick="previousQuestion()" data-id="← Kembali" data-ko="← 이전"></button>
+          <button class="primary" id="nextBtn" onclick="nextQuestion()" data-id="Lanjut →"></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="result" class="hidden">
+      <div class="result">
+        <div class="result-top">
+          <div class="eyebrow" data-id="CONTENT DNA KAMU" data-ko="나의 CONTENT DNA"></div>
+          <p id="participantResultName" class="smallnote"></p>
+          <h2 id="dnaTitle"></h2>
+          <div id="dnaPair" class="dna"></div>
+          <p id="dnaDesc" class="result-desc"></p>
+        </div>
+
+        <div class="scores" id="scores"></div>
+        <div class="cards" id="cards"></div>
+
+        <div class="result-actions">
+          <button class="primary" onclick="copyResult()" data-id="Salin hasil saya" data-ko="결과 복사"></button>
+          <button class="secondary" onclick="restart()" data-id="Coba lagi" data-ko="다시 테스트"></button>
+        </div>
+        <div id="sheetSaveStatus" class="footer-note" aria-live="polite"></div>
+        <div class="footer-note" data-ko="브랜디드 콘텐츠 크리에이터를 위한 재미있는 진단 테스트입니다. 심리학적 진단이 아닙니다."
+             data-id="Tes ringan untuk kreator branded content — bukan diagnosis psikologis."></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const types = {
+  attention:{name:"PERSPECTIVE", title_en:"The Perspective Mover", title_id:"Penyaji Perspektif", title_ko:"관점을 제시하는 사람", color:"attention", keyword_en:"MAKE THEM STOP", keyword_id:"KONTEN YANG MENAWARKAN PERSPEKTIF", keyword_ko:"관점을 제시하는 콘텐츠", desc_en:"You want content to win attention and make people see something in a fresh way. Hooks, trends and surprising perspectives come naturally to you.", desc_id:"Kamu menyukai konten yang menangkap perhatian orang dan menunjukkan perspektif baru. Kamu secara alami memanfaatkan hook, tren, twist, dan sudut pandang baru.", desc_ko:"당신은 사람들의 시선을 붙잡고 새로운 관점을 보여주는 콘텐츠를 좋아합니다. 훅, 트렌드, 반전과 새로운 시선을 자연스럽게 활용합니다.", formats:["TikTok Trends","POV","Viral Hooks","Challenge","Creator Collab"]},
+  action:{name:"ACTION", title_en:"The Action Mover", title_id:"Penggerak Aksi", title_ko:"행동하게 만드는 사람", color:"action", keyword_en:"MAKE THEM ACT", keyword_id:"KONTEN YANG MENDORONG TINDAKAN", keyword_ko:"행동하게 만드는 콘텐츠", desc_en:"For you, a view is only the beginning. Great content makes people click, visit, try, buy, book or participate.", desc_id:"Bagi kamu, jumlah view hanyalah awal. Konten yang baik membuat orang mengklik, berkunjung, mencoba, membeli, memesan, atau berpartisipasi.", desc_ko:"당신에게 조회수는 시작일 뿐입니다. 좋은 콘텐츠란 사람들이 클릭하고, 방문하고, 사용해보고, 구매하고, 예약하거나 참여하게 만드는 콘텐츠입니다.", formats:["Product Demo","Review","How-to","Offer","Location Content","UGC"]},
+  brand:{name:"MESSAGE", title_en:"The Message Mover", title_id:"Penggerak Pesan", title_ko:"메시지를 움직이는 사람", color:"brand", keyword_en:"MAKE THEM REMEMBER", keyword_id:"KONTEN YANG MENYAMPAIKAN PESAN", keyword_ko:"메시지를 전달하는 콘텐츠", desc_en:"You care about what stays in the audience's mind: a feeling, a meaning, a point of view or a memorable message.", desc_id:"Kamu mementingkan apa yang tertinggal di benak orang setelah melihat konten. Kamu menciptakan perasaan, makna, perspektif, dan pesan yang membekas dalam ingatan.", desc_ko:"당신은 콘텐츠를 본 뒤 사람들의 머릿속에 무엇이 남는지를 중요하게 생각합니다. 감정, 의미, 관점, 그리고 기억에 남는 메시지를 만듭니다.", formats:["Brand Film","Storytelling","Lifestyle Film","Founder Story","Cinematic Content"]},
+  connection:{name:"CONNECTION", title_en:"The Connection Mover", title_id:"Pembentuk Relasi", title_ko:"관계를 형성하는 사람", color:"connection", keyword_en:"MAKE THEM FEEL", keyword_id:"KONTEN YANG MEMBANGUN RELASI", keyword_ko:"관계를 형성하는 콘텐츠", desc_en:"You want people to see themselves in the content. Empathy, humor, participation and community are your natural tools.", desc_id:"Kamu ingin orang menemukan dirinya sendiri di dalam konten. Kamu secara alami memanfaatkan empati, humor, partisipasi, dan komunitas.", desc_ko:"당신은 사람들이 콘텐츠 속에서 자신의 모습을 발견하길 원합니다. 공감, 유머, 참여, 커뮤니티를 자연스럽게 활용합니다.", formats:["Relatable Content","Comedy","Reaction","Street Interview","UGC","Community Content"]}
+};
+
+const questions = [
+ {en:"You are creating a TikTok video for a new Indonesian coffee brand.",id:"Kamu sedang membuat video TikTok untuk warung Lontong.",ko:"Lontong 가게의 TikTok 영상을 만들고 있습니다.",a:{en:"Make people think, ‘Wait, what is this?’ from the very first scene.",id:"Bikin orang langsung berpikir, ‘Hah, apa nih?’ dari adegan pertama.",ko:"첫 장면부터 ‘어? 뭐지?’ 싶게 만든다.",t:"attention"},b:{en:"Make people finish the video thinking, ‘I need to go here!’",id:"Bikin orang selesai nonton lalu berpikir, ‘Aku harus ke sini!’",ko:"보고 나면 ‘여기 가봐야겠다!’ 싶게 만든다.",t:"action"}},
+ {en:"You made a video for a new local skincare brand. Which reaction would make you happier?",id:"Kamu membuat video untuk brand batik Mega Mendung. Respons mana yang paling membuatmu senang?",ko:"Mega Mendung 바틱 브랜드의 영상을 만들었습니다. 어떤 반응이 가장 기쁠까요?",a:{en:"‘This brand shows batik in such a different way!’",id:"‘Brand ini menampilkan batik dengan cara yang beda banget!’",ko:"‘이 브랜드, 바틱 보여주는 방식이 진짜 다르다!’",t:"brand"},b:{en:"‘Where can I see this? I want to visit in person!’",id:"‘Ini bisa dilihat di mana? Aku mau datang langsung!’",ko:"‘이거 어디서 볼 수 있어요? 직접 가보고 싶어요!’",t:"action"}},
+ {en:"A new TikTok meme suddenly becomes popular.",id:"Meme TikTok Tari Topeng yang baru tiba-tiba mulai populer.",ko:"새로운 Tari Topeng TikTok 밈이 갑자기 유행하기 시작했습니다.",a:{en:"Use it quickly while it is trending. If it is fun, move fast.",id:"Langsung pakai selagi lagi tren. Kalau seru, gerak cepat!",ko:"유행할 때 바로 써본다. 재밌으면 일단 빠르게!",t:"attention"},b:{en:"Do not just copy it—make it feel like me.",id:"Jangan cuma ikut-ikutan. Ubah jadi gayaku sendiri.",ko:"그대로 따라 하기보다 나답게 바꿔본다.",t:"brand"}},
+ {en:"You are making content for a local fashion brand. Which comment would make you happiest?",id:"Kamu sedang membuat konten tentang destinasi lokal Pantai Kejawanan. Komentar mana yang paling membuatmu senang?",ko:"로컬 명소 Pantai Kejawanan의 콘텐츠를 만들고 있습니다. 어떤 댓글을 받으면 가장 기쁠까요?",a:{en:"‘OMG, this is exactly what I wanted!’",id:"‘OMG, ini banget yang aku cari!’",ko:"‘OMG, 여기 진짜 내가 원했던거야!’",t:"connection"},b:{en:"‘Wow, I never thought of this place that way!’",id:"‘Wah, aku nggak pernah melihat tempat ini seperti ini!’",ko:"‘와, 이 장소를 이렇게 볼 수도 있구나!’",t:"brand"}},
+ {en:"You need to promote a small café in Jakarta.",id:"Kamu perlu membuat konten untuk mempromosikan toko keramik di Sitiwinangun, Cirebon.",ko:"치르본 Sitiwinangun의 도자기 가게를 홍보하는 콘텐츠를 만들어야 합니다.",a:{en:"Make people think, ‘I should visit this place!’",id:"Bikin orang berpikir, ‘Aku harus mampir ke sini!’",ko:"보고 바로 ‘여기 한번 가봐야겠다!’ 싶게 만든다.",t:"action"},b:{en:"Make people send it to a friend saying, ‘Let’s go here!’",id:"Bikin orang langsung kirim ke teman sambil bilang, ‘Yuk, kita ke sini!’",ko:"친구한테 바로 보내면서 ‘우리 여기 가자!’ 하게 만든다.",t:"connection"}},
+ {en:"A new menu launches on GoFood or GrabFood. What would make the content successful?",id:"Menu baru diluncurkan di GoFood atau GrabFood. Hasil seperti apa yang berarti kontennya sukses?",ko:"GoFood 또는 GrabFood에서 새로운 메뉴를 출시했습니다. 어떤 결과가 콘텐츠의 성공을 의미할까요?",a:{en:"People start saying, ‘Have you seen this menu?’",id:"Orang mulai bilang, ‘Eh, kamu udah lihat menu ini?’",ko:"사람들이 ‘이 메뉴 봤어?’ 하며 이야기하게 된다.",t:"attention"},b:{en:"People who see the video actually order it right away.",id:"Orang yang lihat videonya benar-benar langsung pesan.",ko:"영상을 본 사람들이 실제로 바로 주문한다.",t:"action"}},
+ {en:"You are creating a video for an Indonesian local fashion collection.",id:"Kamu sedang membuat video untuk koleksi topeng dari Cirebon.",ko:"치르본의 topeng 컬렉션의 영상을 만들고 있습니다.",a:{en:"Make a familiar topeng feel new: ‘Wow, I have never seen it like this!’",id:"Bikin topeng yang familiar terasa baru: ‘Wah, ternyata bisa kelihatan begini!’",ko:"익숙한 topeng도 ‘이렇게 보니 새롭다!’ 싶게 보여준다.",t:"attention"},b:{en:"Make people feel, ‘Ah, this creator has this kind of taste.’",id:"Bikin orang merasa, ‘Oh, kreator ini punya selera seperti ini.’",ko:"보고 나면 ‘아, 이 제작자는 이런 취향이구나’가 느껴지게 한다.",t:"brand"}},
+ {en:"A viewer sends you a video of themselves having a great time at a place you recommended. How would you use it?",id:"Seorang penonton mengirim video saat dia seru-seruan di tempat yang aku rekomendasikan. Bagaimana kamu akan memanfaatkannya?",ko:"한 시청자가 내가 추천한 장소에 가서 마음껏 즐기는 영상을 보내왔습니다. 어떻게 활용할까요?",a:{en:"Make other viewers want to say, ‘I have a story like this too!’ and share their own experience.",id:"Bikin penonton lain ikut bilang, ‘Aku juga punya cerita kayak gini!’ lalu membagikan pengalaman mereka sendiri.",ko:"다른 시청자들도 ‘나도 이런 이야기 있어!’ 하며 자기 경험을 올리게 만든다.",t:"connection"},b:{en:"Use it again for promotion so people feel, ‘This is the strength of my videos.’",id:"Pakai video itu lagi buat promosi, supaya orang merasa, ‘Oh, ini kekuatan video-video aku.’",ko:"‘이게 내 영상들의 강점입니다’가 느껴지도록 재홍보에 활용한다.",t:"brand"}},
+ {en:"You can make only one successful video for a new beauty brand. What result do you want most?",id:"Kalau kamu hanya bisa membuat satu video yang sukses untuk warung nasi jamblang baru, hasil apa yang paling kamu inginkan?",ko:"새로운 nasi jamblang 가게를 위한 영상을 하나만 성공시킬 수 있다면, 어떤 결과를 가장 원하나요?",a:{en:"People watch it, then actually look up the menu, order, or visit.",id:"Orang selesai nonton lalu benar-benar cari menu, pesan, atau datang ke tempatnya.",ko:"보고 나서 실제로 메뉴를 찾아 주문하거나 가게에 간다.",t:"action"},b:{en:"People think, ‘This is exactly the kind of place I would like!’",id:"Orang merasa, ‘Wah, ini tempat yang cocok banget buat orang seperti aku!’",ko:"‘여긴 딱 나 같은 사람이 좋아할 곳이네!’라고 느낀다.",t:"connection"}},
+ {en:"Your video gets fewer views than expected. What do you change first?",id:"Jumlah view lebih sedikit dari yang diperkirakan. Apa yang kamu ubah lebih dulu?",ko:"조회수가 예상보다 적게 나왔습니다. 무엇을 먼저 바꿀까요?",a:{en:"First, change the opening and editing to make it more fun to watch.",id:"Pertama, ubah opening dan editing supaya videonya lebih seru ditonton.",ko:"먼저 시작 장면과 편집을 바꿔 더 재미있게 만든다.",t:"attention"},b:{en:"First, ask, ‘So what are we actually trying to say?’",id:"Pertama, pikirkan lagi, ‘Sebenarnya kita mau bilang apa?’",ko:"먼저 ‘그래서 무슨 말을 하고 싶은 거지?’를 다시 정리한다.",t:"brand"}},
+ {en:"Your branded video gets many comments. Which one makes you happiest?",id:"Branded content-mu mendapat banyak komentar. Komentar mana yang paling membuatmu senang?",ko:"브랜디드 콘텐츠에 댓글이 많이 달렸습니다. 어떤 댓글이 가장 기쁠까요?",a:{en:"‘I want to try this! How do I do it?’",id:"‘Aku mau coba ini! Gimana caranya?’",ko:"‘이거 해보고 싶은데, 어떻게 하면 돼요?’",t:"action"},b:{en:"‘I really relate to this!’",id:"‘Aku relate banget!’",ko:"‘정말 공감됩니다!’",t:"connection"}},
+ {en:"After creating content around one topic for one year, which feedback would make you proudest?",id:"Setelah membuat konten tentang satu topik selama satu tahun, feedback mana yang paling membuatmu bangga?",ko:"하나의 주제로 콘텐츠를 만든 지 1년 후, 어떤 피드백을 받으면 가장 뿌듯할까요?",a:{en:"‘When I think of this topic, your content comes to mind first.’",id:"‘Kalau ingat topik ini, aku langsung ingat kontenmu.’",ko:"‘이 주제 하면 당신 콘텐츠가 바로 떠올라요.’",t:"brand"},b:{en:"‘I watched your content and tried it myself.’",id:"‘Aku lihat kontenmu, terus aku juga coba sendiri.’",ko:"‘당신 콘텐츠 보고 저도 직접 해봤어요.’",t:"action"}}
+];
+
+const ui = {
+ en:{question:"QUESTION", choose:"Choose the option that feels more like you.", next:"Next →", result:"See my result →", back:"← Back", start:"Start the test →", copy:"Copy my result", again:"Take it again", copied:"Result copied!", alert:"Please choose A or B first.", dna:"YOUR CONTENT DNA", footer:"A fun diagnostic for branded-content creators — not a psychological diagnosis."},
+ id:{question:"PERTANYAAN", choose:"Pilih jawaban yang paling sesuai dengan dirimu.", next:"Lanjut →", result:"Lihat hasil →", back:"← Kembali", start:"Mulai tes →", copy:"Salin hasil saya", again:"Coba lagi", copied:"Hasil berhasil disalin!", alert:"Pilih A atau B terlebih dahulu.", nameRequired:"Masukkan nama terlebih dahulu.", participant:"Peserta", dna:"CONTENT DNA KAMU", footer:"Tes ringan untuk kreator branded content — bukan diagnosis psikologis."},
+ ko:{question:"문항", choose:"나에게 더 가까운 답을 골라주세요.", next:"다음 →", result:"결과 보기 →", back:"← 이전", start:"테스트 시작 →", copy:"결과 복사", again:"다시 테스트", copied:"결과가 복사되었습니다!", alert:"A 또는 B를 먼저 선택해주세요.", nameRequired:"이름을 먼저 입력해주세요.", participant:"참여자", dna:"나의 CONTENT DNA", footer:"브랜디드 콘텐츠 크리에이터를 위한 재미있는 진단 테스트입니다. 심리학적 진단이 아닙니다."}
+};
+
+const GOOGLE_SHEET_WEB_APP_URL="https://script.google.com/macros/s/AKfycbw_3HMmdYL21LZPEUv7Lt0_ovS_YinR4-4QuBPepwlTI8-TxMdQwd8N37oqUxuNr5OlhQ/exec";
+let lang="ko", participantName="", completedAt="", current=0, answers=Array(questions.length).fill(null), scores={attention:0,action:0,brand:0,connection:0}, savedResultKey="", submittedResultKey="";
+const $=id=>document.getElementById(id);
+function text(key){return ui[lang][key];}
+function setLanguage(nextLang){
+  if(!ui[nextLang]) nextLang="ko";
+  lang=nextLang;
+  document.documentElement.lang=lang;
+  document.querySelectorAll('.langTab').forEach(btn=>btn.classList.toggle('active', btn.dataset.lang===lang));
+  document.querySelectorAll('[data-id],[data-ko]').forEach(el=>{
+    const value=el.getAttribute('data-'+lang);
+    if(value!==null) el.innerHTML=value;
+  });
+  const start=$('startBtn'); if(start) start.textContent=text('start');
+  const back=document.querySelector('.back'); if(back) back.textContent=text('back');
+  const copy=document.querySelector('[onclick="copyResult()"]'); if(copy) copy.textContent=text('copy');
+  const again=document.querySelector('[onclick="restart()"]'); if(again) again.textContent=text('again');
+  const dnaLabel=document.querySelector('#result .eyebrow'); if(dnaLabel) dnaLabel.textContent=text('dna');
+  const footer=document.querySelector('.footer-note'); if(footer) footer.textContent=text('footer');
+  if(!$('test').classList.contains('hidden')) renderQuestion();
+  if(!$('result').classList.contains('hidden')) showResult();
+}
+function startTest(){const name=$('participantName').value.trim();if(!name){$('nameError').textContent=text('nameRequired');$('participantName').focus();return;}participantName=name;completedAt='';savedResultKey='';submittedResultKey='';$('sheetSaveStatus').textContent='';$('nameError').textContent='';current=0;answers=Array(questions.length).fill(null);scores={attention:0,action:0,brand:0,connection:0};$('intro').classList.add('hidden');$('result').classList.add('hidden');$('test').classList.remove('hidden');renderQuestion();window.scrollTo({top:0,behavior:'smooth'});}
+function renderQuestion(){const q=questions[current];$('qnum').textContent=`${text('question')} ${String(current+1).padStart(2,'0')}`;$('qtitle').textContent=q[lang];$('qcontext').textContent=text('choose');$('textA').textContent=q.a[lang];$('textB').textContent=q.b[lang];$('choiceA').classList.toggle('selected',answers[current]===0);$('choiceB').classList.toggle('selected',answers[current]===1);$('counter').textContent=`${current+1} / ${questions.length}`;$('progress').style.width=`${(current+1)/questions.length*100}%`;$('nextBtn').textContent=current===questions.length-1?text('result'):text('next');$('nextBtn').style.opacity=answers[current]===null?'.45':'1';}
+function answer(i){answers[current]=i;renderQuestion();}
+function nextQuestion(){if(answers[current]===null){alert(text('alert'));return;}if(current<questions.length-1){current++;renderQuestion();window.scrollTo({top:0,behavior:'smooth'});}else showResult();}
+function previousQuestion(){if(current===0){$('test').classList.add('hidden');$('intro').classList.remove('hidden');}else{current--;renderQuestion();window.scrollTo({top:0,behavior:'smooth'});}}
+function calculate(){scores={attention:0,action:0,brand:0,connection:0};answers.forEach((ans,i)=>{if(ans!==null)scores[questions[i][ans===0?'a':'b'].t]++;});recordResult();}
+function recordResult(){
+  $('participantResultName').textContent=`${text('participant')}: ${participantName}`;
+  if(!completedAt) completedAt=new Date().toISOString();
+  const key=`${participantName}|${completedAt}`;
+  if(savedResultKey===key)return;
+  const sorted=Object.keys(scores).sort((a,b)=>scores[b]-scores[a]);
+  const entry={name:participantName,completedAt,language:lang,primary:types[sorted[0]].name,secondary:types[sorted[1]].name,scores:{...scores},answers:[...answers]};
+  try{const history=JSON.parse(localStorage.getItem('contentDnaResults')||'[]');history.push(entry);localStorage.setItem('contentDnaResults',JSON.stringify(history));savedResultKey=key;}catch(error){console.warn('결과 이력을 브라우저에 저장하지 못했습니다.',error);}
+  submitResultToGoogleSheet(entry,key);
+}
+async function submitResultToGoogleSheet(entry,key){
+  if(submittedResultKey===key)return;
+  submittedResultKey=key;
+  const status=$('sheetSaveStatus');
+  status.textContent=lang==='ko'?'결과를 저장하고 있습니다…':'Menyimpan hasil…';
+  try{
+    await fetch(GOOGLE_SHEET_WEB_APP_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:new URLSearchParams({payload:JSON.stringify(entry)})});
+    status.textContent=lang==='ko'?'결과가 안전하게 저장되었습니다.':'Hasil berhasil disimpan.';
+  }catch(error){
+    submittedResultKey='';
+    status.textContent=lang==='ko'?'결과 저장에 실패했습니다. 인터넷 연결 후 다시 시도해주세요.':'Gagal menyimpan hasil. Periksa koneksi internet.';
+    console.error('Google Sheet 저장 실패:',error);
+  }
+}
+function showResult(){calculate();$('test').classList.add('hidden');$('result').classList.remove('hidden');const sorted=Object.keys(scores).sort((a,b)=>scores[b]-scores[a]);const top=sorted[0],second=sorted[1],t=types[top],s=types[second];$('dnaTitle').textContent=t['title_'+lang];$('dnaPair').textContent=`${t.name} × ${s.name}`;$('dnaDesc').textContent=lang==='en'?`Your strongest content purpose is ${t.name.toLowerCase()}, supported by ${s.name.toLowerCase()}. You are most energized when content creates this kind of change.`:lang==='id'?`Tujuan konten terkuatmu adalah ${t.name}, dan kecenderungan ${s.name} menjadi yang kedua terkuat. Kamu merasakan motivasi terbesar saat menciptakan perubahan seperti ini melalui konten.`:`당신의 가장 강한 콘텐츠 목적은 ${t.name}이고, ${s.name} 성향이 그다음으로 강합니다. 당신은 콘텐츠를 통해 이런 변화를 만들어낼 때 가장 큰 동기를 느낍니다.`;const labels={action:{en:'ACTION',id:'AKSI',ko:'행동'},brand:{en:'MESSAGE',id:'PESAN',ko:'메시지'},connection:{en:'CONNECTION',id:'RELASI',ko:'관계'},attention:{en:'PERSPECTIVE',id:'PERSPEKTIF',ko:'관점'}};$('scores').innerHTML=['action','brand','connection','attention'].map(k=>`<div class="score-row"><span>${labels[k][lang]}</span><div class="bar ${types[k].color}"><i style="width:${scores[k]/6*100}%"></i></div><span>${scores[k]}/6</span></div>`).join('');$('cards').innerHTML=sorted.map((k,idx)=>{const x=types[k];return `<article class="card ${idx===0?'best':''}"><div class="tag">${String(idx+1).padStart(2,'0')} · ${x.name}</div><h3>${x['keyword_'+lang]}</h3><p>${x['desc_'+lang]}</p><div class="formats">${x.formats.map(f=>`<span class="format">${f}</span>`).join('')}</div></article>`;}).join('');window.scrollTo({top:0,behavior:'smooth'});}
+function copyResult(){const sorted=Object.keys(scores).sort((a,b)=>scores[b]-scores[a]);const top=types[sorted[0]],second=types[sorted[1]];const label=lang==='en'?'My Content DNA':lang==='id'?'Content DNA Saya':'나의 Content DNA';const textToCopy=`${label}: ${top.name} × ${second.name}\n${Object.entries(scores).map(([k,v])=>`${types[k].name}: ${v}/6`).join(' · ')}`;navigator.clipboard?.writeText(textToCopy).then(()=>alert(text('copied'))).catch(()=>alert(textToCopy));}
+function restart(){startTest();}
+setLanguage('ko');
+</script>
+</body>
+</html>
