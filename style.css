@@ -1652,7 +1652,15 @@ body.about-open {
   }
 
   .about-language-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 48px);
     justify-content: flex-start;
+  }
+
+  .about-test-button {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-left: 64px;
   }
 
   .about-close {

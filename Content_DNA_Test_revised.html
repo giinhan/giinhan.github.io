@@ -238,7 +238,7 @@ const ui = {
  ko:{question:"문항", choose:"나에게 더 가까운 답을 골라주세요.", next:"다음 →", result:"결과 보기 →", back:"← 이전", start:"테스트 시작 →", copy:"결과 복사", again:"다시 테스트", copied:"결과가 복사되었습니다!", alert:"A 또는 B를 먼저 선택해주세요.", nameRequired:"이름을 먼저 입력해주세요.", participant:"참여자", dna:"나의 CONTENT DNA", footer:"브랜디드 콘텐츠 크리에이터를 위한 재미있는 진단 테스트입니다. 심리학적 진단이 아닙니다."}
 };
 
-const GOOGLE_SHEET_WEB_APP_URL="https://script.google.com/macros/s/AKfycbw_3HMmdYL21LZPEUv7Lt0_ovS_YinR4-4QuBPepwlTI8-TxMdQwd8N37oqUxuNr5OlhQ/exec";
+const GOOGLE_SHEET_WEB_APP_URL="https://script.google.com/macros/s/AKfycbxKFEB6UEjskdHn1Kiwt2y4ZLJWyx5Xe1RiH4uNluujO5DR2kvtPuOV9xLNusZBSy1cmA/exec";
 let lang="ko", participantName="", completedAt="", current=0, answers=Array(questions.length).fill(null), scores={attention:0,action:0,brand:0,connection:0}, savedResultKey="", submittedResultKey="";
 const $=id=>document.getElementById(id);
 function text(key){return ui[lang][key];}
