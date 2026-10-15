@@ -8,7 +8,7 @@
   const states = [...form.querySelectorAll('[data-notify-state]')];
   let busy = false, accepted = false, trigger = null;
   const digits = () => phone.value.replace(/\D/g, '');
-  const validPhone = () => phone.checkValidity() && digits().length >= 9 && digits().length <= 15;
+  const validPhone = () => /^[+0-9() -]+$/.test(phone.value) && phone.checkValidity() && digits().length >= 9 && digits().length <= 15;
   const sync = () => { send.disabled = busy || accepted || !consent.checked || !validPhone(); };
   const state = value => states.forEach(node => { node.hidden = node.dataset.notifyState !== value; });
   phone.addEventListener('input', sync);
