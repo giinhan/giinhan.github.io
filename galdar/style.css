@@ -221,6 +221,31 @@ footer{padding:72px 0 92px;background:var(--black);color:var(--white)}
 h1, h2 { max-width:none; width:100%; white-space:normal; word-break:normal; overflow-wrap:break-word; text-wrap:wrap; }
 .section-head, .section-head.single { grid-template-columns:minmax(0,1fr); gap:24px; }
 .section-head > div { min-width:0; width:100%; }
+/* Align main and secondary navigation in the column immediately before VISIT. */
+.nav {
+  display:grid; grid-template-columns:auto minmax(0,1fr) auto;
+  grid-template-rows:74px auto; height:auto; min-height:74px;
+  column-gap:22px; row-gap:0; padding:0;
+}
+.nav .logo { grid-column:1; grid-row:1; }
+.nav .menu {
+  grid-column:2; grid-row:1; justify-self:end; justify-content:flex-end;
+  width:max-content; max-width:100%; margin:0; padding:0;
+}
+.nav .nav-cta { grid-column:3; grid-row:1; margin:0; }
+.nav .subnav {
+  grid-column:2; grid-row:2; width:100%; min-width:0;
+  justify-content:safe flex-end; margin:0; padding:16px 0;
+  border-top:1px solid var(--line); border-bottom:0;
+}
+@media(max-width:900px) {
+  .nav { grid-template-columns:minmax(0,1fr) auto; grid-template-rows:auto auto auto; padding:16px 0; row-gap:12px; }
+  .nav .logo { grid-column:1; grid-row:1; }
+  .nav .nav-cta { grid-column:2; grid-row:1; }
+  .nav .menu { grid-column:1 / -1; grid-row:2; width:100%; min-width:0; justify-content:safe flex-end; overflow-x:auto; padding:8px 0; }
+  .nav .subnav { grid-column:1 / -1; grid-row:3; padding:12px 0 0; }
+}
+
 /* Keep descriptions on one line; allow reading long copy on narrow screens. */
 .section-head > p, .detail-hero .wrap > p {
   max-width:none; width:100%; min-width:0;
