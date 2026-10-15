@@ -10,6 +10,8 @@
   const states = [...form.querySelectorAll('[data-inquiry-state]')];
   let busy = false;
   let trigger = null;
+  const heading = document.getElementById('inquiry-heading');
+  const defaultHeading = heading.textContent.trim();
   const showState = state => states.forEach(node => { node.hidden = node.dataset.inquiryState !== state; });
   document.querySelectorAll('[data-open-inquiry]').forEach(button => {
     button.addEventListener('click', () => {
@@ -18,8 +20,10 @@
         form.reset();
         showState('');
         send.disabled = false;
-        kind.value = button.closest('article').querySelector('h3').textContent.trim();
-        subject.value = `${kind.value} · ${document.getElementById('inquiry-heading').textContent.trim()}`;
+        const proposal = button.dataset?.inquiryMode === 'proposal';
+        heading.textContent = proposal ? button.textContent.trim() : defaultHeading;
+        kind.value = proposal ? button.textContent.trim() : button.closest('article').querySelector('h3').textContent.trim();
+        subject.value = kind.value === heading.textContent.trim() ? kind.value : `${kind.value} · ${heading.textContent.trim()}`;
       }
       dialog.showModal();
       subject.focus();

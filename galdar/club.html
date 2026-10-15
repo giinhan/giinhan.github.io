@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>갈다클럽 | GALDAR</title><meta name="description" content="갈다클럽 — 과학과 사람 사이, 즐거운 경험을 만드는 GALDAR"><link rel="stylesheet" href="style.css?v=eea8a0904245"></head><body><a class="skip" href="#main">본문 바로가기</a><header><div class="wrap nav"><a class="logo" href="index.html">GALDAR <span>과학과 사람 사이</span></a><nav class="menu" aria-label="주요 메뉴"><a href="club.html" aria-current="page">GALDAR CLUB</a><a href="projects.html">PROJECTS</a><a href="collab.html">STUDIO</a><a href="archive.html">ARCHIVE</a><a href="about.html">ABOUT</a></nav><a class="nav-cta" href="visit.html">VISIT GALDAR HOUSE</a></div></header><main id="main"><div class="wrap club-layout"><aside class="club-sidebar"><nav aria-label="하위 메뉴"><a href="cosmos.html">갈다 코스모스</a><a href="moderator.html">코스모스 모더레이터 과정</a><a href="club-2027.html">갈다클럽 2027</a><a href="open-club.html">오픈클럽</a></nav></aside><div class="club-content"><section class="section" id="club">
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>갈다클럽 | GALDAR</title><meta name="description" content="갈다클럽 — 과학과 사람 사이, 즐거운 경험을 만드는 GALDAR"><link rel="stylesheet" href="style.css?v=67f666de6b70"></head><body><a class="skip" href="#main">본문 바로가기</a><header><div class="wrap nav"><a class="logo" href="index.html">GALDAR <span>과학과 사람 사이</span></a><nav class="menu" aria-label="주요 메뉴"><a href="club.html" aria-current="page">GALDAR CLUB</a><a href="projects.html">PROJECTS</a><a href="collab.html">STUDIO</a><a href="archive.html">ARCHIVE</a><a href="about.html">ABOUT</a></nav><a class="nav-cta" href="visit.html">VISIT GALDAR HOUSE</a></div></header><main id="main"><div class="wrap club-layout"><aside class="club-sidebar"><nav aria-label="하위 메뉴"><a href="cosmos.html">갈다 코스모스</a><a href="moderator.html">코스모스 모더레이터 과정</a><a href="club-2027.html">갈다클럽 2027</a><a href="open-club.html">오픈클럽</a></nav></aside><div class="club-content"><section class="section" id="club">
   <div class="wrap">
     <div class="section-head">
       <div>
@@ -9,14 +9,14 @@
     </div>
 
     <div class="cards">
-      <article class="card"><a class="card-link" href="cosmos.html">
-        <div>
-          <div class="tag">GALDAR SIGNATURE</div>
-          <h3>갈다 코스모스</h3>
-          <p>이명현 천문학자와 함께하는 갈다 시그니처 북클럽. 새해를 가장 과학적으로 시작하는 방법입니다.</p>
-        </div>
-        <div class="arrow">↗</div>
-      </a></article>
+      <article class="card cosmos-card">
+  <div class="club-card-heading"><div class="tag">GALDAR SIGNATURE</div><span class="application-pill">2026.12 신청접수</span></div>
+  <a href="cosmos.html" class="club-title-link"><h3>갈다 코스모스</h3></a>
+  <p>이명현 천문학자와 함께하는 갈다 시그니처 북클럽. 새해를 가장 과학적으로 시작하는 방법입니다.</p>
+  <button class="btn club-notify-button" type="button" data-open-notify aria-haspopup="dialog" aria-controls="club-notify">클럽 오픈 알림받기</button>
+  <a class="arrow" href="cosmos.html" aria-label="갈다 코스모스 상세 보기">↗</a>
+</article>
+
 
       <article class="card"><a class="card-link" href="moderator.html">
         <div>
@@ -46,7 +46,24 @@
       </a></article>
     </div>
   </div>
-</section></div></div></main><footer class="site-footer">
+</section></div></div><dialog class="inquiry-dialog notify-dialog" id="club-notify" aria-labelledby="notify-heading">
+  <div class="inquiry-dialog-head"><h2 id="notify-heading">갈다 코스모스읽기 클럽 오픈 알람 신청</h2><button type="button" class="inquiry-close" data-close-notify aria-label="알림 신청 창 닫기">×</button></div>
+  <form id="notify-form" action="https://formsubmit.co/galdarbookshop@gmail.com" method="post">
+    <label for="notify-phone">전화번호</label>
+    <input id="notify-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" pattern="[0-9+() \-]{9,20}" maxlength="20" required autofocus>
+    <label class="notify-consent" for="notify-consent"><input id="notify-consent" name="consent" type="checkbox" required><span id="notify-consent-copy">「개인정보 보호법」등 관련 법규에 의거하여 상기 본인은 위와 같이 개인정보 수집 및 활용에 동의합니다.</span></label>
+    <div class="inquiry-honeypot" aria-hidden="true"><label for="notify-website">웹사이트</label><input id="notify-website" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
+    <div class="inquiry-feedback" role="status" aria-live="polite">
+      <p data-notify-state="pending" hidden>알림 신청을 전송하고 있습니다.</p>
+      <p data-notify-state="success" hidden>클럽 오픈 알림 신청 요청이 접수되었습니다.</p>
+      <p data-notify-state="error" hidden>신청 요청을 완료하지 못했습니다. 입력한 내용은 유지됩니다. 잠시 후 다시 시도해주세요.</p>
+      <p data-notify-state="timeout" hidden>신청 결과를 확인하지 못했습니다. 잠시 후 다시 확인해주세요.</p>
+    </div>
+    <button class="btn inquiry-send" type="submit" disabled>SEND</button>
+  </form>
+</dialog>
+<script src="assets/notify.js?v=b8e04e45bf3a" defer></script>
+</main><footer class="site-footer">
   <div class="wrap footer-grid">
     <div class="footer-left">
       <a class="footer-logo" href="https://giinhan.com/galdar/">GALDAR</a>
