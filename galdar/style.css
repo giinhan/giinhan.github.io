@@ -221,6 +221,20 @@ footer{padding:72px 0 92px;background:var(--black);color:var(--white)}
 h1, h2 { max-width:none; width:100%; white-space:normal; word-break:normal; overflow-wrap:break-word; text-wrap:wrap; }
 .section-head, .section-head.single { grid-template-columns:minmax(0,1fr); gap:24px; }
 .section-head > div { min-width:0; width:100%; }
+/* Match the supplied GALDAR wordmark with a compact, bold neo-grotesque. */
+.nav .logo {
+  font-family:Arial,Helvetica,sans-serif;
+  font-weight:700;
+  font-size:24px;
+  letter-spacing:-.8px;
+  line-height:1;
+}
+.nav .logo span {
+  font-family:"Noto Sans CJK KR","Apple SD Gothic Neo","Malgun Gothic",Arial,sans-serif;
+  font-weight:400;
+  line-height:1.5;
+}
+
 .visit-cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
 .visit-card { border:1.2px solid #000; min-height:300px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; gap:28px; }
 .visit-card h3 { margin:0 0 14px; font-size:25px; }
