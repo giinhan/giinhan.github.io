@@ -222,6 +222,7 @@ h1, h2 { max-width:none; width:100%; white-space:normal; word-break:normal; over
 .section-head, .section-head.single { grid-template-columns:minmax(0,1fr); gap:24px; }
 .section-head > div { min-width:0; width:100%; }
 /* Align main and secondary navigation in the column immediately before VISIT. */
+header.has-subnav { border-bottom:0; }
 .nav {
   display:grid; grid-template-columns:auto minmax(0,1fr) auto;
   grid-template-rows:74px auto; height:auto; min-height:74px;
@@ -235,15 +236,15 @@ h1, h2 { max-width:none; width:100%; white-space:normal; word-break:normal; over
 .nav .nav-cta { grid-column:3; grid-row:1; margin:0; }
 .nav .subnav {
   grid-column:2; grid-row:2; width:100%; min-width:0;
-  justify-content:safe flex-end; margin:0; padding:16px 0;
-  border-top:1px solid var(--line); border-bottom:0;
+  justify-content:safe flex-end; margin:-12px 0 0; padding:8px 0;
+  border:0;
 }
 @media(max-width:900px) {
-  .nav { grid-template-columns:minmax(0,1fr) auto; grid-template-rows:auto auto auto; padding:16px 0; row-gap:12px; }
+  .nav { grid-template-columns:minmax(0,1fr) auto; grid-template-rows:auto auto auto; padding:16px 0; row-gap:6px; }
   .nav .logo { grid-column:1; grid-row:1; }
   .nav .nav-cta { grid-column:2; grid-row:1; }
-  .nav .menu { grid-column:1 / -1; grid-row:2; width:100%; min-width:0; justify-content:safe flex-end; overflow-x:auto; padding:8px 0; }
-  .nav .subnav { grid-column:1 / -1; grid-row:3; padding:12px 0 0; }
+  .nav .menu { grid-column:1 / -1; grid-row:2; width:100%; min-width:0; justify-content:safe flex-end; overflow-x:auto; padding:4px 0; }
+  .nav .subnav { grid-column:1 / -1; grid-row:3; margin:0; padding:6px 0 0; }
 }
 
 /* Keep descriptions on one line; allow reading long copy on narrow screens. */
