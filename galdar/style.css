@@ -221,6 +221,14 @@ footer{padding:72px 0 92px;background:var(--black);color:var(--white)}
 h1, h2 { max-width:none; width:100%; white-space:normal; word-break:normal; overflow-wrap:break-word; text-wrap:wrap; }
 .section-head, .section-head.single { grid-template-columns:minmax(0,1fr); gap:24px; }
 .section-head > div { min-width:0; width:100%; }
+/* Keep descriptions on one line; allow reading long copy on narrow screens. */
+.section-head > p, .detail-hero .wrap > p {
+  max-width:none; width:100%; min-width:0;
+  white-space:nowrap; overflow-x:auto; overflow-y:hidden;
+  scrollbar-width:thin;
+}
+.section-head > p br, .detail-hero .wrap > p br { display:none; }
+
 
 body, button, input, b, strong { font-weight:400; }
 h1, h2, h3, h4, h5, h6 { font-weight:700; }
