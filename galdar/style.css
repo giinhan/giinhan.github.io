@@ -221,6 +221,19 @@ footer{padding:72px 0 92px;background:var(--black);color:var(--white)}
 h1, h2 { max-width:none; width:100%; white-space:normal; word-break:normal; overflow-wrap:break-word; text-wrap:wrap; }
 .section-head, .section-head.single { grid-template-columns:minmax(0,1fr); gap:24px; }
 .section-head > div { min-width:0; width:100%; }
+/* Compact two-column footer: equal halves, matching header wordmark. */
+footer.site-footer { padding:20px 0; min-height:160px; display:flex; align-items:center; }
+.site-footer .footer-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:40px; align-items:start; }
+.site-footer .footer-left, .site-footer .footer-company { min-width:0; }
+.site-footer .footer-logo { display:inline-block; font-family:Arial,Helvetica,sans-serif; font-weight:700; font-size:24px; letter-spacing:-.8px; line-height:1; }
+.site-footer .footer-copy { margin:8px 0 10px; max-width:none; color:rgba(255,255,255,.74); font-size:12px; line-height:1.65; }
+.site-footer .footlinks { display:flex; flex-wrap:wrap; gap:5px 16px; font-size:12px; line-height:1.6; }
+.site-footer .footer-company { font-size:11px; line-height:1.85; color:rgba(255,255,255,.74); overflow-wrap:anywhere; }
+.site-footer .footer-company p { margin:0 0 6px; }
+.site-footer .footer-company p:last-child { margin-bottom:0; }
+.site-footer .footer-company a { text-decoration:underline; text-underline-offset:3px; }
+@media(max-width:700px) { footer.site-footer { min-height:0; padding:24px 0; } .site-footer .footer-grid { grid-template-columns:minmax(0,1fr); gap:24px; } }
+
 .projects .project h3 { margin-top:0; }
 /* Match the supplied GALDAR wordmark with a compact, bold neo-grotesque. */
 .nav .logo {
