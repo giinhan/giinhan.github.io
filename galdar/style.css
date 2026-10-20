@@ -454,20 +454,22 @@ h1, h2, h3, h4, h5, h6,
 .booktalk-controls label { display:block; font-size:12px; }
 .booktalk-controls input,.booktalk-controls select { display:block; width:100%; min-width:0; border:1px solid #aaa; border-radius:0; background:white; color:#000; padding:12px; margin-top:8px; font:inherit; font-size:14px; }
 .booktalk-controls :is(input,select):focus-visible { outline:2px solid #000; outline-offset:2px; }
-.booktalk-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:32px 22px; }
+.booktalk-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:32px 20px; }
 .booktalk-card { min-width:0; border-bottom:1px solid var(--line); padding-bottom:26px; }
 .booktalk-card a { display:flex; flex-direction:column; height:100%; }
 .booktalk-card a:focus-visible { outline:2px solid #000; outline-offset:4px; }
 .booktalk-card img { display:block; width:100%; height:auto; aspect-ratio:1; object-fit:contain; background:#f7f7f7; margin-bottom:18px; }
-.booktalk-meta { display:flex; gap:12px; align-items:center; font-size:11px; color:#666; }
+.booktalk-meta { display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-size:11px; color:#666; }
 .booktalk-status { border:1px solid #999; padding:3px 8px; }
-.booktalk-card h2 { font-size:20px; line-height:1.7; margin:12px 0 20px; overflow-wrap:anywhere; }
+.booktalk-card h2 { font-size:17px; line-height:1.7; margin:12px 0 20px; overflow-wrap:anywhere; }
 .booktalk-card .booktalk-read { font-size:12px; margin-top:auto; text-decoration:underline; text-underline-offset:5px; }
 .booktalk-count { font-size:13px; color:#666; margin:0 0 25px; }
 .booktalk-more { display:block; margin:36px auto 0; }
 .booktalk-empty { padding:40px 0; line-height:1.8; }
 .booktalk-archive [hidden] { display:none !important; }
-@media(max-width:500px) { .booktalk-controls { grid-template-columns:minmax(0,1fr) 110px; gap:12px; } .booktalk-grid { grid-template-columns:minmax(0,1fr); } }
+@media(max-width:1199px) { .booktalk-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:760px) { .booktalk-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:480px) { .booktalk-controls { grid-template-columns:minmax(0,1fr) 110px; gap:12px; } .booktalk-grid { grid-template-columns:minmax(0,1fr); } }
 
 .rental-hero { padding-top:48px; padding-bottom:46px; }
 .rental-hero h1 { font-size:clamp(42px,6vw,76px); margin:16px 0; }
