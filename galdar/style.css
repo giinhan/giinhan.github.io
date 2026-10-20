@@ -469,6 +469,52 @@ h1, h2, h3, h4, h5, h6,
 .booktalk-archive [hidden] { display:none !important; }
 @media(max-width:500px) { .booktalk-controls { grid-template-columns:minmax(0,1fr) 110px; gap:12px; } .booktalk-grid { grid-template-columns:minmax(0,1fr); } }
 
+.rental-hero { padding-top:48px; padding-bottom:46px; }
+.rental-hero h1 { font-size:clamp(42px,6vw,76px); margin:16px 0; }
+.rental-hero > p { font-size:18px; line-height:1.8; margin:0 0 18px; }
+.rental-draft { display:inline-block; font-size:12px; color:#777; }
+.rental-nav { border-top:1px solid #bbb; border-bottom:1px solid #bbb; background:#fff; }
+.rental-nav > div { display:flex; gap:28px; overflow-x:auto; padding:20px 0; white-space:nowrap; font-size:13px; }
+.rental-nav a:hover { text-decoration:underline; text-underline-offset:5px; }
+.rental-content { padding-bottom:70px; }
+.rental-section { padding:64px 0; border-bottom:1px solid var(--line); scroll-margin-top:115px; }
+.rental-section-head { margin-bottom:32px; }
+.rental-section-head h2 { font-size:clamp(28px,3vw,40px); margin:8px 0 12px; }
+.rental-section-head p { font-size:14px; color:#777; line-height:1.8; margin:0; }
+.rental-space-layout { display:grid; grid-template-columns:minmax(0,1.8fr) minmax(0,1fr); gap:50px; align-items:start; }
+.rental-gallery { min-width:0; }
+.rental-photo { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; background:#f1f1ef; color:#888; min-width:0; aspect-ratio:16/10; border:1px solid #e3e3df; }
+.rental-photo-main { aspect-ratio:16/10; }
+.rental-photo span { font-size:12px; letter-spacing:.12em; }
+.rental-photo strong { font-size:23px; font-weight:400; }
+.rental-photo small { font-size:12px; }
+.rental-thumbnails { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+.rental-thumbnails .rental-photo { aspect-ratio:16/7; }
+.rental-space-info > p { font-size:15px; color:#666; line-height:1.9; margin:0 0 24px; }
+.rental-specs { margin:0 0 28px; border-top:1px solid #bbb; }
+.rental-specs > div { display:grid; grid-template-columns:100px minmax(0,1fr); padding:15px 0; border-bottom:1px solid #ddd; gap:14px; font-size:13px; }
+.rental-specs dt { color:#444; }
+.rental-specs dd { margin:0; color:#999; }
+.rental-case-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+.rental-case .rental-photo { margin-bottom:24px; }
+.rental-case h3 { font-size:21px; margin:10px 0; }
+.rental-case p { font-size:13px; color:#888; line-height:1.8; }
+.rental-process { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); list-style:none; padding:0; margin:0; border-top:1px solid #bbb; }
+.rental-process li { padding:25px 20px 10px 0; }
+.rental-process li > span { font-size:26px; color:#999; }
+.rental-process h3 { font-size:17px; margin:20px 0 12px; }
+.rental-process p { font-size:12px; line-height:1.8; color:#888; }
+.rental-resources { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.rental-resources > div { padding:30px; border:1px solid #ccc; }
+.rental-resources h3 { font-size:22px; margin:0 0 16px; }
+.rental-resources p { color:#888; line-height:1.8; font-size:14px; margin-bottom:25px; }
+.rental-resources button:disabled { color:#999; border-color:#ccc; cursor:default; background:#f7f7f7; }
+.rental-frame .visit-contact { margin-top:0; border-top:0; }
+.rental-bottom { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px; font-size:13px; }
+.rental-frame a:focus-visible { outline:2px solid #000; outline-offset:5px; }
+@media(max-width:850px) { .rental-space-layout { grid-template-columns:minmax(0,1fr); gap:28px; } .rental-process { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:600px) { .rental-hero { padding-top:30px; } .rental-nav > div { gap:22px; } .rental-section { padding:40px 0; } .rental-case-grid,.rental-resources { grid-template-columns:minmax(0,1fr); } .rental-process { grid-template-columns:repeat(2,minmax(0,1fr)); } .rental-photo small { font-size:11px; } }
+
 .about-history { padding:0; }
 .about-history > h2 { margin:0 0 48px; }
 .history-entry { display:grid; grid-template-columns:190px minmax(0,1fr); gap:50px; padding:36px 0; border-top:1px solid #bbb; }
