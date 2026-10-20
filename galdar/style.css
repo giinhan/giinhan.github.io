@@ -383,6 +383,8 @@ h1, h2, h3, h4, h5, h6,
 #projects .project-columns { min-height:0; padding:0 0 14px; color:var(--gray-1); font-size:12px; }
 @media(max-width:600px) { #projects .project-columns { grid-template-columns:minmax(0,1fr) 72px minmax(0,1fr) 16px; gap:10px; font-size:10px; } }
 
+#projects .project-more { margin-top:32px; text-align:center; }
+
 .visit-detail-hero .btn { margin-top:24px; }
 .visit-detail { padding-top:64px; padding-bottom:80px; }
 .visit-case-note { color:#666; line-height:1.8; margin:0 0 28px; }
