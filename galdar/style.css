@@ -362,7 +362,7 @@ h1, h2, h3, h4, h5, h6,
 }
 #projects .project-row, #projects .project-columns {
   display:grid; grid-template-columns:minmax(0,1.15fr) minmax(110px,.4fr) minmax(0,1.1fr) 24px;
-  align-items:center; gap:36px; min-height:168px; padding:34px 0;
+  align-items:center; gap:36px; min-height:118px; padding:24px 0;
 }
 #projects .project-row > * { min-width:0; }
 #projects .project h3 { font-size:clamp(21px,2.1vw,30px); line-height:1.5; margin:0; overflow-wrap:anywhere; }
@@ -373,7 +373,7 @@ h1, h2, h3, h4, h5, h6,
 #projects a.project-row:hover { background:#f7f7f7; }
 #projects a.project-row:focus-visible { outline:2px solid #000; outline-offset:5px; }
 @media(max-width:600px) {
-  #projects .project-row { grid-template-columns:minmax(0,1fr) 72px minmax(0,1fr) 16px; gap:10px; min-height:0; padding:26px 0; }
+  #projects .project-row { grid-template-columns:minmax(0,1fr) 72px minmax(0,1fr) 16px; gap:10px; min-height:0; padding:18px 0; }
   #projects .project h3 { font-size:16px; line-height:1.65; }
   #projects .project-category { font-size:10px; letter-spacing:0; overflow-wrap:anywhere; }
   #projects .project p { font-size:12px; line-height:1.7; }
