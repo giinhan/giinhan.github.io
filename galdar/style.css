@@ -269,7 +269,9 @@ footer.site-footer { padding:20px 0; min-height:160px; display:flex; align-items
   line-height:1.5;
 }
 
-.visit-cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.visit-cards { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+@media(min-width:701px) and (max-width:1050px) { .visit-cards { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+#proposal { scroll-margin-top:125px; }
 .visit-card { border:1.2px solid #000; min-height:300px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; gap:28px; }
 .visit-card h3 { margin:0 0 14px; font-size:25px; }
 .visit-card p { margin:0; font-size:14px; line-height:1.75; color:var(--gray-1); }
