@@ -414,6 +414,8 @@ h1, h2, h3, h4, h5, h6,
  .visit-fields { gap:0 14px; }
 }
 
+.visit-case.proposal-placeholder:hover { background:white; }
+
 #archive .archive-card:has(.archive-category-link) { padding:0; }
 .archive-category-link { display:flex; flex-direction:column; height:100%; min-height:240px; padding:27px; }
 .archive-category-link h3 { margin:38px 0 12px; }
