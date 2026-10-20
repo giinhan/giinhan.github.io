@@ -416,6 +416,23 @@ h1, h2, h3, h4, h5, h6,
 
 .visit-case.proposal-placeholder:hover { background:white; }
 
+.group-guide { padding-bottom:54px; margin-bottom:54px; border-bottom:1px solid var(--line); }
+.group-guide-intro { display:grid; grid-template-columns:1fr 1.1fr; gap:60px; margin-bottom:32px; }
+.group-guide h2 { font-size:clamp(28px,3vw,38px); margin:12px 0; }
+.group-guide p { color:#666; line-height:1.9; font-size:15px; }
+.group-guide-photos { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:32px 0 40px; }
+.group-guide-photos img { display:block; width:100%; height:auto; aspect-ratio:3/4; object-fit:cover; }
+.group-guide-programs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+.group-guide-programs article { padding:26px 0; border-top:1px solid #aaa; }
+.group-guide-programs article > span { font-size:13px; color:#888; }
+.group-guide-programs h3 { font-size:21px; margin:16px 0; }
+.group-guide-contact { display:flex; justify-content:space-between; align-items:center; gap:30px; padding:30px; background:#f6f6f3; margin-top:20px; }
+.group-guide-contact h3 { margin:0 0 12px; font-size:23px; }
+.group-guide-contact p { margin:0 0 15px; }
+.group-guide-contact > a { flex-shrink:0; }
+.group-guide-contact div > a { text-decoration:underline; font-size:14px; overflow-wrap:anywhere; }
+@media(max-width:750px) { .group-guide-intro { grid-template-columns:1fr; gap:16px; } .group-guide-photos { grid-template-columns:repeat(2,minmax(0,1fr)); } .group-guide-programs { grid-template-columns:1fr; gap:0; } .group-guide-contact { align-items:start; flex-direction:column; padding:24px; } }
+
 #archive .archive-card:has(.archive-category-link) { padding:0; }
 .archive-category-link { display:flex; flex-direction:column; height:100%; min-height:240px; padding:27px; }
 .archive-category-link h3 { margin:38px 0 12px; }
@@ -518,6 +535,22 @@ h1, h2, h3, h4, h5, h6,
 .rental-frame a:focus-visible { outline:2px solid #000; outline-offset:5px; }
 @media(max-width:850px) { .rental-space-layout { grid-template-columns:minmax(0,1fr); gap:28px; } .rental-process { grid-template-columns:repeat(3,minmax(0,1fr)); } }
 @media(max-width:600px) { .rental-hero { padding-top:30px; } .rental-nav > div { gap:22px; } .rental-section { padding:40px 0; } .rental-case-grid,.rental-resources { grid-template-columns:minmax(0,1fr); } .rental-process { grid-template-columns:repeat(2,minmax(0,1fr)); } .rental-photo small { font-size:11px; } }
+
+.rental-guide-photo { display:block; background:#f4f4f1; }
+.rental-guide-photo img { display:block; width:100%; height:auto; aspect-ratio:4/3; object-fit:contain; }
+.rental-guide-photo-main img { aspect-ratio:16/11; }
+.rental-specs dd { color:#555; line-height:1.8; }
+.rental-specs dt { line-height:1.8; }
+.rental-case-image { display:block; width:100%; height:auto; aspect-ratio:4/3; object-fit:contain; background:#f4f4f1; margin-bottom:20px; }
+.rental-case-read { display:inline-block; font-size:12px; text-decoration:underline; text-underline-offset:5px; margin-top:12px; }
+.rental-process-three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.rental-building-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+.rental-building-grid article { padding:26px; border:1px solid #ccc; }
+.rental-building-grid h3 { font-size:20px; margin:15px 0; }
+.rental-building-grid p { font-size:14px; color:#666; line-height:1.9; }
+.house-access-note { font-size:14px; color:#555; line-height:1.9; margin:26px 0 0; }
+.house-guide-sources { display:flex; flex-wrap:wrap; gap:24px; margin-top:20px; }
+@media(max-width:600px) { .rental-building-grid,.rental-process-three { grid-template-columns:minmax(0,1fr); } .rental-process-three li { padding-bottom:20px; border-bottom:1px solid #ddd; } }
 
 #collab .studio-proposal { margin:0 0 30px; }
 #collab .studio-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; border:0; margin-top:48px; }
