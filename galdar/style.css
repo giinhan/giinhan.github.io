@@ -362,7 +362,7 @@ h1, h2, h3, h4, h5, h6,
   padding:0; margin:0; border-right:0; border-bottom:1px solid var(--line);
 }
 #projects .project-row, #projects .project-columns {
-  display:grid; grid-template-columns:minmax(200px,1.1fr) 56px minmax(100px,.5fr) minmax(240px,1.3fr) 138px;
+  display:grid; grid-template-columns:minmax(200px,1.1fr) 76px minmax(100px,.5fr) minmax(240px,1.3fr) 138px;
   align-items:center; gap:24px; min-height:118px; padding:24px 0;
 }
 #projects .project-row > * { min-width:0; }
@@ -376,6 +376,15 @@ h1, h2, h3, h4, h5, h6,
 #projects a.project-row:focus-visible { outline:2px solid #000; outline-offset:-2px; }
 #projects .project-columns { min-width:940px; min-height:0; padding:0 0 14px; color:var(--gray-1); font-size:12px; }
 #projects .project-more { margin-top:32px; text-align:center; }
+
+#projects .project-sort-heading { display:flex; align-items:center; gap:4px; color:#000; white-space:nowrap; }
+#projects .project-sort { display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; width:36px; height:36px; padding:0; border:0; border-radius:0; background:transparent; color:#000; cursor:pointer; }
+#projects .project-sort-triangle { display:block; width:0; height:0; border-left:7px solid transparent; border-right:7px solid transparent; border-top:10px solid #000; }
+#projects .project-sort[data-direction="ascending"] .project-sort-triangle { transform:rotate(180deg); }
+#projects .project-sort:hover, #projects .project-sort[aria-pressed="true"] { background:#ededed; }
+#projects .project-sort:focus-visible { outline:2px solid #000; outline-offset:2px; }
+#projects .project-sort-status { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+@media(pointer:coarse) { #projects .project-sort { min-height:44px; } }
 
 .visit-detail-hero .btn { margin-top:24px; }
 .visit-detail { padding-top:64px; padding-bottom:80px; }
