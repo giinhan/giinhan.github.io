@@ -363,7 +363,7 @@ h1, h2, h3, h4, h5, h6,
 }
 #projects .project-row, #projects .project-columns {
   display:grid; grid-template-columns:minmax(200px,1.1fr) 76px minmax(100px,.5fr) minmax(240px,1.3fr) 138px;
-  align-items:center; gap:24px; min-height:118px; padding:24px 0;
+  align-items:center; gap:24px; min-height:94px; padding:19px 0;
 }
 #projects .project-row > * { min-width:0; }
 #projects .project h3 { font-size:clamp(21px,2.1vw,30px); line-height:1.5; margin:0; overflow-wrap:anywhere; }
