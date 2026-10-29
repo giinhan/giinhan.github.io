@@ -3,7 +3,8 @@
   const columns = {
     title: { selector: '.project-identity h3', label: '프로젝트명' },
     year: { selector: '.project-year', label: '연도' },
-    keyword: { selector: '.project-keyword', label: '키워드' }
+    keyword: { selector: '.project-keyword', label: '키워드' },
+    category: { selector: '.project-category', label: '구분' }
   };
   document.querySelectorAll('#projects').forEach(section => {
     const list = section.querySelector('.projects');

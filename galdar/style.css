@@ -502,16 +502,10 @@ h1, h2, h3, h4, h5, h6,
 .travel-original td,.travel-original th { border:1px solid #ccc; padding:10px; }
 .travel-original a { text-decoration:underline; text-underline-offset:4px; }
 
-.club-travel-menu { font-size:13px; line-height:1.7; }
-.club-travel-menu summary { padding:12px 0; cursor:pointer; }
-.club-travel-menu summary:hover { text-decoration:underline; text-underline-offset:6px; }
-.club-travel-children { margin:0 0 12px 8px; padding-left:16px; border-left:1px solid var(--line); }
-.club-travel-children a { font-size:12px; padding:8px 0; }
 .science-travel-categories { padding:36px 0 60px; }
 .science-travel-categories .cards { grid-template-columns:repeat(3,minmax(0,1fr)); }
 .science-travel-categories .card h2 { font-size:24px; }
 .travel-card-more { display:block; font-size:12px; margin-top:28px; text-decoration:underline; text-underline-offset:4px; }
-@media(max-width:900px) { .club-travel-menu { flex-basis:100%; } .club-travel-children { display:flex; flex-wrap:wrap; gap:4px 22px; } }
 @media(max-width:760px) { .science-travel-categories .cards { grid-template-columns:1fr; } }
 
 .rental-hero { padding-top:48px; padding-bottom:46px; }
