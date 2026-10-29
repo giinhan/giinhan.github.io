@@ -492,6 +492,15 @@ h1, h2, h3, h4, h5, h6,
 @media(max-width:760px) { .booktalk-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:480px) { .booktalk-controls { grid-template-columns:minmax(0,1fr) 110px; gap:12px; } .booktalk-grid { grid-template-columns:minmax(0,1fr); } }
 
+.travel-detail { padding:40px 0; }
+.travel-detail .content-image { display:block; width:auto; max-width:100%; height:auto; margin:24px auto; }
+.travel-gallery { display:grid; gap:24px; }
+.travel-gallery .content-image { margin:0 auto; }
+.travel-original { overflow-wrap:anywhere; }
+.travel-original table { width:100%; border-collapse:collapse; }
+.travel-original td,.travel-original th { border:1px solid #ccc; padding:10px; }
+.travel-original a { text-decoration:underline; text-underline-offset:4px; }
+
 .rental-hero { padding-top:48px; padding-bottom:46px; }
 .rental-hero h1 { font-size:clamp(42px,6vw,76px); margin:16px 0; }
 .rental-hero > p { font-size:18px; line-height:1.8; margin:0 0 18px; }
