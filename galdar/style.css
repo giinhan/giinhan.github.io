@@ -573,11 +573,12 @@ h1, h2, h3, h4, h5, h6,
 .rental-resources .source { display:inline-block; margin-top:16px; }
 
 #collab .studio-proposal { margin:0 0 30px; }
-#collab .studio-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; border:0; margin-top:48px; }
+#collab .studio-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; border:0; margin-top:48px; }
 #collab .studio-card { min-height:240px; border:1.2px solid #000; padding:0; }
 #collab .studio-card .type { font-size:11px; }
 #collab .studio-card h3 { margin:38px 0 12px; }
-#collab .studio-unlinked:hover { background:white; }
+#collab .studio-card .studio-card-description { font-size:13px; line-height:1.8; margin:0; color:#555; }
+@media(min-width:701px) and (max-width:1000px) { #collab .studio-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:700px) { #collab .studio-grid { grid-template-columns:minmax(0,1fr); } }
 
 .about-history { padding:0; }
