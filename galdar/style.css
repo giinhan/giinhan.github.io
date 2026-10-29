@@ -579,6 +579,7 @@ h1, h2, h3, h4, h5, h6,
 .about-history > h2 { margin:0 0 48px; }
 .history-entry { display:grid; grid-template-columns:190px minmax(0,1fr); gap:50px; padding:28.8px 0; border-top:1px solid #bbb; }
 .history-entry h3 { margin:0; font-size:30.4px; }
+#history-ongoing { white-space:nowrap; }
 .history-content { line-height:1.56; font-size:16px; padding-top:9.6px; }
 .history-content p { margin:0 0 11.2px; }
 .history-content ul { list-style:none; padding:0; margin:0; }
