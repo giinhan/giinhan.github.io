@@ -576,6 +576,8 @@ h1, h2, h3, h4, h5, h6,
 @media(max-width:700px) { #collab .studio-grid { grid-template-columns:minmax(0,1fr); } }
 
 .about-history { padding:0; }
+#about .process { margin-bottom:80px; }
+#about .section-head p { white-space:normal; overflow:visible; max-width:none; }
 .about-history > h2 { margin:0 0 48px; }
 .history-entry { display:grid; grid-template-columns:190px minmax(0,1fr); gap:50px; padding:28.8px 0; border-top:1px solid #bbb; }
 .history-entry h3 { margin:0; font-size:30.4px; }
