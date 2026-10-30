@@ -5,7 +5,7 @@
 
 .portfolio{margin-top:clamp(56px,8cqi,100px)}.portfolio-heading{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:24px}.portfolio-heading h2{font-size:clamp(16px,2cqi,24px);letter-spacing:-.04em;margin:0}.portfolio-heading>span{font-size:12px;color:#737373}
 .portfolio-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2cqi,28px)}
-.portfolio-card{position:relative;display:flex;flex-direction:column;aspect-ratio:3 / 4.15;min-width:0;padding:clamp(14px,2cqi,28px);overflow:hidden;border-radius:clamp(14px,2cqi,24px);background:#ededed;color:#080808;transition:background-color .2s,color .2s}
+.portfolio-card{position:relative;display:flex;flex-direction:column;aspect-ratio:3 / 4.15;min-width:0;padding:clamp(14px,2cqi,28px);overflow:hidden;border-radius:0;background:#ededed;color:#080808;transition:background-color .2s,color .2s}
 .portfolio-category{display:block;font-size:clamp(11px,1.2cqi,15px);color:#737373;margin-bottom:6px}.portfolio-meta h3{font-size:clamp(14px,1.65cqi,21px);line-height:1.3;letter-spacing:-.045em;font-weight:600;margin:0;word-break:keep-all;overflow-wrap:anywhere}
 .portfolio-hover-title{text-align:center;position:absolute;left:clamp(14px,2cqi,28px);right:clamp(14px,2cqi,28px);top:48%;transform:translateY(-50%);font-size:clamp(18px,2.2cqi,30px);font-weight:600;line-height:1.15;letter-spacing:-.04em;word-break:keep-all;overflow-wrap:anywhere;opacity:0}
 .portfolio-cta{margin-top:auto;padding:8px 10px;border-radius:100px;text-align:center;font-size:clamp(11px,1.3cqi,16px);background:#fff;color:#000;display:none}
