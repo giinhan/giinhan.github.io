@@ -15,7 +15,7 @@
 <main class="stage" id="stage" aria-label="BOX8 메뉴"></main>
 <footer><span>Eight boxes. Infinite possibilities.</span><span>© BOX8</span></footer>
 <script>
-const menus=[{id:'about',label:'about',color:'#e399b6'},{id:'project',label:'project',color:'#c9c9c9'},{id:'shop',label:'shop',color:'#ffb20b'},{id:'vhs',label:'VHS',color:'#1300fa'},{id:'the-screen',label:'THE SCREEN',color:'#c94cf3'},{id:'studio-box8',label:'STUDIO BOX8',color:'#bf302c'},{id:'whats-your-genre',label:"what’s your genre",color:'#85cada'},{id:'cinema-mapping',label:'cinema mapping',color:'#f45529'}];
+const menus=[{id:'about',label:'ABOUT',color:'#e399b6'},{id:'project',label:'PROJECT',color:'#c9c9c9'},{id:'shop',label:'SHOP',color:'#ffb20b'},{id:'vhs',label:'VHS',color:'#1300fa'},{id:'the-screen',label:'THE SCREEN',color:'#c94cf3'},{id:'studio-box8',label:'STUDIO BOX8',color:'#bf302c'},{id:'whats-your-genre',label:"what’s your genre",color:'#85cada'},{id:'cinema-mapping',label:'cinema mapping',color:'#f45529'}];
 const stage=document.querySelector('#stage');
 menus.forEach((menu,index)=>{const button=document.createElement('a');button.className='tile';button.dataset.id=menu.id;button.style.background=menu.color;const number=document.createElement('small');number.textContent=String(index+1).padStart(2,'0');const label=document.createElement('span');label.textContent=menu.label;button.append(number,label);button.href='./'+menu.id+'/';stage.append(button)});
 
