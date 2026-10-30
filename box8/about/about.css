@@ -14,3 +14,7 @@
 .about-card[href="../vhs/"]{--card-color:#1300fa;--card-text:#fff}
 .about-card[href="../project/"]{--card-color:#c9c9c9}
 .about-card[href="../studio-box8/"]{--card-color:#bf302c}
+
+/* Use the whole viewport ratio to choose four, two, or one columns. */
+@media(max-aspect-ratio:1 / 1){.about-menus{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-aspect-ratio:2 / 3){.about-menus{grid-template-columns:minmax(0,1fr)}}
