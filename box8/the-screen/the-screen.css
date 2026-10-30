@@ -1,0 +1,5 @@
+.page-content{container-type:inline-size;max-width:1200px;padding-right:clamp(12px,2.5vw,40px);padding-bottom:100px}
+.screen-intro{padding-top:8px}.screen-logo{display:block;width:clamp(60px,9cqi,90px);height:auto;margin-bottom:36px}
+.screen-intro p{margin:0;max-width:900px;font-size:clamp(15px,2cqi,22px);line-height:1.85;letter-spacing:-.035em;word-break:keep-all;overflow-wrap:break-word}
+.screen-social{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:30px}.screen-social a{display:inline-flex;align-items:center;gap:10px;max-width:100%;padding:8px 10px;font-size:clamp(14px,1.8cqi,20px);line-height:1.4;overflow-wrap:anywhere}.screen-social img{flex-shrink:0}.screen-social a:hover,.screen-social a:focus-visible{background:#c94cf3;color:#fff;text-decoration:none}.screen-social a:hover img,.screen-social a:focus-visible img{filter:brightness(0) invert(1)}
+@container(max-width:360px){.screen-social a{gap:7px}.screen-social img{width:20px;height:20px}}
