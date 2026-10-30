@@ -1,0 +1,4 @@
+.page-content{container-type:inline-size;max-width:1200px;padding-right:clamp(12px,2.5vw,40px);padding-bottom:100px}
+.project-intro{padding-top:8px}.project-intro h1{font-size:clamp(24px,3.6cqi,42px);font-weight:600;line-height:1.2;letter-spacing:-.045em;margin:0 0 28px;overflow-wrap:break-word}
+.project-intro p{margin:0;max-width:900px;font-size:clamp(15px,2cqi,22px);line-height:1.85;letter-spacing:-.035em;word-break:keep-all;overflow-wrap:break-word}
+.project-video{display:block;width:100%;height:auto;aspect-ratio:16 / 9;object-fit:contain;margin-top:clamp(32px,5cqi,64px);background:#000}
