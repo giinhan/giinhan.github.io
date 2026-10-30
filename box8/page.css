@@ -1,5 +1,5 @@
 /* Shared layout for BOX8 menu pages. */
-:root{font-family:Arial,Helvetica,sans-serif;color:#171717;background:#f4f4f2;color-scheme:light;--edge:clamp(20px,2.8vw,48px);--rail:clamp(180px,24vw,340px)}
+:root{font-family:Arial,Helvetica,sans-serif;color:#171717;background:#ffffff;color-scheme:light;--edge:clamp(20px,2.8vw,48px);--rail:clamp(180px,24vw,340px)}
 *{box-sizing:border-box}body{margin:0;min-height:100svh}a{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}a:focus-visible{outline:2px solid #171717;outline-offset:6px}
 .page-content{width:calc(100% - var(--rail) - var(--edge)*2);min-height:100svh;margin-left:var(--edge);padding:28px 0 80px}
 .page-nav{position:fixed;z-index:10;top:27px;right:var(--edge);width:var(--rail);display:flex;flex-direction:column;align-items:flex-end;gap:3px;max-height:calc(100svh - 130px);overflow-y:auto;scrollbar-width:thin}
