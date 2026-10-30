@@ -4,13 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#ffffff">
-<title>what’s your genre — BOX8</title>
+<meta name="description" content="8개의 질문으로 찾는 나의 멜로 탐험 경로. VHS 필드맵 01. MELO와 함께 당신의 취향을 발견하세요.">
+<title>01. MELO — what’s your genre — BOX8</title>
 <link rel="stylesheet" href="../page.css">
+<link rel="stylesheet" href="./melo.css">
+<script src="./melo-data.js" defer></script>
+<script src="./melo.js" defer></script>
 </head>
 <body>
 <main class="page-content" id="content" aria-label="what’s your genre 콘텐츠">
-<h1 class="sr-only">what’s your genre</h1>
-<!-- 이 영역에 메뉴별 콘텐츠를 추가합니다. -->
+<div class="melo-shell">
+<header class="masthead"><a href="./" aria-label="what’s your genre 처음으로">WHAT’S YOUR GENRE?</a><span>VHS / FIELD TEST 01</span></header>
+<section id="intro" aria-labelledby="intro-title">
+<div class="hero-poster">
+<div class="poster-meta"><span>VIVA HERITAGE SERIES</span><span>VOL. 01</span></div>
+<h1 id="intro-title">MELO<span>MELO</span>MELO</h1>
+<div class="poster-caption"><span>사랑이라는 우주,<br>당신은 어디로 향하나요?</span><span class="round-stamp">8 QUESTIONS<br>4 ROUTES<br>YOUR CHOICE ↗</span></div>
+</div>
+<div class="intro-copy"><p class="eyebrow">01. MELO / 나의 멜로 경로 찾기</p><h2>당신의 마음이<br>다음 장면을 고릅니다.</h2><p>설렘도, 분노도, 눈물도, 그리움도 모두 환영합니다.<br>지금의 나에게 가장 끌리는 문장을 골라보세요.</p><p class="muted">총 8문항 · 약 3분<br>정답은 없습니다. 매 질문에서 가장 가까운 답 하나를 선택하세요.</p><button class="primary" id="start" type="button">나의 멜로 탐험 시작하기 <span aria-hidden="true">↗</span></button></div>
+<details class="editorial"><summary>멜로라는 우주를 탐험하는 법 <span aria-hidden="true">＋</span></summary><div><h3>네 갈래의 길, 하나의 출발점</h3><p>어떤 길은 당신을 설렘으로 이끌고, 어떤 길은 자신을 마주하게 만들고, 어떤 길은 경고를 울리고, 어떤 길은 고독을 허락할 겁니다.</p><p>여덟 번의 선택에서 가장 많이 닿은 경로를 추천합니다. 같은 점수의 경로가 있다면 함께 안내합니다. 하나의 타입으로 당신을 단정하기보다, 지금의 감정이 이끄는 영화 탐험의 출발점을 찾아보세요.</p><h3>VHS 멜로 필드맵</h3><p id="fieldmap-intro"></p><h3>멜로, 그 말의 시작</h3><p>그리스어 ‘Melos(노래)’와 ‘Drama(연극)’의 합성어로 음악이 있는 드라마라는 뜻. 19세기 드라마틱한 음악 반주로 감정을 과장되게 표현한 감성적이고 통속적인 연극을 의미합니다. 한국에서는 주로 로맨스를 뜻합니다.</p></div></details>
+</section>
+<section id="quiz" hidden aria-labelledby="question-title">
+<div class="quiz-meta"><span>MELO / ROUTE FINDER</span><span id="step"></span></div>
+<progress id="progress" max="8" value="0" aria-label="답변 완료 문항 수"></progress>
+<form id="question-form"><fieldset><legend id="question-title" tabindex="-1"></legend><p class="question-hint">지금의 나에게 가장 가까운 문장 하나를 골라주세요.</p><div id="choices"></div></fieldset><div class="quiz-actions"><button type="button" class="secondary" id="previous">← 이전 질문</button><button type="submit" class="primary" id="next" disabled>다음 질문 →</button></div></form>
+<button class="text-button" id="restart" type="button">처음부터 다시 시작</button>
+</section>
+<section id="result" hidden aria-labelledby="result-title"><p class="eyebrow">YOUR MELO ROUTE / 탐험 준비 완료</p><h2 id="result-title" tabindex="-1"></h2><p id="result-intro"></p><div id="route-results"></div><div class="score-panel"><h3>여덟 번의 선택이 그린 지도</h3><div id="scores"></div><p class="muted">각 답변은 해당 경로에 1표로 반영됩니다.<br>지금의 영화 취향을 위한 가이드입니다.</p></div><details class="editorial"><summary>아직 끝나지 않은 길, HIDDEN ROUTE <span aria-hidden="true">＋</span></summary><div><p id="hidden-route"></p></div></details><div class="result-actions"><button type="button" id="retry" class="primary">다시 탐험하기 ↺</button><button type="button" id="share" class="secondary">결과 링크 복사 ↗</button></div><p id="share-status" role="status"></p><a class="shop-link" href="https://www.viva-heritage-series.com/shop_view?idx=1" target="_blank" rel="noopener noreferrer">VHS FIELD MAP 01. MELO 만나보기 ↗</a></section>
+<footer class="melo-footer"><span>VIVA HERITAGE SERIES</span><span>당신의 장르를 확장하는 탐험</span></footer>
+<noscript><p class="noscript">테스트를 시작하려면 브라우저에서 JavaScript를 켜주세요.</p></noscript>
+</div>
 </main>
 <nav class="page-nav" aria-label="BOX8 메뉴">
 <a href="../about/" style="--menu-color:#e399b6">ABOUT</a>
