@@ -11,7 +11,7 @@
   let limit = batch;
   const normalize = value => value.normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g, ' ').trim();
   function render() {
-    const query = normalize(search.value);
+    const query = normalize(search ? search.value : '');
     const matches = cards.filter(card => (!year.value || card.dataset.year === year.value) && normalize(card.dataset.title).includes(query));
     const shown = new Set(matches.slice(0, limit));
     cards.forEach(card => { card.hidden = !shown.has(card); });
@@ -20,7 +20,7 @@
     more.hidden = matches.length <= limit;
   }
   function reset() { limit = batch; render(); }
-  search.addEventListener('input', reset);
+  if (search) search.addEventListener('input', reset);
   year.addEventListener('change', reset);
   more.addEventListener('click', () => { limit += batch; render(); });
   render();
