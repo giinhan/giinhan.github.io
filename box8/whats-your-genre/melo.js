@@ -115,7 +115,7 @@ if (typeof document !== 'undefined') {
       get('choices').append(label);
     });
     get('previous').textContent = current === 0 ? '← 시작 화면' : '← 이전 질문';
-    get('next').textContent = current === 7 ? '나의 경로 확인하기 ↗' : '다음 질문 →';
+    get('next').textContent = current === 7 ? '나의 경로 확인하기' : '다음 질문 →';
     get('next').disabled = !answers[current];
     showScreen('quiz', 'question-title');
   }
