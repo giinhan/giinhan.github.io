@@ -7,7 +7,7 @@
   const count = root.querySelector('[data-booktalk-count]');
   const empty = root.querySelector('[data-booktalk-empty]');
   const more = root.querySelector('[data-booktalk-more]');
-  const batch = 24;
+  const batch = root.hasAttribute('data-show-all') ? cards.length : 24;
   let limit = batch;
   const normalize = value => value.normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g, ' ').trim();
   function render() {
