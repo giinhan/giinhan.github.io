@@ -1,0 +1,11 @@
+/* About content stays in the left column, beside the fixed site navigation. */
+.page-content{container-type:inline-size;max-width:1200px;padding-right:clamp(12px,2vw,36px);padding-bottom:80px}
+.about-intro{padding-top:12px}.about-logo{display:block;width:min(300px,80%);height:auto;margin-bottom:clamp(36px,5vw,76px)}
+.about-intro h1{font-size:clamp(28px,4.4vw,72px);font-weight:700;line-height:1.04;letter-spacing:-.055em;margin:0 0 32px;overflow-wrap:anywhere}
+.about-intro>p{max-width:900px;margin:0;font-size:clamp(16px,1.55vw,24px);line-height:1.85;letter-spacing:-.035em;word-break:keep-all;overflow-wrap:break-word}
+.about-menus{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,2vw,28px);margin-top:clamp(40px,5vw,80px)}
+.about-card{aspect-ratio:1;min-width:0;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:20px;padding:clamp(16px,2.6vw,40px);border:1px solid #dedede;background:#fff;transition:border-color .2s}
+.about-card:hover{border-color:#171717}.card-logo{min-height:0;display:flex;align-items:center;justify-content:center}.card-logo img{display:block;width:85%;height:100%;max-height:100%;object-fit:contain}.card-logo .screen-logo{width:65%}
+.about-card p{margin:0;font-size:clamp(14px,1.3vw,21px);line-height:1.55;letter-spacing:-.035em;word-break:keep-all;overflow-wrap:break-word}
+@container(max-width:480px){.about-menus{grid-template-columns:1fr}.about-intro h1{font-size:clamp(25px,8cqi,40px)}.about-card{padding:16px;gap:12px}.about-card p{font-size:14px}.about-logo{width:90%}}
+@media(prefers-reduced-motion:reduce){.about-card{transition:none}}
