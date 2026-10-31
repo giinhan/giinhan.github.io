@@ -1,0 +1,12 @@
+.cult-shell{--pink:#d5e455;--blush:#f1f5ce}
+.cult-shell .eyebrow,.cult-shell .answer-number{color:#526200}
+.cult-shell .primary,.cult-shell .secondary{border-color:#a5b175}
+.cult-shell .secondary:hover{color:#526200}
+.cult-shell .editorial{border-color:#ced5b2}
+.cult-shell .answer-box{border-color:#c4cbac}
+.cult-shell .answer input:checked+.answer-box{border-color:#617000}
+.cult-shell .answer input:checked+.answer-box .answer-number{color:#526200}
+.cult-shell .route-card .editorial,.cult-shell .route-card .movie-heading{border-color:#b9c38c}
+.cult-shell .route-card .editorial p{color:#3d4528}
+.cult-shell .score-track,.cult-shell progress,.cult-shell progress::-webkit-progress-bar{background:#edf0de}
+.cult-shell .hero-poster h1{margin:36px 0 42px}

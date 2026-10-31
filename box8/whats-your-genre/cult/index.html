@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="8개의 질문으로 찾는 나의 컬트 탐험 경로. VHS 필드맵 02. CULT와 함께 당신의 취향을 발견하세요.">
+<title>02. CULT — what’s your genre — BOX8</title>
+<link rel="stylesheet" href="../../page.css?v=6a79234601">
+<link rel="stylesheet" href="../melo.css?v=5924952dad">
+<script src="./cult-data.js?v=8b45d0c750" defer></script>
+<script src="./cult.js?v=df9ddacef7" defer></script>
+<link rel="stylesheet" href="../../logo-motion.css?v=28f18e9abb">
+<link rel="stylesheet" href="./cult.css?v=762065e227">
+<link rel="stylesheet" href="../genre-switch.css?v=086c07691e">
+</head>
+<body>
+<main class="page-content" id="content" aria-label="what’s your genre 콘텐츠">
+<div class="melo-shell cult-shell">
+<header class="masthead"><a href="./" aria-label="what’s your genre 처음으로">WHAT’S YOUR GENRE?</a><span>VHS / FIELD TEST 02</span></header>
+<nav class="genre-switch" aria-label="장르 테스트 선택"><a href="../">01. MELO</a><a href="./" aria-current="page">02. CULT</a></nav>
+<section id="intro" aria-labelledby="intro-title">
+<div class="hero-poster">
+<div class="poster-meta"><span>VIVA HERITAGE SERIES</span><span>VOL. 02</span></div>
+<h1 id="intro-title"><img src="./cult-lettering.svg?v=72f9cc41c7" width="274" height="172" alt="CULT"></h1>
+<div class="poster-caption"><span>낯설수록 끌리는 세계,<br>당신은 어디로 향하나요?</span><span class="round-stamp">8 QUESTIONS<br>4 ROUTES<br>YOUR CHOICE</span></div>
+</div>
+<div class="intro-copy"><p class="eyebrow">02. CULT / 나의 컬트 경로 찾기</p><h2>당신의 이상한 취향이<br>다음 세계를 엽니다.</h2><p>기괴함도, 반항도, 거친 감각도, 낯선 실험도 환영합니다.<br>지금의 나에게 가장 끌리는 문장을 골라보세요.</p><p class="muted">총 8문항 · 약 3분<br>정답은 없습니다. 매 질문에서 가장 가까운 답 하나를 선택하세요.</p><button class="primary" id="start" type="button">나의 컬트 탐험 시작하기</button></div>
+<details class="editorial"><summary>컬트라는 우주를 탐험하는 법 <span aria-hidden="true">＋</span></summary><div><h3>네 갈래의 길, 하나의 출발점</h3><p>어떤 길은 기이한 잔상으로, 어떤 길은 반항으로, 어떤 길은 B급 감성으로, 어떤 길은 장르를 깨는 실험으로 이어집니다.</p><p>여덟 번의 선택에서 가장 많이 닿은 경로를 추천합니다. 같은 점수의 경로가 있다면 함께 안내합니다. 하나의 타입으로 당신을 단정하기보다, 지금의 감정이 이끄는 영화 탐험의 출발점을 찾아보세요.</p><h3>VHS 컬트 필드맵</h3><p id="fieldmap-intro"></p><h3>컬트, 그 말의 시작</h3><p>라틴어 ‘Cultus’(종교적 숭배)에서 유래한 말. 컬트 영화는 특정 장르나 형식보다 하나의 현상에 가깝습니다. 주류의 전형성을 깨는 새로운 도전으로, 특정 관객층의 열렬한 지지를 얻은 영화를 뜻합니다.</p></div></details>
+</section>
+<section id="quiz" hidden aria-labelledby="question-title">
+<div class="quiz-meta"><span>CULT / ROUTE FINDER</span><span id="step"></span></div>
+<progress id="progress" max="8" value="0" aria-label="답변 완료 문항 수"></progress>
+<form id="question-form"><fieldset><legend id="question-title" tabindex="-1"></legend><p class="question-hint">지금의 나에게 가장 가까운 문장 하나를 골라주세요.</p><div id="choices"></div></fieldset><div class="quiz-actions"><button type="button" class="secondary" id="previous">← 이전 질문</button><button type="submit" class="primary" id="next" disabled>다음 질문 →</button></div></form>
+<button class="text-button" id="restart" type="button">처음부터 다시 시작</button>
+</section>
+<section id="result" hidden aria-labelledby="result-title"><p class="eyebrow">YOUR CULT ROUTE / 탐험 준비 완료</p><h2 id="result-title" tabindex="-1"></h2><p id="result-intro"></p><div id="route-results"></div><div class="score-panel"><h3>여덟 번의 선택이 그린 지도</h3><div id="scores"></div><p class="muted">각 답변은 해당 경로에 1표로 반영됩니다.<br>지금의 영화 취향을 위한 가이드입니다.</p></div><details class="editorial"><summary>아직 끝나지 않은 길, HIDDEN ROUTE <span aria-hidden="true">＋</span></summary><div><p id="hidden-route"></p></div></details><div class="result-actions"><button type="button" id="retry" class="primary">다시 탐험하기 ↺</button><button type="button" id="share" class="secondary">결과 링크 복사</button></div><p id="share-status" role="status"></p><a class="shop-link" href="https://www.viva-heritage-series.com/shop_view?idx=2" target="_blank" rel="noopener noreferrer">VHS FIELD MAP 02. CULT 만나보기</a></section>
+<footer class="melo-footer"><span>VIVA HERITAGE SERIES</span><span>당신의 장르를 확장하는 탐험</span></footer>
+<noscript><p class="noscript">테스트를 시작하려면 브라우저에서 JavaScript를 켜주세요.</p></noscript>
+</div>
+</main>
+<nav class="page-nav" aria-label="BOX8 메뉴">
+<a href="../../about/" style="--menu-color:#e399b6">ABOUT</a>
+<a href="../../the-screen/" style="--menu-color:#c94cf3">THE SCREEN</a>
+<a href="../../vhs/" style="--menu-color:#1300fa">VHS</a>
+<a href="../../project/" style="--menu-color:#c9c9c9">PROJECT</a>
+<a href="../../studio-box8/" style="--menu-color:#bf302c">STUDIO BOX8</a>
+<a href="../../shop/" style="--menu-color:#ffb20b">SHOP</a>
+<a href="../../whats-your-genre/" style="--menu-color:#85cada" aria-current="page">what’s your genre</a>
+<a href="../../cinema-mapping/" style="--menu-color:#f45529">cinema mapping</a>
+</nav>
+<a class="page-logo logo-motion" href="../../" aria-label="BOX8 메인으로 돌아가기"><span class="logo-art"><img class="logo-fixed" src="../../img/logo_box8.png" width="672" height="232" alt="BOX8"><img class="logo-eight" aria-hidden="true" src="../../img/logo_box8.png" width="672" height="232" alt=""></span></a>
+</body>
+</html>
