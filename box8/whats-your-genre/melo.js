@@ -2,15 +2,16 @@
 
 const ROUTE_IDS = ['A', 'B', 'C', 'D'];
 // Each row uses one original blue answer per route. Every answer appears once.
+// Follow the journey from choosing a film to the feelings after watching.
 const QUESTION_PLAN = [
+  { title: '멜로 영화 비디오 코너에 서성이는 마음을 설명해줘.', picks: [3, 4, 6, 6] },
+  { title: '멜로 영화에 손에 가는 이유가 뭐야?', picks: [2, 7, 2, 7] },
+  { title: '당신의 연애는 어떤 모습이야?', picks: [7, 3, 7, 3] },
   { title: '오늘 멜로 영화를 고르는 당신에게, 가장 필요한 것은?', picks: [0, 2, 5, 0] },
   { title: '멜로 영화의 서사 중에서 가장 좋아하는 종류는 어떤거야?', picks: [4, 0, 1, 5] },
-  { title: '영화가 끝났어. 어떤 마음이 들면 좋아?', picks: [6, 1, 0, 1] },
-  { title: '멜로 영화 비디오 코너에 서성이는 마음을 설명해줘.', picks: [3, 4, 6, 6] },
-  { title: '영화 속 멜로에서 느끼고 싶은 감정은 뭐야?', picks: [1, 5, 4, 4] },
   { title: '멜로 영화에 기대하는 게 뭐야?', picks: [5, 6, 3, 2] },
-  { title: '멜로 영화에 손에 가는 이유가 뭐야?', picks: [2, 7, 2, 7] },
-  { title: '당신의 연애는 어떤 모습이야?', picks: [7, 3, 7, 3] }
+  { title: '영화 속 멜로에서 느끼고 싶은 감정은 뭐야?', picks: [1, 5, 4, 4] },
+  { title: '영화가 끝났어. 어떤 마음이 들면 좋아?', picks: [6, 1, 0, 1] }
 ];
 const ROUTE_SUMMARIES = {
   A: '“아— 연애하고 싶다!” 잠들어 있던 연애 세포를 깨우는 길. 설레는 만남과 진심 어린 사랑을 따라가다 보면, 사랑받기 충분한 나를 다시 믿게 될 거예요.',
@@ -29,14 +30,14 @@ function shuffle(items, random = Math.random) {
 }
 
 function buildQuestionSet(random = Math.random) {
-  return shuffle(QUESTION_PLAN.map((question, id) => ({
+  return QUESTION_PLAN.map((question, id) => ({
     id,
     title: question.title,
     options: shuffle(ROUTE_IDS.map((route, index) => ({
       route,
       text: MELO_DATA.routes[route].answers[question.picks[index]]
     })), random)
-  })), random);
+  }));
 }
 
 function scoreAnswers(answers) {
