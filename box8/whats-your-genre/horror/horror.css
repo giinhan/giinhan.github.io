@@ -1,0 +1,14 @@
+.horror-shell{--pink:#8ca49d;--blush:#e7efec}
+.horror-shell .eyebrow,.horror-shell .answer-number{color:#314e45}
+.horror-shell .primary,.horror-shell .secondary{border-color:#9aada5}
+.horror-shell .secondary:hover{color:#314e45}
+.horror-shell .editorial{border-color:#c5d3cd}
+.horror-shell .answer-box{border-color:#baccc4}
+.horror-shell .answer input:checked+.answer-box{border-color:#3b5f51}
+.horror-shell .answer input:checked+.answer-box .answer-number{color:#314e45}
+.horror-shell .route-card .editorial,.horror-shell .route-card .movie-heading{border-color:#a7bdb2}
+.horror-shell .route-card .editorial p{color:#2d4238}
+.horror-shell .score-track,.horror-shell progress,.horror-shell progress::-webkit-progress-bar{background:#e7efeb}
+.horror-shell .hero-poster h1{margin:48px 0 54px}
+.horror-shell .hero-poster{min-height:430px;display:flex;flex-direction:column;justify-content:space-between}
+@media(max-width:600px){.horror-shell .hero-poster{min-height:360px}}

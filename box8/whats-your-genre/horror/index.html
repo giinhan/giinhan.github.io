@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="8개의 질문으로 찾는 나의 호러 탐험 경로. VHS 필드맵 03. HORROR와 함께 당신의 취향을 발견하세요.">
+<title>03. HORROR — what’s your genre — BOX8</title>
+<link rel="stylesheet" href="../../page.css?v=6a79234601">
+<link rel="stylesheet" href="../melo.css?v=5924952dad">
+<script src="./horror-data.js?v=7c5bdc9100" defer></script>
+<script src="./horror.js?v=8edafe7b18" defer></script>
+<link rel="stylesheet" href="../../logo-motion.css?v=28f18e9abb">
+<link rel="stylesheet" href="./horror.css?v=0a3c843eae">
+<link rel="stylesheet" href="../genre-switch.css?v=086c07691e">
+</head>
+<body>
+<main class="page-content" id="content" aria-label="what’s your genre 콘텐츠">
+<div class="melo-shell horror-shell">
+<header class="masthead"><a href="./" aria-label="what’s your genre 처음으로">WHAT’S YOUR GENRE?</a><span>VHS / FIELD TEST 03</span></header>
+<nav class="genre-switch" aria-label="장르 테스트 선택"><a href="../">01. MELO</a><a href="../cult/">02. CULT</a><a href="./" aria-current="page">03. HORROR</a></nav>
+<section id="intro" aria-labelledby="intro-title">
+<div class="hero-poster">
+<div class="poster-meta"><span>VIVA HERITAGE SERIES</span><span>VOL. 03</span></div>
+<h1 id="intro-title"><img src="./horror-lettering.svg?v=6fb5e7e16c" width="276" height="101" alt="HORROR"></h1>
+<div class="poster-caption"><span>두려움을 비추는 거울,<br>당신은 어디로 향하나요?</span><span class="round-stamp">8 QUESTIONS<br>4 ROUTES<br>YOUR CHOICE</span></div>
+</div>
+<div class="intro-copy"><p class="eyebrow">03. HORROR / 나의 호러 경로 찾기</p><h2>당신의 두려움이<br>다음 장면을 고릅니다.</h2><p>오싹함도, 불안도, 낯선 감각도, 서늘한 여운도 환영합니다.<br>지금의 나에게 가장 끌리는 문장을 골라보세요.</p><p class="muted">총 8문항 · 약 3분<br>정답은 없습니다. 매 질문에서 가장 가까운 답 하나를 선택하세요.</p><button class="primary" id="start" type="button">나의 호러 탐험 시작하기</button></div>
+<details class="editorial"><summary>호러라는 우주를 탐험하는 법 <span aria-hidden="true">＋</span></summary><div><h3>네 갈래의 길, 하나의 출발점</h3><p>어떤 길은 어둠 속 존재에게로, 어떤 길은 내면의 불안으로, 어떤 길은 몸의 변화로, 어떤 길은 인간과 사회가 만든 공포로 이어집니다.</p><p>여덟 번의 선택에서 가장 많이 닿은 경로를 추천합니다. 같은 점수의 경로가 있다면 함께 안내합니다. 하나의 타입으로 당신을 단정하기보다, 지금의 감정이 이끄는 영화 탐험의 출발점을 찾아보세요.</p><h3>VHS 호러 필드맵</h3><p id="fieldmap-intro"></p><h3>호러, 그 말의 시작</h3><p>라틴어 ‘horrere’(털이 곤두서다, 떨다)에서 유래한 말. 문자 그대로 등골이 오싹해지는 느낌을 뜻합니다. 호러 영화는 공포를 불러일으키는 것을 일차적 목표로 삼고, 불안과 금기 앞에 관객을 세우는 장르입니다.</p></div></details>
+</section>
+<section id="quiz" hidden aria-labelledby="question-title">
+<div class="quiz-meta"><span>HORROR / ROUTE FINDER</span><span id="step"></span></div>
+<progress id="progress" max="8" value="0" aria-label="답변 완료 문항 수"></progress>
+<form id="question-form"><fieldset><legend id="question-title" tabindex="-1"></legend><p class="question-hint">지금의 나에게 가장 가까운 문장 하나를 골라주세요.</p><div id="choices"></div></fieldset><div class="quiz-actions"><button type="button" class="secondary" id="previous">← 이전 질문</button><button type="submit" class="primary" id="next" disabled>다음 질문 →</button></div></form>
+<button class="text-button" id="restart" type="button">처음부터 다시 시작</button>
+</section>
+<section id="result" hidden aria-labelledby="result-title"><p class="eyebrow">YOUR HORROR ROUTE / 탐험 준비 완료</p><h2 id="result-title" tabindex="-1"></h2><p id="result-intro"></p><div id="route-results"></div><div class="score-panel"><h3>여덟 번의 선택이 그린 지도</h3><div id="scores"></div><p class="muted">각 답변은 해당 경로에 1표로 반영됩니다.<br>지금의 영화 취향을 위한 가이드입니다.</p></div><details class="editorial"><summary>아직 끝나지 않은 길, HIDDEN ROUTE <span aria-hidden="true">＋</span></summary><div><p id="hidden-route"></p></div></details><div class="result-actions"><button type="button" id="retry" class="primary">다시 탐험하기 ↺</button><button type="button" id="share" class="secondary">결과 링크 복사</button></div><p id="share-status" role="status"></p><a class="shop-link" href="https://www.viva-heritage-series.com/shop_view?idx=3" target="_blank" rel="noopener noreferrer">VHS FIELD MAP 03. HORROR 만나보기</a></section>
+<footer class="melo-footer"><span>VIVA HERITAGE SERIES</span><span>당신의 장르를 확장하는 탐험</span></footer>
+<noscript><p class="noscript">테스트를 시작하려면 브라우저에서 JavaScript를 켜주세요.</p></noscript>
+</div>
+</main>
+<nav class="page-nav" aria-label="BOX8 메뉴">
+<a href="../../about/" style="--menu-color:#e399b6">ABOUT</a>
+<a href="../../the-screen/" style="--menu-color:#c94cf3">THE SCREEN</a>
+<a href="../../vhs/" style="--menu-color:#1300fa">VHS</a>
+<a href="../../project/" style="--menu-color:#c9c9c9">PROJECT</a>
+<a href="../../studio-box8/" style="--menu-color:#bf302c">STUDIO BOX8</a>
+<a href="../../shop/" style="--menu-color:#ffb20b">SHOP</a>
+<a href="../../whats-your-genre/" style="--menu-color:#85cada" aria-current="page">what’s your genre</a>
+<a href="../../cinema-mapping/" style="--menu-color:#f45529">cinema mapping</a>
+</nav>
+<a class="page-logo logo-motion" href="../../" aria-label="BOX8 메인으로 돌아가기"><span class="logo-art"><img class="logo-fixed" src="../../img/logo_box8.png" width="672" height="232" alt="BOX8"><img class="logo-eight" aria-hidden="true" src="../../img/logo_box8.png" width="672" height="232" alt=""></span></a>
+</body>
+</html>
