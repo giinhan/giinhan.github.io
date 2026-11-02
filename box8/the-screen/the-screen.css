@@ -1,4 +1,4 @@
-.page-content{container-type:inline-size;padding-right:clamp(12px,2.5vw,40px);padding-bottom:100px}
+.page-content{container-type:inline-size;padding-right:12px;padding-bottom:100px}
 .screen-intro{padding-top:8px}.screen-logo{display:block;width:clamp(60px,9cqi,90px);height:auto;margin-bottom:36px}
 .screen-intro p{margin:0;font-size:clamp(15px,2cqi,22px);line-height:1.85;letter-spacing:-.035em;word-break:keep-all;overflow-wrap:break-word}
 .screen-social{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:45px}:is(.screen-social a,.screen-channel-link){display:inline-flex;align-items:center;gap:10px;max-width:100%;padding:8px 10px;font-weight:400;text-decoration:none;letter-spacing:normal;font-size:clamp(14px,1.8cqi,20px);line-height:1.4;overflow-wrap:anywhere}:is(.screen-social,.screen-channel-link) img{display:block;width:24px;height:24px;flex-shrink:0;object-fit:contain}:is(.screen-social a,.screen-channel-link):hover,:is(.screen-social a,.screen-channel-link):focus-visible{background:#c94cf3;color:#fff;text-decoration:none}:is(.screen-social a,.screen-channel-link):hover img,:is(.screen-social a,.screen-channel-link):focus-visible img{filter:brightness(0) invert(1)}
@@ -36,3 +36,6 @@
 .gv-more{display:block;margin:32px auto 0;padding:12px 36px;border:1px solid #171717;border-radius:0;background:#fff;color:#171717;font:inherit;font-size:16px;line-height:1.4;cursor:pointer}
 .gv-more:hover{background:#c94cf3;border-color:#c94cf3;color:#fff}
 .gv-more:focus-visible{outline:3px solid #c94cf3;outline-offset:5px}
+
+/* Reserve only the width needed by the navigation, leaving more room for copy. */
+@media(min-width:601px){body:has(.screen-intro){--rail:clamp(180px,20vw,260px)}}
