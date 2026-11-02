@@ -43,3 +43,5 @@
 
 /* Reserve only the width needed by the navigation, leaving more room for copy. */
 @media(min-width:601px){body:has(.screen-intro){--rail:clamp(180px,20vw,260px)}}
+
+.screen-channel .screen-videos,.screen-channel .screen-magazines{margin-bottom:20px}
