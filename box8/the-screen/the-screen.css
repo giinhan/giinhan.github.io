@@ -45,3 +45,5 @@
 @media(min-width:601px){body:has(.screen-intro){--rail:clamp(180px,20vw,260px)}}
 
 .screen-channel .screen-videos,.screen-channel .screen-magazines{margin-bottom:20px}
+
+.screen-channel .screen-videos,.screen-channel .screen-magazines{margin-top:0}
