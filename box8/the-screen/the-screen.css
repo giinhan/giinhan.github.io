@@ -13,3 +13,21 @@
 .screen-magazine{display:block;min-width:0}
 .screen-magazine img{display:block;width:100%;height:100%;object-fit:contain}
 .screen-videos a:hover,.screen-magazine:hover{opacity:.85}
+
+.screen-gv{margin-top:clamp(56px,8cqi,100px)}
+.screen-gv>h2{font-size:clamp(16px,2cqi,24px);letter-spacing:-.04em;margin:0 0 24px}
+.gv-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2cqi,28px)}
+.gv-card{position:relative;aspect-ratio:3/4.15;min-width:0;background:#ededed;color:#fff;overflow:hidden;cursor:default}
+.gv-card>img{display:block;width:100%;height:100%;object-fit:cover}
+.gv-cover{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(14px,2cqi,28px);background:linear-gradient(transparent 40%,rgba(0,0,0,.85));gap:6px}
+.gv-cover>span:first-child,.gv-category{font-size:clamp(11px,1.2cqi,15px);line-height:1.5}
+.gv-cover-title,.gv-info h3{font-size:clamp(18px,2.2cqi,30px);font-weight:600;line-height:1.25;letter-spacing:-.04em;word-break:keep-all;overflow-wrap:break-word}
+.gv-info{position:absolute;inset:0;padding:clamp(14px,2cqi,28px);display:flex;flex-direction:column;justify-content:center;background:#000;opacity:0;overflow-y:auto;transition:opacity .2s}
+.gv-category{color:#bcbcbc}.gv-info h3{margin:8px 0 20px}.gv-info dl{margin:0;font-size:clamp(12px,1.35cqi,17px);line-height:1.65;word-break:keep-all;overflow-wrap:break-word}
+.gv-session+.gv-session{margin-top:16px}.gv-info dt{font-size:.8em;color:#bcbcbc}.gv-info dd{margin:0 0 8px}
+.gv-card:hover .gv-info,.gv-card:focus .gv-info{opacity:1}
+.gv-card:focus-visible{outline:3px solid #c94cf3;outline-offset:5px}
+@container(max-width:600px){.gv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.gv-card{aspect-ratio:auto}.gv-card>img{height:auto;aspect-ratio:3/4.15}.gv-cover{display:none}.gv-info{position:static;opacity:1;overflow:visible;padding:16px}.gv-info h3{font-size:20px}.gv-info dl{font-size:14px}}
+@container(max-width:300px){.gv-grid{grid-template-columns:minmax(0,1fr)}}
+@media(hover:none){.gv-card{aspect-ratio:auto}.gv-card>img{height:auto;aspect-ratio:3/4.15}.gv-cover{display:none}.gv-info{position:static;opacity:1;overflow:visible}}
+@media(prefers-reduced-motion:reduce){.gv-info{transition:none}}

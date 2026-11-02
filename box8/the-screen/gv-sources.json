@@ -1,0 +1,94 @@
+[
+  {
+    "source": "https://www.instagram.com/p/DfESPu8JlYy/",
+    "title": "매쉬빌",
+    "category": "SPECIAL GV",
+    "sessions": [
+      {
+        "venue": "인디스페이스",
+        "datetime": "11월 15일(일) 13:30 상영 후"
+      }
+    ]
+  },
+  {
+    "source": "https://www.instagram.com/p/DXi2ty0k6rw/",
+    "title": "란 12.3",
+    "category": "인정사정 없는 GV",
+    "sessions": [
+      {
+        "venue": "CGV 용산아이파크몰 18관",
+        "datetime": "4월 27일(월) 19:40"
+      }
+    ]
+  },
+  {
+    "source": "https://www.instagram.com/p/DRlhkcGktde/",
+    "title": "고당도",
+    "category": "개봉일 스페셜 GV",
+    "sessions": [
+      {
+        "venue": "CGV 용산아이파크몰 11관",
+        "datetime": "12월 10일(수) 19:10"
+      }
+    ]
+  },
+  {
+    "source": "https://www.instagram.com/p/DRgZOiQE7-r/",
+    "title": "한란",
+    "category": "문화의 날 개봉 GV",
+    "sessions": [
+      {
+        "venue": "씨네Q 신도림",
+        "datetime": "11월 26일(수) 19:30 상영 후"
+      }
+    ]
+  },
+  {
+    "source": "https://www.instagram.com/p/DCqxZ5-Pyge/",
+    "title": "딜리버리",
+    "category": "메가토크",
+    "sessions": [
+      {
+        "venue": "메가박스 성수 1관",
+        "datetime": "11월 23일(토) 14:00"
+      }
+    ]
+  },
+  {
+    "source": "https://www.instagram.com/p/DCYGARmvlu8/",
+    "title": "엄태구 배우전",
+    "category": "단편 4편 특별 상영 및 GV",
+    "sessions": [
+      {
+        "venue": "KT&G 상상마당 시네마",
+        "datetime": "11월 15일(금) 19:00"
+      }
+    ]
+  },
+  {
+    "source": "https://www.instagram.com/p/DBq0WhTv0kO/",
+    "title": "더 킬러스",
+    "category": "릴레이 응원 GV",
+    "sessions": [
+      {
+        "venue": "롯데시네마 월드타워",
+        "datetime": "10월 29일(화) 19:30"
+      },
+      {
+        "venue": "롯데시네마 건대입구",
+        "datetime": "11월 3일(일) 14:00"
+      }
+    ]
+  },
+  {
+    "source": "https://www.instagram.com/p/DBfuKfPvDjm/",
+    "title": "공작새",
+    "category": "개봉 기념 GV",
+    "sessions": [
+      {
+        "venue": "아트나인 0관",
+        "datetime": "10월 24일(목) 19:40 상영 후"
+      }
+    ]
+  }
+]
