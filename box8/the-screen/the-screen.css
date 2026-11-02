@@ -15,7 +15,11 @@
 .screen-videos a:hover,.screen-magazine:hover{opacity:.85}
 
 .screen-gv{margin-top:clamp(56px,8cqi,100px)}
-.screen-gv>h2{font-size:clamp(16px,2cqi,24px);letter-spacing:-.04em;margin:0 0 24px}
+.screen-gv>h2{display:flex;align-items:center;gap:10px;max-width:100%;padding:8px 10px;margin:0 0 24px;font-size:clamp(14px,1.8cqi,20px);font-weight:400;line-height:1.4;letter-spacing:normal;overflow-wrap:anywhere}
+.screen-gv>h2 img{display:block;width:24px;height:24px;flex-shrink:0}
+.gv-grid{margin-inline:10px}
+.gv-timing-note{display:block;font-size:.85em;color:#bcbcbc}
+@container(max-width:360px){.screen-gv>h2{gap:7px}.screen-gv>h2 img{width:20px;height:20px}}
 .gv-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2cqi,28px)}
 .gv-card{position:relative;aspect-ratio:3/4.15;min-width:0;background:#ededed;color:#fff;overflow:hidden;cursor:default}
 .gv-card>img{display:block;width:100%;height:100%;object-fit:cover}
