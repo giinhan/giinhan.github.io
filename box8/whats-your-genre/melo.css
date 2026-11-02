@@ -3,3 +3,18 @@
 @media(min-width:1100px){.melo-shell{container-type:inline-size}#intro{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:36px 30px}#intro>.editorial{grid-column:1 / -1}.hero-poster{padding:24px}.hero-poster h1{margin:38px 0 44px}.poster-meta{font-size:8px}.poster-caption{font-size:14px}.round-stamp{width:70px;height:70px;font-size:8px}.intro-copy{padding:0}.intro-copy h2{font-size:clamp(28px,4.8cqi,52px)}.intro-copy>p{font-size:15px}.intro-copy .eyebrow{font-size:11px}.intro-copy .muted{font-size:12px}.intro-copy .primary{font-size:13px;padding:18px 16px}}
 @media(max-width:900px){.masthead{flex-wrap:wrap}.round-stamp{width:75px;height:75px;font-size:9px}.quiz-actions{flex-direction:column-reverse}.melo-footer{flex-direction:column;gap:4px}}
 @media(max-width:600px){body:has(.melo-shell){--rail:0px}.page-content:has(.melo-shell){width:calc(100% - 24px);margin:0 12px;padding:12px 0 30px}.melo-shell{padding:22px}.page-content:has(.melo-shell)~.page-nav{position:static;max-height:none;width:auto;margin:0 20px 24px;align-items:flex-start;flex-direction:row;flex-wrap:wrap;gap:8px}.page-content:has(.melo-shell)~.page-nav a{font-size:14px}.page-content:has(.melo-shell)~.page-logo{position:static;margin:20px 28px 32px;width:140px}.poster-caption{font-size:13px}.hero-poster{padding:18px}.poster-meta{font-size:8px}.masthead{gap:6px}.masthead>span{font-size:8px}.intro-copy{padding-top:32px}.answer-box{padding:18px 14px;min-height:88px;font-size:15px;gap:10px}.quiz-meta{font-size:9px}.question-hint{font-size:11px}.result-actions{flex-direction:column}.round-stamp{width:68px;height:68px;font-size:8px}progress{margin-bottom:32px}.melo-footer{font-size:8px}}
+
+/* Align the intro title and closed guide to the poster edges on desktop. */
+@media(min-width:1100px){
+  #intro{grid-template-rows:minmax(min-content,1fr) auto;align-items:stretch;row-gap:0}
+  #intro>.hero-poster{grid-column:1;grid-row:1 / 3}
+  #intro>.intro-copy{grid-column:2;grid-row:1;display:flex;flex-direction:column;align-self:stretch;padding:0;min-width:0}
+  #intro>.intro-copy .primary{margin-top:auto}
+  #intro>.editorial{display:contents}
+  #intro>.editorial::details-content{display:contents;content-visibility:visible}
+  #intro>.editorial>summary{grid-column:2;grid-row:2;align-self:end;margin-top:20px;border-top:1px solid #d7c5d0;border-bottom:1px solid #d7c5d0}
+  #intro>.editorial:not([open])>div{display:none}
+  #intro>.editorial[open]>div{display:block;grid-column:1 / -1;grid-row:3;margin-top:24px}
+  .cult-shell #intro>.editorial>summary{border-color:#ced5b2}
+  .horror-shell #intro>.editorial>summary{border-color:#c5d3cd}
+}
