@@ -18,7 +18,7 @@
 <script>
 const menus=[{id:'about',label:'ABOUT',color:'#e399b6'},{id:'project',label:'PROJECT',color:'#c9c9c9'},{id:'shop',label:'SHOP',color:'#ffb20b'},{id:'vhs',label:'VHS',color:'#1300fa'},{id:'the-screen',label:'THE SCREEN',color:'#c94cf3'},{id:'studio-box8',label:'STUDIO BOX8',color:'#f45529'},{id:'whats-your-genre',label:"what’s your genre",color:'#85cada'}];
 const stage=document.querySelector('#stage');
-menus.forEach((menu,index)=>{const button=document.createElement('a');button.className='tile';button.dataset.id=menu.id;button.style.background=menu.color;const number=document.createElement('small');number.textContent=String(index+1).padStart(2,'0');const label=document.createElement('span');label.textContent=menu.label;button.append(number,label);button.href='./'+menu.id+'/?v=menu7-orange';stage.append(button)});
+menus.forEach((menu,index)=>{const button=document.createElement('a');button.className='tile';button.dataset.id=menu.id;button.style.background=menu.color;const number=document.createElement('small');number.textContent=String(index+1).padStart(2,'0');const label=document.createElement('span');label.textContent=menu.label;button.append(number,label);button.href='./'+menu.id+'/?v=copy-grid-v1';stage.append(button)});
 
 let layoutSeed=Math.random();
 function gridFor(width,height){let best={size:0,cols:0,rows:0};for(let cols=1;cols<=18;cols++){const rows=Math.ceil(18/cols),size=Math.min(width/cols,height/rows);if(size>best.size)best={size,cols,rows}}return best}
