@@ -25,5 +25,6 @@ function gridFor(width,height){let best={size:0,cols:0,rows:0};for(let cols=1;co
 function layout(randomize=false){if(randomize)layoutSeed=Math.random();const width=stage.clientWidth,height=stage.clientHeight;if(!width||!height)return;const {size,cols,rows}=gridFor(width,height);let seed=Math.floor(layoutSeed*4294967296)>>>0;function random(){seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296}const cells=Array.from({length:cols*rows},(_,i)=>i);for(let i=cells.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[cells[i],cells[j]]=[cells[j],cells[i]]}const ox=(width-cols*size)/2,oy=(height-rows*size)/2;stage.style.setProperty('--tile-size',size+'px');[...stage.children].forEach((tile,i)=>{tile.style.width=tile.style.height=size+'px';tile.style.left=ox+(cells[i]%cols)*size+'px';tile.style.top=oy+Math.floor(cells[i]/cols)*size+'px'})}
 window.addEventListener('pageshow',event=>{if(event.persisted)layout(true)});let timer;window.addEventListener('resize',()=>{clearTimeout(timer);timer=setTimeout(layout,120)});layout();
 </script>
+<script src="./english-tracking.js?v=d0f02fc713"></script>
 </body>
 </html>
