@@ -9,6 +9,7 @@
 .screen-videos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(10px,2cqi,24px);max-width:900px;margin-top:20px}
 .screen-videos a{display:block;overflow:hidden}
 .screen-videos img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
-.screen-magazine{display:block;width:min(100%,420px);margin-top:20px}
-.screen-magazine img{display:block;width:100%;height:auto}
+.screen-magazines{display:grid;grid-template-columns:minmax(0,1752fr) minmax(0,1324fr);gap:clamp(10px,2cqi,24px);max-width:976px;margin-top:20px;align-items:stretch}
+.screen-magazine{display:block;min-width:0}
+.screen-magazine img{display:block;width:100%;height:100%;object-fit:contain}
 .screen-videos a:hover,.screen-magazine:hover{opacity:.85}
