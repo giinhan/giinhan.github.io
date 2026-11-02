@@ -90,5 +90,16 @@
         "datetime": "10월 24일(목) 19:40 상영 후"
       }
     ]
+  },
+  {
+    "source": "https://www.instagram.com/p/DevY_VAkjOJ/",
+    "title": "흐르는 여정",
+    "category": "개봉 기념 씨네토크",
+    "sessions": [
+      {
+        "venue": "씨네큐브 2관",
+        "datetime": "10월 28일(수) 19:30"
+      }
+    ]
   }
 ]
