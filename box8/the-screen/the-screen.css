@@ -31,3 +31,8 @@
 @container(max-width:300px){.gv-grid{grid-template-columns:minmax(0,1fr)}}
 @media(hover:none){.gv-card{aspect-ratio:auto}.gv-card>img{height:auto;aspect-ratio:3/4.15}.gv-cover{display:none}.gv-info{position:static;opacity:1;overflow:visible}}
 @media(prefers-reduced-motion:reduce){.gv-info{transition:none}}
+
+.gv-card[hidden],.gv-more[hidden]{display:none}
+.gv-more{display:block;margin:32px auto 0;padding:12px 36px;border:1px solid #171717;border-radius:0;background:#fff;color:#171717;font:inherit;font-size:16px;line-height:1.4;cursor:pointer}
+.gv-more:hover{background:#c94cf3;border-color:#c94cf3;color:#fff}
+.gv-more:focus-visible{outline:3px solid #c94cf3;outline-offset:5px}
