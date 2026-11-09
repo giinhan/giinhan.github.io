@@ -27,6 +27,7 @@ header{
   border-bottom:1px solid var(--line);
 }
 .nav{height:74px;display:flex;align-items:center;justify-content:space-between;gap:22px}
+.logo img{display:block;width:120px;max-width:100%;height:auto}
 .logo{font-weight:400;font-size:24px;letter-spacing:-1px;white-space:nowrap}
 .logo span{
   font-size:11px;font-weight:400;letter-spacing:.06em;
