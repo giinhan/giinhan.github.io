@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>기존 기록 옮기기</title>
+<style>@import url('https://fonts.googleapis.com/css?family=Gothic+A1:400,800&display=swap');*{box-sizing:border-box}body{font:16px/1.5 'Gothic A1',sans-serif;color:#006b63;background:#fff;margin:0;padding:32px 6%}main{max-width:720px;margin:0 auto}h1{font-size:20px}button,a{font:inherit}button{border:0;background:#00847a;color:#fff;padding:12px 18px;margin:8px 10px 8px 0;cursor:pointer}button:disabled{opacity:.5;cursor:wait}a{color:inherit}p{white-space:pre-wrap;overflow-wrap:anywhere}.muted{color:#52776c}#details{font-size:14px}button:focus-visible,a:focus-visible{outline:3px solid #00d084;outline-offset:-3px}</style>
+</head><body><main>
+<h1>기존 기록을 구글 시트로 옮깁니다.</h1>
+<p>기록을 작성했던 브라우저에서 실행해주세요. 브라우저에 남은 원본은 지우지 않습니다.</p>
+<p id="status" role="status" aria-live="polite">기존 기록을 확인하는 중…</p>
+<p id="details" class="muted"></p>
+<button id="retry" type="button">다시 확인하기</button><button id="export" type="button" hidden>브라우저 원본 백업 받기</button>
+<p><a href="./?v=shared-records-sync">책모임으로 돌아가기</a></p>
+</main><script>
+const API = 'https://script.google.com/macros/s/AKfycbzsXH4Ael7BUmBnzgFEm761mPDGLqovOuMSgSnXWwV4SJyPVXV0DeFVsnLE39qhnO5Gdw/exec';
+const KEY = 'hey-branding-2026-member-notes-v1';
+const status = document.getElementById('status');
+const details = document.getElementById('details');
+const retry = document.getElementById('retry');
+const exportButton = document.getElementById('export');
+let backup = null;
+async function request(options = {}) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000);
+  try {
+    const response = await fetch(API + '?sync=' + Date.now(), {...options, credentials:'omit', signal:controller.signal});
+    if (!response.ok) throw Error('서버 연결에 실패했습니다.');
+    const result = await response.json();
+    if (!result || result.ok !== true) throw Error(result?.error || '요청에 실패했습니다.');
+    return result;
+  } finally { clearTimeout(timeout); }
+}
+function readRecords(data) {
+  const records = [];
+  if (!data || typeof data !== 'object') return records;
+  for (let book = 0; book < 4; book++) {
+    if (!Array.isArray(data[book])) continue;
+    for (const note of data[book]) {
+      if (!note || typeof note.author !== 'string' || typeof note.text !== 'string') continue;
+      const author = note.author.trim(), text = note.text.trim();
+      const sentence = typeof note.sentence === 'string' && note.sentence.trim() ? note.sentence.trim() : '(별도 문장 없이 작성한 기존 기록)';
+      if (author && text) records.push({book,author,text,sentence,originalDate:note.createdAt || note.date || ''});
+    }
+  }
+  return records;
+}
+async function sync() {
+  if (retry.disabled) return;
+  retry.disabled = true;
+  status.textContent = '이 브라우저의 기록과 구글 시트를 확인하는 중…';
+  details.textContent = '';
+  let saved = 0;
+  try {
+    const raw = localStorage.getItem(KEY);
+    backup = raw ? JSON.parse(raw) : {};
+    const records = readRecords(backup);
+    exportButton.hidden = !records.length;
+    details.textContent = `현재 주소: ${location.origin}\n이 브라우저의 기존 기록: ${records.length}건`;
+    const server = await request();
+    if (!Array.isArray(server.notes)) throw Error('서버의 기록 형식이 올바르지 않습니다.');
+    if (!records.length) {
+      status.textContent = `이 브라우저에서 이전할 기록을 찾지 못했습니다. 구글 시트에는 ${server.notes.length}건이 있습니다.`;
+      details.textContent += '\n기록이 보이는 원래 창의 주소가 https://giinhan.com인지 확인해주세요. www 주소, 다른 브라우저 프로필, 로컬 미리보기는 저장소가 서로 다릅니다.';
+      return;
+    }
+    const expectedIds = [];
+    for (let index = 0; index < records.length; index++) {
+      const record = records[index];
+      status.textContent = `구글 시트로 옮기는 중… ${index + 1}/${records.length}`;
+      if (record.author.length > 40 || record.sentence.length > 1000 || record.text.length > 1000)
+        throw Error(`${index + 1}번째 기록의 글자 수가 현재 저장 한도를 초과합니다. 원본 백업을 받아주세요.`);
+      const bytes = new TextEncoder().encode(JSON.stringify(record));
+      const hash = await crypto.subtle.digest('SHA-256', bytes);
+      const id = 'legacy_' + Array.from(new Uint8Array(hash), b => b.toString(16).padStart(2,'0')).join('');
+      const existing = server.notes.find(note => note.id === id || (Number(note.book) === record.book && note.author === record.author && note.sentence === record.sentence && note.text === record.text));
+      if (existing) { expectedIds.push(existing.id); continue; }
+      const payload = new URLSearchParams({id,book:String(record.book),author:record.author,sentence:record.sentence,text:record.text});
+      try { await request({method:'POST',body:payload}); }
+      catch (error) {
+        const verification = await request();
+        if (!verification.notes?.some(note => note.id === id)) throw error;
+      }
+      expectedIds.push(id);
+      server.notes.push({id,...record});
+      saved++;
+    }
+    const verification = await request();
+    if (!Array.isArray(verification.notes) || !expectedIds.every(id => verification.notes.some(note => note.id === id)))
+      throw Error('이전한 기록을 서버에서 다시 확인하지 못했습니다. 다시 확인하기를 눌러주세요.');
+    status.textContent = `이전 완료: 기존 기록 ${records.length}건이 구글 시트에 저장되어 있습니다.`;
+    details.textContent += `\n이번에 새로 이전한 기록: ${saved}건\n다른 기기에서도 책모임 페이지를 새로고침하면 볼 수 있습니다.\n브라우저 원본은 그대로 보관했습니다. 이전된 기록의 시간은 시트로 옮긴 시각으로 표시됩니다.`;
+  } catch (error) {
+    status.textContent = '이전을 완료하지 못했습니다. 브라우저 원본은 보관되어 있습니다.';
+    details.textContent += '\n오류: ' + (error.name === 'AbortError' ? '서버 응답 시간이 초과했습니다. 다시 확인하기를 눌러주세요.' : error.message);
+  } finally { retry.disabled = false; }
+}
+exportButton.addEventListener('click', () => {
+  const url = URL.createObjectURL(new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}));
+  const link = document.createElement('a');
+  link.href = url; link.download = 'heybook-browser-records-backup.json';
+  link.click();setTimeout(() => URL.revokeObjectURL(url),1000);
+});
+retry.addEventListener('click',sync);
+sync();
+</script></body></html>
