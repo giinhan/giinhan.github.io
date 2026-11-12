@@ -67,9 +67,9 @@ async function loadSharedNotes(quiet = false) {
   }
 }
 
-async function saveSharedNote(key, fields) {
+async function saveSharedNote(key, fields, migrationId = null) {
   const signature = JSON.stringify([key, fields.author, fields.sentence, fields.text]);
-  let id = pendingSubmissions.get(signature);
+  let id = migrationId || pendingSubmissions.get(signature);
   if (!id) {
     id = crypto.randomUUID();
     pendingSubmissions.set(signature, id);
@@ -212,3 +212,75 @@ document.querySelectorAll('.expand-button').forEach(button => {
 
 loadSharedNotes();
 setInterval(() => { if (!document.hidden) loadSharedNotes(true); }, 30000);
+
+
+// Import only real records from this club's old storage key; retain the backup.
+async function migrateBrowserNotes() {
+  let legacy;
+  try { legacy = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+  catch { return; }
+  if (!legacy || typeof legacy !== 'object' || Array.isArray(legacy)) return;
+  const records = [];
+  for (let book = 0; book < 4; book++) {
+    if (!Array.isArray(legacy[book])) continue;
+    legacy[book].forEach(note => {
+      if (!note || typeof note.author !== 'string' || typeof note.text !== 'string') return;
+      const author = note.author.trim();
+      const text = note.text.trim();
+      const sentence = typeof note.sentence === 'string' && note.sentence.trim()
+        ? note.sentence.trim() : '(별도 문장 없이 작성한 기존 기록)';
+      if (author && text) records.push({book, author, text, sentence, originalDate: note.createdAt || note.date || ''});
+    });
+  }
+  if (!records.length) return;
+  const status = document.createElement('p');
+  status.className = 'migration-status';
+  status.setAttribute('role', 'status');
+  document.getElementById('books').prepend(status);
+  let busy = false;
+  async function transfer() {
+    if (busy) return;
+    busy = true;
+    status.textContent = '이 브라우저의 기존 기록을 확인하는 중…';
+    let copied = 0;
+    try {
+      const server = await callNotesApi();
+      if (!Array.isArray(server.notes)) throw new Error('Invalid records');
+      const existing = server.notes;
+      for (const record of records) {
+        const bytes = new TextEncoder().encode(JSON.stringify(record));
+        const digest = await crypto.subtle.digest('SHA-256', bytes);
+        const id = 'legacy_' + Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
+        const matching = existing.find(note => note.id === id ||
+          (note.book === record.book && note.author === record.author &&
+           note.sentence === record.sentence && note.text === record.text));
+        if (!matching) {
+          if (record.author.length > 40 || record.text.length > 1000 || record.sentence.length > 1000)
+            throw new Error('기존 기록 중 글자 수 제한을 초과한 항목이 있습니다.');
+          status.textContent = `기존 기록을 옮기는 중… ${copied + 1}/${records.length}`;
+          const saved = await saveSharedNote(String(record.book), {
+            author: record.author, sentence: record.sentence, text: record.text
+          }, id);
+          // Confirm the exact record can be read back before considering it migrated.
+          const verification = await callNotesApi();
+          if (!verification.notes?.some(note => note.id === id)) throw new Error('Migration not confirmed');
+          existing.push(saved);
+          copied++;
+        }
+      }
+      status.textContent = copied
+        ? `기존 기록 ${copied}건을 구글 시트로 옮겼습니다. 브라우저 원본도 보관했습니다.`
+        : '이 브라우저의 기존 기록은 모두 구글 시트에 저장되어 있습니다.';
+      await loadSharedNotes(true);
+    } catch (error) {
+      status.textContent = '일부 기존 기록을 옮기지 못했습니다. 브라우저 원본은 보관되어 있습니다. ';
+      const retry = document.createElement('button');
+      retry.type = 'button';
+      retry.textContent = '다시 옮기기';
+      retry.addEventListener('click', transfer);
+      status.append(retry);
+    } finally { busy = false; }
+  }
+  await transfer();
+}
+migrateBrowserNotes();
