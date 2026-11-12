@@ -1,9 +1,107 @@
 const STORAGE_KEY = 'hey-branding-2026-member-notes-v1';
+const NOTES_API = 'https://script.google.com/macros/s/AKfycbzsXH4Ael7BUmBnzgFEm761mPDGLqovOuMSgSnXWwV4SJyPVXV0DeFVsnLE39qhnO5Gdw/exec';
+// Existing local records stay in localStorage; shared records come from Google Sheets.
 let notesByBook = {};
-try {
-  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-  if (saved && typeof saved === 'object' && !Array.isArray(saved)) notesByBook = saved;
-} catch { /* Start with an empty archive when storage is unavailable. */ }
+let notesRevision = 0;
+let loadSequence = 0;
+const pendingSubmissions = new Map();
+
+function setNotesStatus(entry, message, retry = false) {
+  const status = entry.querySelector('.notes-status');
+  status.replaceChildren();
+  if (message) status.append(document.createTextNode(message));
+  if (retry) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = '다시 불러오기';
+    button.addEventListener('click', () => loadSharedNotes());
+    status.append(button);
+  }
+}
+
+async function callNotesApi(options = {}) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000);
+  try {
+    const response = await fetch(`${NOTES_API}?_=${Date.now()}`, {
+      ...options, credentials: 'omit', redirect: 'follow', signal: controller.signal
+    });
+    if (!response.ok) throw new Error('서버에 연결하지 못했습니다.');
+    const result = await response.json();
+    if (!result || result.ok !== true) throw new Error(result?.error || '요청을 완료하지 못했습니다.');
+    return result;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function groupSharedNotes(notes) {
+  if (!Array.isArray(notes)) throw new Error('기록 응답을 확인하지 못했습니다.');
+  const grouped = {};
+  notes.forEach(note => {
+    if (!note || !Number.isInteger(note.book) || note.book < 0 || note.book > 3 ||
+        typeof note.author !== 'string' || typeof note.text !== 'string' ||
+        typeof note.sentence !== 'string') return;
+    (grouped[note.book] ||= []).push(note);
+  });
+  return grouped;
+}
+
+async function loadSharedNotes(quiet = false) {
+  const sequence = ++loadSequence;
+  const revision = notesRevision;
+  const entries = document.querySelectorAll('.book-entry');
+  if (!quiet) entries.forEach(entry => setNotesStatus(entry, '기록을 불러오는 중…'));
+  try {
+    const result = await callNotesApi();
+    const grouped = groupSharedNotes(result.notes);
+    if (sequence !== loadSequence || revision !== notesRevision) return;
+    notesByBook = grouped;
+    entries.forEach(entry => {
+      renderNotes(entry, entry.dataset.book);
+      setNotesStatus(entry, '');
+    });
+  } catch (error) {
+    if (sequence !== loadSequence || revision !== notesRevision) return;
+    entries.forEach(entry => setNotesStatus(entry, '기록을 불러오지 못했습니다. ', true));
+  }
+}
+
+async function saveSharedNote(key, fields) {
+  const signature = JSON.stringify([key, fields.author, fields.sentence, fields.text]);
+  let id = pendingSubmissions.get(signature);
+  if (!id) {
+    id = crypto.randomUUID();
+    pendingSubmissions.set(signature, id);
+  }
+  const payload = {id, book: Number(key), ...fields};
+  let result;
+  try {
+    // A form-encoded POST avoids a cross-origin preflight request.
+    result = await callNotesApi({method: 'POST', body: new URLSearchParams(payload)});
+  } catch (error) {
+    // A response may be lost after the sheet was updated. Verify this exact ID.
+    try {
+      const verification = await callNotesApi();
+      const saved = verification.notes?.find(note => note.id === id);
+      if (saved) result = {ok: true, ...saved};
+    } catch { /* Keep the same ID for a safe retry and leave the form intact. */ }
+    if (!result) throw error;
+  }
+  let createdAt = result.createdAt;
+  if (!createdAt) {
+    const verification = await callNotesApi();
+    const saved = verification.notes?.find(note => note.id === id);
+    if (!saved) throw new Error('저장 여부를 확인하지 못했습니다. 다시 눌러주세요.');
+    createdAt = saved.createdAt;
+  }
+  notesRevision++;
+  const saved = {...payload, createdAt};
+  notesByBook[key] = [saved, ...(notesByBook[key] || []).filter(note => note.id !== id)];
+  pendingSubmissions.delete(signature);
+  return saved;
+}
+
 function renderNotes(entry, key) {
   const notes = Array.isArray(notesByBook[key]) ? notesByBook[key].filter(note => note && typeof note.author === 'string' && typeof note.text === 'string') : [];
   const container = entry.querySelector('.notes-scroll');
@@ -48,25 +146,49 @@ function renderNotes(entry, key) {
 }
 document.querySelectorAll('.book-entry').forEach(entry => {
   const key = entry.dataset.book;
+  const status = document.createElement('p');
+  status.className = 'notes-status';
+  status.setAttribute('role', 'status');
+  entry.querySelector('.notes-scroll').before(status);
   renderNotes(entry, key);
   entry.querySelector('.expand-button').addEventListener('click', event => {
     const expanded = entry.classList.toggle('is-expanded');
     event.currentTarget.setAttribute('aria-expanded', String(expanded));
     event.currentTarget.textContent = expanded ? '접기' : '펼쳐서 보기';
   });
-  entry.querySelector('.note-form').addEventListener('submit', event => {
+  const form = entry.querySelector('.note-form');
+  const formStatus = document.createElement('p');
+  formStatus.className = 'save-status';
+  formStatus.setAttribute('role', 'status');
+  form.append(formStatus);
+  form.addEventListener('submit', async event => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const button = form.querySelector('button[type="submit"]');
+    if (button.disabled) return;
+    const data = new FormData(form);
     const author = String(data.get('author') || '').trim();
     const text = String(data.get('note') || '').trim();
     const sentence = String(data.get('sentence') || '').trim();
     if (!author || !sentence || !text) return;
-    const next = {...notesByBook, [key]: [{author, sentence, text, createdAt: new Date().toISOString(), date: new Intl.DateTimeFormat('ko-KR', {timeZone:'Asia/Seoul', month:'2-digit', day:'2-digit'}).format(new Date())}, ...(Array.isArray(notesByBook[key]) ? notesByBook[key] : [])]};
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); }
-    catch { window.alert('기록을 저장하지 못했습니다. 브라우저 저장 공간을 확인해주세요.'); return; }
-    notesByBook = next;
-    renderNotes(entry, key);
-    event.currentTarget.reset();
+    button.disabled = true;
+    button.textContent = '저장 중…';
+    const fields = form.querySelectorAll('input, textarea');
+    fields.forEach(field => { field.readOnly = true; });
+    formStatus.textContent = '';
+    try {
+      await saveSharedNote(key, {author, text, sentence});
+      renderNotes(entry, key);
+      form.reset();
+      formStatus.textContent = '저장했습니다.';
+      setNotesStatus(entry, '');
+      loadSharedNotes(true);
+    } catch (error) {
+      formStatus.textContent = '저장을 확인하지 못했습니다. 입력 내용은 유지됩니다. 잠시 후 다시 눌러주세요.';
+    } finally {
+      fields.forEach(field => { field.readOnly = false; });
+      button.disabled = false;
+      button.textContent = '기록 남기기';
+    }
   });
 });
 
@@ -87,3 +209,6 @@ document.querySelectorAll('.expand-button').forEach(button => {
     document.querySelectorAll('.note-form textarea').forEach(fitNoteField);
   });
 });
+
+loadSharedNotes();
+setInterval(() => { if (!document.hidden) loadSharedNotes(true); }, 30000);

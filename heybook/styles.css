@@ -163,3 +163,8 @@ button,input,textarea,select{scroll-margin:8px}
 .note-card .note-sentence:first-child,.note-card .note-reflection:first-child{margin-top:0}
 
 .form-footer{justify-content:flex-end}
+
+.notes-status:empty,.save-status:empty{display:none}
+.notes-status,.save-status{margin:12px 0;line-height:1.5!important}
+.notes-status button{margin-left:8px;padding:6px 10px;border:0;background:var(--teal);color:#fff}
+.form-footer button:disabled{opacity:.6;cursor:wait}
