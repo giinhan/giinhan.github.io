@@ -268,9 +268,7 @@ async function migrateBrowserNotes() {
           copied++;
         }
       }
-      status.textContent = copied
-        ? `기존 기록 ${copied}건을 구글 시트로 옮겼습니다. 브라우저 원본도 보관했습니다.`
-        : '이 브라우저의 기존 기록은 모두 구글 시트에 저장되어 있습니다.';
+      status.remove();
       await loadSharedNotes(true);
     } catch (error) {
       status.textContent = '일부 기존 기록을 옮기지 못했습니다. 브라우저 원본은 보관되어 있습니다. ';
