@@ -1,5 +1,6 @@
+@font-face{font-family:"Genre Futura Condensed";src:local("Futura Condensed Bold"),local("Futura-CondensedExtraBold"),local("Futura Condensed ExtraBold");font-weight:700;font-style:normal;font-display:swap}
 .genre-switch{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 28px}
-.genre-switch a{border:1px solid #d7d7d7;padding:10px 16px;font-size:11px;letter-spacing:.04em;line-height:1.4}
-.genre-switch a[aria-current="page"]{background:var(--blush);border-color:currentColor;font-weight:700}
-.genre-switch a:hover{border-color:currentColor}
+.genre-switch a{border:1px solid #d7d7d7;border-radius:0;padding:10px 16px;font-family:"Genre Futura Condensed","Futura Condensed","Arial Narrow",sans-serif;font-stretch:condensed;font-weight:700;font-size:18px;letter-spacing:.02em;line-height:1.2}
+.genre-switch a[aria-current="page"]{background:#000;color:#fff;border-color:#000}
+.genre-switch a:hover{border-color:#000}
 @media(max-width:600px){.genre-switch a{padding:10px 14px}}
