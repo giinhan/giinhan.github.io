@@ -40,3 +40,6 @@
  .about-value-art,.about-value-dobby .about-value-art{position:static;transform:none;float:right;width:30%;height:auto;max-height:140px;margin:4px 0 8px 14px}
  .about-value-dobby .about-value-art{float:left;margin:4px 14px 8px 0}
 }
+
+/* English section headings use Optima Regular. */
+.about-intro h1,.about-intro h2,.about-you>h2{font-family:Optima,"Optima Regular",sans-serif;font-weight:400;font-style:normal}
