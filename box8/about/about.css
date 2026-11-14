@@ -3,7 +3,7 @@
 .about-intro{padding-top:12px}.about-logo{display:block;width:min(300px,80%);height:auto;margin-bottom:clamp(36px,5vw,76px)}
 .about-intro h1,.about-intro h2{font-size:clamp(28px,4.4vw,72px);font-weight:700;line-height:1.04;letter-spacing:-.055em;margin:0 0 32px;overflow-wrap:anywhere}
 .about-intro>p{margin:0;font-size:var(--font-body);line-height:1.85;letter-spacing:-.035em;word-break:keep-all;overflow-wrap:break-word}
-.about-menus{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:clamp(8px,1.5cqi,20px);overflow-x:auto;padding-bottom:8px;margin-top:clamp(40px,5vw,80px)}
+.about-menus{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:clamp(8px,1.5cqi,20px);overflow-x:auto;padding-bottom:8px;margin-top:clamp(80px,10vw,160px)}
 .about-card{aspect-ratio:2 / 3;min-width:0;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;padding:clamp(8px,1.2cqi,16px);border:1px solid transparent;background:#fff}
 .card-logo{min-height:0;display:flex;align-items:center;justify-content:center}.card-logo img{display:block;width:85%;height:100%;max-height:100%;object-fit:contain}.card-logo .screen-logo{width:65%}
 .about-card p{margin:0;padding:clamp(8px,1cqi,14px);background:var(--card-color);color:var(--card-text,#171717);text-align:center;font-size:var(--font-caption);line-height:1.55;letter-spacing:-.035em;word-break:keep-all;overflow-wrap:break-word}
@@ -19,15 +19,15 @@
 @media(max-aspect-ratio:1 / 1){.about-menus{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-aspect-ratio:2 / 3){.about-menus{grid-template-columns:minmax(0,1fr)}}
 
-.about-intro h2{margin-top:clamp(48px,7cqi,90px)}
+.about-intro h2{margin-top:clamp(96px,14cqi,180px)}
 
-.about-you{margin-top:clamp(48px,7cqi,90px)}.about-you>h2{font-size:clamp(28px,4.4vw,72px);font-weight:700;line-height:1.04;letter-spacing:-.055em;margin:0 0 32px}.about-values{margin:0;padding-left:1.5em;font-size:var(--font-body);line-height:1.85;letter-spacing:-.035em}.about-values li+li{margin-top:32px}.about-values li::marker{font-weight:700}.about-values h3{margin:0 0 8px;font-size:var(--font-body);font-weight:700;line-height:1.6;word-break:keep-all;overflow-wrap:break-word}.about-values p{margin:0;font-size:var(--font-body);line-height:1.85}@container(max-width:480px){.about-you>h2{font-size:clamp(25px,8cqi,40px)}}
+.about-you{margin-top:clamp(96px,14cqi,180px)}.about-you>h2{font-size:clamp(28px,4.4vw,72px);font-weight:700;line-height:1.04;letter-spacing:-.055em;margin:0 0 32px}.about-values{margin:0;padding-left:1.5em;font-size:var(--font-body);line-height:1.85;letter-spacing:-.035em}.about-values li+li{margin-top:64px}.about-values li::marker{font-weight:700}.about-values h3{margin:0 0 8px;font-size:var(--font-body);font-weight:700;line-height:1.6;word-break:keep-all;overflow-wrap:break-word}.about-values p{margin:0;font-size:var(--font-body);line-height:1.85}@container(max-width:480px){.about-you>h2{font-size:clamp(25px,8cqi,40px)}}
 
 /* Character cutouts accompany the three film-inspired values. */
 .about-values{padding-left:0;list-style:none;counter-reset:about-value}
 .about-values>li{counter-increment:about-value}
 .about-values h3::before{content:counter(about-value) ". "}
-.about-values .about-value-character{margin-top:48px}
+.about-values .about-value-character{margin-top:96px}
 .about-value-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(130px,23%);align-items:center;gap:clamp(24px,4cqi,48px)}
 .about-value-copy{min-width:0}
 .about-value-art{display:block;width:100%;height:auto;max-height:270px;object-fit:contain;align-self:center;justify-self:center}
