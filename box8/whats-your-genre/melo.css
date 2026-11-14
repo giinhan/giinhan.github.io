@@ -26,3 +26,5 @@
 .melo-shell #result p:not(.eyebrow):not(.route-label):not(.muted):not(#share-status){font-size:var(--font-body);line-height:1.85}
 
 .poster-meta{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px}.poster-meta>span:nth-child(2){text-align:center;word-break:keep-all}.poster-meta>span:last-child{white-space:nowrap}@media(max-width:400px){.poster-meta{grid-template-columns:minmax(0,1fr) auto}.poster-meta>span:nth-child(2){grid-column:1 / -1;grid-row:2}.poster-meta>span:last-child{grid-column:2;grid-row:1}}
+
+.melo-shell{--answer-hover:var(--pink)}.horror-shell{--answer-hover:#ff0000}.melo-shell .answer input:not(:checked)+.answer-box:hover{background:var(--answer-hover);border-color:var(--answer-hover);color:#000}.melo-shell .answer input:not(:checked)+.answer-box:hover .answer-number{color:inherit}
