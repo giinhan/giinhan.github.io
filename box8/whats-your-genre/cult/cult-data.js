@@ -25,54 +25,24 @@ const CULT_DATA = {
       ],
       "movies": [
         {
-          "id": "032",
-          "title": "세컨즈",
-          "year": "1966"
-        },
-        {
-          "id": "041",
-          "title": "지배계급",
-          "year": "1972"
-        },
-        {
-          "id": "035",
           "title": "시스터즈",
-          "year": "1972"
+          "year": "1972",
+          "recommended": true
         },
         {
-          "id": "040",
-          "title": "그랑 부페",
-          "year": "1973"
-        },
-        {
-          "id": "042",
           "title": "퍼제션",
-          "year": "1981"
+          "year": "1981",
+          "recommended": false
         },
         {
-          "id": "020",
-          "title": "사구",
-          "year": "1984"
-        },
-        {
-          "id": "021",
           "title": "씨에스타",
-          "year": "1987"
+          "year": "1987",
+          "recommended": false
         },
         {
-          "id": "034",
           "title": "데드 링거",
-          "year": "1988"
-        },
-        {
-          "id": "014",
-          "title": "광란의 사랑",
-          "year": "1990"
-        },
-        {
-          "id": "038",
-          "title": "도니 다코",
-          "year": "2001"
+          "year": "1988",
+          "recommended": false
         }
       ]
     },
@@ -101,64 +71,24 @@ const CULT_DATA = {
       ],
       "movies": [
         {
-          "id": "012",
           "title": "이유없는 반항",
-          "year": "1955"
+          "year": "1955",
+          "recommended": true
         },
         {
-          "id": "019",
-          "title": "이지라이더",
-          "year": "1969"
-        },
-        {
-          "id": "001",
-          "title": "공황시대",
-          "year": "1972"
-        },
-        {
-          "id": "016",
-          "title": "비열한 거리",
-          "year": "1973"
-        },
-        {
-          "id": "011",
           "title": "택시 드라이버",
-          "year": "1976"
+          "year": "1976",
+          "recommended": false
         },
         {
-          "id": "029",
-          "title": "매드 맥스",
-          "year": "1979"
+          "title": "매드맥스",
+          "year": "1979",
+          "recommended": false
         },
         {
-          "id": "030",
-          "title": "매드 맥스 2",
-          "year": "1981"
-        },
-        {
-          "id": "023",
           "title": "복수의 립스틱",
-          "year": "1981"
-        },
-        {
-          "id": "028",
-          "title": "리포맨",
-          "year": "1984"
-        },
-        {
-          "id": "027",
-          "title": "마돈나의 수잔을 찾아서",
-          "year": "1985"
-        },
-        {
-          "id": "026",
-          "title": "씨드와 낸시",
-          "year": "1986"
-        },
-        {
-          "id": "018",
-          "title": "배드 캅",
-          "year": "1992"
+          "year": "1981",
+          "recommended": false
         }
       ]
     },
@@ -188,44 +118,24 @@ const CULT_DATA = {
       ],
       "movies": [
         {
-          "id": "008",
           "title": "토마토 공격대",
-          "year": "1978"
+          "year": "1978",
+          "recommended": true
         },
         {
-          "id": "036",
-          "title": "섹스, 자살, 그리고 영화",
-          "year": "1980"
-        },
-        {
-          "id": "004",
           "title": "이블 데드",
-          "year": "1981"
+          "year": "1981",
+          "recommended": false
         },
         {
-          "id": "009",
-          "title": "죽음의 날",
-          "year": "1985"
-        },
-        {
-          "id": "006",
-          "title": "공포의 텍사스",
-          "year": "1986"
-        },
-        {
-          "id": "039",
           "title": "하이랜더",
-          "year": "1986"
+          "year": "1986",
+          "recommended": false
         },
         {
-          "id": "007",
           "title": "아리조나 유괴사건",
-          "year": "1987"
-        },
-        {
-          "id": "024",
-          "title": "사랑의 눈물",
-          "year": "1990"
+          "year": "1987",
+          "recommended": false
         }
       ]
     },
@@ -254,74 +164,24 @@ const CULT_DATA = {
       ],
       "movies": [
         {
-          "id": "043",
-          "title": "암캐",
-          "year": "1931"
-        },
-        {
-          "id": "037",
-          "title": "키스 미 데들리",
-          "year": "1955"
-        },
-        {
-          "id": "044",
           "title": "하녀",
-          "year": "1960"
+          "year": "1960",
+          "recommended": true
         },
         {
-          "id": "013",
-          "title": "청춘낙서",
-          "year": "1973"
+          "title": "백색공포",
+          "year": "1977",
+          "recommended": false
         },
         {
-          "id": "002",
-          "title": "슈가랜드 특급",
-          "year": "1974"
-        },
-        {
-          "id": "033",
-          "title": "가르시아",
-          "year": "1974"
-        },
-        {
-          "id": "031",
-          "title": "딥 레드",
-          "year": "1975"
-        },
-        {
-          "id": "015",
-          "title": "백색 공포",
-          "year": "1977"
-        },
-        {
-          "id": "022",
-          "title": "스턴트맨",
-          "year": "1980"
-        },
-        {
-          "id": "003",
           "title": "분노의 저격자",
-          "year": "1984"
+          "year": "1984",
+          "recommended": false
         },
         {
-          "id": "005",
-          "title": "크라임 웨이브",
-          "year": "1985"
-        },
-        {
-          "id": "025",
-          "title": "썸씽 와일드",
-          "year": "1986"
-        },
-        {
-          "id": "010",
-          "title": "죽음의 키스",
-          "year": "1987"
-        },
-        {
-          "id": "017",
-          "title": "마담 엠마",
-          "year": "1989"
+          "title": "암캐",
+          "year": "1931",
+          "recommended": false
         }
       ]
     }
