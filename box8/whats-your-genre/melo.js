@@ -135,24 +135,24 @@ if (typeof document !== 'undefined') {
     card.append(element('p', 'route-label', `ROUTE ${route} / ${resultScores[route]} OF 8 CHOICES`));
     card.append(element('h3', '', data.name));
     card.append(element('p', 'route-summary', ROUTE_SUMMARIES[route]));
-    const details = element('details', 'editorial');
-    const summary = element('summary', '', '이 경로의 이야기를 더 읽어보세요');
-    const plus = element('span', '', '＋');
-    plus.setAttribute('aria-hidden', 'true');
-    summary.append(plus);
-    const copy = element('div');
-    copy.append(element('p', '', data.description));
-    details.append(summary, copy);
-    card.append(details, element('h4', 'movie-heading', 'WAYPOINTS / 이 영화에서 출발해 보세요'));
+    const story = element('section', 'route-story');
+    story.append(element('h4', 'route-story-heading', '이 경로의 이야기'), element('p', '', data.description));
+    card.append(story, element('h4', 'movie-heading', 'WAYPOINTS / 이 영화에서 출발해 보세요'));
     const list = element('ul', 'movie-list');
-    data.movies.forEach(movie => {
+    data.movies.slice(0, 4).forEach(movie => {
       const item = element('li');
-      const title = element('span', '', movie.title);
+      const title = element(movie.recommended ? 'strong' : 'span', '', movie.title);
       title.append(element('span', 'movie-year', `(${movie.year})`));
-      item.append(element('span', 'movie-id', movie.id), title);
+      item.append(title);
       list.append(item);
     });
     card.append(list);
+    const more = element('div', 'fieldmap-recommendation');
+    more.append(element('p', '', '더 많은 영화 추천을 원하시면 VHS 시리즈 필드맵을 참고해 보세요.'));
+    const fieldmapLink = element('a', 'primary fieldmap-button', 'VHS 필드맵 시리즈 보러 가기');
+    fieldmapLink.href = '../vhs/#fieldmap-series';
+    more.append(fieldmapLink);
+    card.append(more);
     return card;
   }
 
