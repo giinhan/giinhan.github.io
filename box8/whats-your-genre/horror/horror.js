@@ -132,7 +132,7 @@ if (typeof document !== 'undefined') {
   function routeCard(route) {
     const data = HORROR_DATA.routes[route];
     const card = element('article', 'route-card');
-    card.append(element('p', 'route-label', `ROUTE ${route} / ${resultScores[route]} OF 8 CHOICES`));
+    card.append(element('p', 'route-label', `ROUTE ${route}`));
     card.append(element('h3', '', data.name));
     card.append(element('p', 'route-summary', ROUTE_SUMMARIES[route]));
     const story = element('section', 'route-story');
