@@ -2,11 +2,11 @@
 .page-content{container-type:inline-size;padding-right:clamp(12px,2vw,36px);padding-bottom:80px}
 .about-intro{padding-top:12px}.about-logo{display:block;width:min(300px,80%);height:auto;margin-bottom:clamp(36px,5vw,76px)}
 .about-intro h1,.about-intro h2{font-size:clamp(28px,4.4vw,72px);font-weight:700;line-height:1.04;letter-spacing:-.055em;margin:0 0 32px;overflow-wrap:anywhere}
-.about-intro>p{margin:0;font-size:clamp(12.8px,1.24vw,19.2px);line-height:1.85;letter-spacing:-.035em;word-break:keep-all;overflow-wrap:break-word}
+.about-intro>p{margin:0;font-size:var(--font-body);line-height:1.85;letter-spacing:-.035em;word-break:keep-all;overflow-wrap:break-word}
 .about-menus{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:clamp(8px,1.5cqi,20px);overflow-x:auto;padding-bottom:8px;margin-top:clamp(40px,5vw,80px)}
 .about-card{aspect-ratio:2 / 3;min-width:0;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;padding:clamp(8px,1.2cqi,16px);border:1px solid transparent;background:#fff}
 .card-logo{min-height:0;display:flex;align-items:center;justify-content:center}.card-logo img{display:block;width:85%;height:100%;max-height:100%;object-fit:contain}.card-logo .screen-logo{width:65%}
-.about-card p{margin:0;padding:clamp(8px,1cqi,14px);background:var(--card-color);color:var(--card-text,#171717);text-align:center;font-size:clamp(9.6px,1.12cqi,14.4px);line-height:1.55;letter-spacing:-.035em;word-break:keep-all;overflow-wrap:break-word}
+.about-card p{margin:0;padding:clamp(8px,1cqi,14px);background:var(--card-color);color:var(--card-text,#171717);text-align:center;font-size:var(--font-caption);line-height:1.55;letter-spacing:-.035em;word-break:keep-all;overflow-wrap:break-word}
 @container(max-width:480px){.about-intro h1,.about-intro h2{font-size:clamp(25px,8cqi,40px)}.about-logo{width:90%}}
 @media(prefers-reduced-motion:reduce){.about-card{transition:none}}
 
