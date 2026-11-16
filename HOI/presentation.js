@@ -3,7 +3,6 @@
   const previous = document.getElementById('previous');
   const next = document.getElementById('next');
   const restart = document.getElementById('restart');
-  const count = document.getElementById('page-count');
   const dots = document.querySelector('.dots');
   let current = 0;
   const buttons = pages.map((page, index) => {
@@ -24,7 +23,6 @@
     previous.disabled = current === 0;
     next.hidden = current === pages.length - 1;
     restart.hidden = current !== pages.length - 1;
-    count.textContent = `${String(current + 1).padStart(2, '0')} / 10`;
     document.title = `${current + 1}/10 · 여러분에게 보내는 작은 제안 — 한지인`;
     if (focus) {
       // Focus the page so keyboard and screen-reader users follow the page turn.
