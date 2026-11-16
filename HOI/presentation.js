@@ -22,6 +22,8 @@
     });
     previous.disabled = current === 0;
     next.hidden = current === pages.length - 1;
+    const nextLabel = current === 7 ? '이해했어요' : current === 8 ? '생각해볼게요!' : '아하, 그렇군요!';
+    next.firstChild.textContent = `${nextLabel} `;
     restart.hidden = current !== pages.length - 1;
     document.title = `${current + 1}/10 · 여러분에게 보내는 작은 제안 — 한지인`;
     if (focus) {
