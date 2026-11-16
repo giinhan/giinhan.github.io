@@ -985,6 +985,7 @@ button {
 }
 
 .about-test-button {
+  padding: 0 12px;
   background: #fff4b8;
   color: #843426;
   font-weight: 700;
