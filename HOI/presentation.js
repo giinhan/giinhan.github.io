@@ -27,10 +27,10 @@
     count.textContent = `${String(current + 1).padStart(2, '0')} / 10`;
     document.title = `${current + 1}/10 · 여러분에게 보내는 작은 제안 — 한지인`;
     if (focus) {
-      // Focus the new heading so keyboard and screen-reader users follow the page turn.
-      const heading = pages[current].querySelector('h1');
-      heading.tabIndex = -1;
-      heading.focus({ preventScroll: true });
+      // Focus the page so keyboard and screen-reader users follow the page turn.
+      const page = pages[current];
+      page.tabIndex = -1;
+      page.focus({ preventScroll: true });
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
   }
