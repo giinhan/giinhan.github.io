@@ -25,3 +25,5 @@ body{font-size:20px;line-height:1.7}.book-header{font-size:15px}.chapter{font-si
 body:before{display:none}
 figure img{mix-blend-mode:darken;mask-image:linear-gradient(to right,transparent,#000 8%,#000 92%,transparent),linear-gradient(to bottom,transparent,#000 8%,#000 92%,transparent);mask-composite:intersect}
 .envelope .letter-motion{top:55%;height:40%}
+.letter-paper:has(.letter-surprise){align-items:center;justify-content:center;text-align:center}
+.letter-paper .letter-surprise{font-size:clamp(36px,5vw,64px);font-weight:600;line-height:1}
