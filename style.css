@@ -984,17 +984,6 @@ button {
   color: #843426;
 }
 
-.about-test-button {
-  padding: 0 12px;
-  background: #fff4b8;
-  color: #843426;
-  font-weight: 700;
-}
-
-.about-test-button:hover {
-  background: #ffe879;
-}
-
 .about-panel .about-name {
   margin-bottom: 18px;
   font-weight: 400;
@@ -1656,12 +1645,6 @@ body.about-open {
     display: grid;
     grid-template-columns: repeat(4, 48px);
     justify-content: flex-start;
-  }
-
-  .about-test-button {
-    grid-column: 1 / -1;
-    justify-self: start;
-    margin-left: 64px;
   }
 
   .about-close {
